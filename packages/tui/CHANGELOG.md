@@ -7,6 +7,9 @@
 ### Breaking Changes
 
 - Full-output references and the `[raw output: …]` footer now use `local://N.log` instead of `artifact://N`.
+### Fixed
+
+- Task cards now show the error state when a call fails before any subagent row exists, such as a refused per-call model (`results: []`) or a child that finished before its isolation merge threw, instead of a success check over the refusal text
 
 ### Added
 
