@@ -184,7 +184,8 @@ function requestFields(
 		};
 	}
 	if (thinking.mode === "effort") {
-		return { reasoning: { mode: "standard", effort: thinking.effortMap?.[effort] ?? effort } };
+		const mapped = thinking.effortMap?.[effort];
+		return { reasoning: { mode: "standard", effort: typeof mapped === "string" ? mapped : effort } };
 	}
 	return undefined;
 }
