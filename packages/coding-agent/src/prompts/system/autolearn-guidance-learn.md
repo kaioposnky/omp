@@ -1,2 +1,2 @@
 Durable fact—not procedure—(project convention, non-obvious fix, user preference): record with `learn` → long-term memory.
-Fact and procedure: same `learn` call MAY mint or enhance a managed skill.
+Fact and procedure: the same `learn` call MAY enhance a managed skill. Search existing managed procedures first; update an applicable one before creating another. Keep environment observations distinct from reusable instructions, and verify every claimed check rather than recording an unrun check as successful.

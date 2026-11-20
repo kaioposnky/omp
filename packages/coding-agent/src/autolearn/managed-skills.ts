@@ -10,7 +10,7 @@
 import { constants as fsConstants, type Stats } from "node:fs";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import { getAgentDir, isEnoent } from "@oh-my-pi/pi-utils";
+import { getAgentDir, isEnoent, parseFrontmatter } from "@oh-my-pi/pi-utils";
 import { YAML } from "bun";
 
 /** Provider id stamped on discovered managed skills (distinguishes them from authored). */
@@ -88,22 +88,18 @@ export interface WriteManagedSkillInput {
 	body: string;
 }
 
-/**
- * Serialize create/update/delete on the same skill name. Both tools are
- * non-exclusive, so a parallel tool batch in one turn can run two mutations on
- * the same skill at once (e.g. an update observing the file mid-delete). This
- * per-name promise chain runs same-skill mutations in submission order while
- * different names still proceed in parallel. In-process only; cross-process
- * races are out of scope.
+/** Serialize all mutations within one managed root; duplicate checks and creates
+ * must be atomic even across different names. Cross-process races remain outside
+ * this in-process queue's scope.
  */
 const skillMutationChains = new Map<string, Promise<unknown>>();
-function serializeSkillMutation<T>(name: string, op: () => Promise<T>): Promise<T> {
-	const prev = skillMutationChains.get(name) ?? Promise.resolve();
+function serializeSkillMutation<T>(root: string, op: () => Promise<T>): Promise<T> {
+	const prev = skillMutationChains.get(root) ?? Promise.resolve();
 	const run = prev.then(op, op);
 	const guarded = run.catch(() => {});
-	skillMutationChains.set(name, guarded);
+	skillMutationChains.set(root, guarded);
 	void guarded.finally(() => {
-		if (skillMutationChains.get(name) === guarded) skillMutationChains.delete(name);
+		if (skillMutationChains.get(root) === guarded) skillMutationChains.delete(root);
 	});
 	return run;
 }
@@ -117,8 +113,7 @@ function serializeSkillMutation<T>(name: string, op: () => Promise<T>): Promise<
  * at the mutation itself. A broken link or a link to a non-directory has no
  * defined write target, so it is refused.
  */
-async function assertManagedRootSafe(): Promise<void> {
-	const root = getManagedSkillsDir();
+async function assertManagedRootSafe(root: string): Promise<void> {
 	const rootStat = await fs.lstat(root).catch(err => {
 		if (isEnoent(err)) return null;
 		throw err;
@@ -159,6 +154,60 @@ async function openManagedSkillFileForUpdate(name: string, file: string) {
 	}
 }
 
+function normalizeManagedBody(body: string): string {
+	return body
+		.replace(/\r\n/g, "\n")
+		.replace(/[^\S\n]+$/gm, "")
+		.trim();
+}
+
+async function assertNoDuplicateBody(root: string, name: string, body: string): Promise<void> {
+	const entries = await fs.readdir(root, { withFileTypes: true }).catch(err => {
+		if (isEnoent(err)) return [];
+		throw err;
+	});
+	const normalized = normalizeManagedBody(body);
+	for (const entry of entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))) {
+		if (!entry.isDirectory() || entry.name === name) continue;
+		const file = path.join(root, entry.name, "SKILL.md");
+		let candidate: { name: string; body: string };
+		try {
+			const stat = await fs.lstat(file).catch(err => {
+				if (isEnoent(err)) return null;
+				throw err;
+			});
+			if (!stat || stat.isSymbolicLink() || !stat.isFile()) continue;
+			const handle = await fs.open(file, fsConstants.O_RDONLY | fsConstants.O_NOFOLLOW);
+			try {
+				const content = (await handle.readFile("utf8")).replace(/\r\n/g, "\n");
+				if (!/^---\n[\s\S]*?\n---(?:\n|$)/.test(content)) {
+					throw new Error("missing or unclosed frontmatter");
+				}
+				const parsed = parseFrontmatter(content, { source: file, repair: false, level: "fatal" });
+				const candidateName = parsed.frontmatter.name ?? entry.name;
+				if (
+					typeof candidateName !== "string" ||
+					!isValidManagedSkillName(candidateName) ||
+					typeof parsed.frontmatter.description !== "string" ||
+					!sanitizeManagedDescription(parsed.frontmatter.description) ||
+					!parsed.body.trim()
+				) {
+					throw new Error("invalid managed skill metadata or empty body");
+				}
+				candidate = { name: candidateName, body: parsed.body };
+			} finally {
+				await handle.close();
+			}
+		} catch (err) {
+			const reason = err instanceof Error ? err.message.split("\n")[0] : String(err);
+			throw new Error(`Cannot compare managed skill "${file}": ${reason}`);
+		}
+		if (normalizeManagedBody(candidate.body) === normalized) {
+			throw new Error(`Managed skill body duplicates "${candidate.name}". Use action "update" on that skill.`);
+		}
+	}
+}
+
 /** Create or update a managed `SKILL.md`. Returns the resolved file path. */
 export async function writeManagedSkill(input: WriteManagedSkillInput): Promise<{ path: string }> {
 	const name = sanitizeSkillName(input.name);
@@ -182,9 +231,10 @@ export async function writeManagedSkill(input: WriteManagedSkillInput): Promise<
 			`Managed skill is ${bytes} bytes; the limit is ${MAX_MANAGED_SKILL_BYTES}. Trim the body or description.`,
 		);
 	}
-	return serializeSkillMutation(name, async () => {
-		await assertManagedRootSafe();
-		const dir = path.join(getManagedSkillsDir(), name);
+	const root = getManagedSkillsDir();
+	return serializeSkillMutation(root, async () => {
+		await assertManagedRootSafe(root);
+		const dir = path.join(root, name);
 		const file = path.join(dir, "SKILL.md");
 		// Reject a symlinked skill directory: an intermediate symlink would let the
 		// write escape the isolated managed root. lstat does not follow the final
@@ -199,6 +249,7 @@ export async function writeManagedSkill(input: WriteManagedSkillInput): Promise<
 			);
 		}
 		if (input.action === "create") {
+			await assertNoDuplicateBody(root, name, body);
 			await fs.mkdir(dir, { recursive: true });
 			// O_CREAT|O_EXCL ("wx"): atomic create that fails if the file already
 			// exists (closing the check-then-write race) and refuses a symlinked SKILL.md.
@@ -243,9 +294,10 @@ export async function writeManagedSkill(input: WriteManagedSkillInput): Promise<
 /** Delete a managed skill directory. Throws when it does not exist. */
 export async function deleteManagedSkill(name: string): Promise<void> {
 	const safe = sanitizeSkillName(name);
-	await serializeSkillMutation(safe, async () => {
-		await assertManagedRootSafe();
-		const dir = path.join(getManagedSkillsDir(), safe);
+	const root = getManagedSkillsDir();
+	await serializeSkillMutation(root, async () => {
+		await assertManagedRootSafe(root);
+		const dir = path.join(root, safe);
 		// Refuse to follow a symlinked skill directory (rm would delete the target).
 		const dirStat = await fs.lstat(dir).catch(err => {
 			if (isEnoent(err)) return null;

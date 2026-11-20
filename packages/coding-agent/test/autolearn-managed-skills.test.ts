@@ -68,6 +68,116 @@ describe("managed-skills primitives", () => {
 			).rejects.toThrow(/already exists/);
 		});
 
+		it("rejects a differently named normalized duplicate before creating its directory", async () => {
+			await writeManagedSkill({
+				action: "create",
+				name: "original",
+				description: "first",
+				body: "# Recipe  \r\n\r\nRun it.\t\r\n",
+			});
+			await expect(
+				writeManagedSkill({
+					action: "create",
+					name: "copy",
+					description: "different",
+					body: "\n# Recipe\n\nRun it.\n",
+				}),
+			).rejects.toThrow('Managed skill body duplicates "original". Use action "update" on that skill.');
+			expect(
+				await fs.access(path.dirname(skillFile("copy"))).then(
+					() => true,
+					() => false,
+				),
+			).toBe(false);
+		});
+
+		it("keeps interior whitespace, case, and distinct bodies with identical descriptions", async () => {
+			for (const [name, body] of [
+				["one", "Run  it."],
+				["two", "Run it."],
+				["three", "run it."],
+			] as const) {
+				await writeManagedSkill({ action: "create", name, description: "same description", body });
+			}
+			expect(await fs.readdir(getManagedSkillsDir())).toHaveLength(3);
+		});
+
+		it("allows updates to overwrite with an existing body", async () => {
+			await writeManagedSkill({ action: "create", name: "one", description: "d", body: "first" });
+			await writeManagedSkill({ action: "create", name: "two", description: "d", body: "second" });
+			await writeManagedSkill({ action: "update", name: "two", description: "d", body: "first" });
+			expect(parseFrontmatter(await Bun.file(skillFile("two")).text()).body).toBe("first");
+		});
+
+		it("serializes different-name duplicate creates so exactly one wins", async () => {
+			const results = await Promise.allSettled([
+				writeManagedSkill({ action: "create", name: "one", description: "d", body: "same" }),
+				writeManagedSkill({ action: "create", name: "two", description: "other", body: "same  \r\n" }),
+			]);
+			expect(results.filter(result => result.status === "fulfilled")).toHaveLength(1);
+			const rejected = results.find(result => result.status === "rejected") as PromiseRejectedResult;
+			expect(String(rejected.reason)).toContain('body duplicates "one"');
+			expect(await fs.readdir(getManagedSkillsDir())).toEqual(["one"]);
+		});
+
+		it("checks creates after preceding different-name updates and deletes", async () => {
+			await writeManagedSkill({ action: "create", name: "one", description: "d", body: "old" });
+			const results = await Promise.allSettled([
+				writeManagedSkill({ action: "update", name: "one", description: "d", body: "new" }),
+				writeManagedSkill({ action: "create", name: "two", description: "d", body: "new" }),
+			]);
+			expect(results[0]?.status).toBe("fulfilled");
+			expect(results[1]?.status).toBe("rejected");
+			await Promise.all([
+				deleteManagedSkill("one"),
+				writeManagedSkill({ action: "create", name: "two", description: "d", body: "new" }),
+			]);
+			expect(await fs.readdir(getManagedSkillsDir())).toEqual(["two"]);
+		});
+
+		it("fails closed with the candidate path on malformed managed files", async () => {
+			await fs.mkdir(path.dirname(skillFile("broken")), { recursive: true });
+			for (const content of [
+				"---\nname: [unterminated\n---\nbody",
+				"---\nname: broken",
+				"no frontmatter",
+				"---\ndescription: []\n---\nbody",
+			]) {
+				await fs.writeFile(skillFile("broken"), content);
+				await expect(
+					writeManagedSkill({ action: "create", name: "new", description: "d", body: "unique" }),
+				).rejects.toThrow(skillFile("broken"));
+				expect(await Bun.file(skillFile("new")).exists()).toBe(false);
+			}
+		});
+
+		it("fails closed with the file path when an existing candidate cannot be opened", async () => {
+			await writeManagedSkill({ action: "create", name: "existing", description: "d", body: "existing" });
+			const open = spyOn(fs, "open").mockRejectedValueOnce(
+				Object.assign(new Error("permission denied"), { code: "EACCES" }),
+			);
+			try {
+				await expect(
+					writeManagedSkill({ action: "create", name: "new", description: "d", body: "unique" }),
+				).rejects.toThrow(`Cannot compare managed skill "${skillFile("existing")}": permission denied`);
+				expect(await Bun.file(skillFile("new")).exists()).toBe(false);
+			} finally {
+				open.mockRestore();
+			}
+		});
+
+		it("does not follow symlinked directories or SKILL.md files while comparing", async () => {
+			const outside = path.join(tempHome, "outside");
+			await fs.mkdir(outside);
+			await fs.writeFile(path.join(outside, "SKILL.md"), "malformed outside file");
+			await fs.mkdir(path.dirname(skillFile("linked-file")), { recursive: true });
+			await fs.symlink(outside, path.join(getManagedSkillsDir(), "linked-dir"));
+			await fs.symlink(path.join(outside, "SKILL.md"), skillFile("linked-file"));
+			await writeManagedSkill({ action: "create", name: "safe", description: "d", body: "unique" });
+			expect(await Bun.file(skillFile("safe")).exists()).toBe(true);
+			expect(await Bun.file(path.join(outside, "SKILL.md")).text()).toBe("malformed outside file");
+		});
+
 		it("update overwrites the body; update of a missing skill throws", async () => {
 			await writeManagedSkill({ action: "create", name: "bar", description: "d", body: "original" });
 			await writeManagedSkill({ action: "update", name: "bar", description: "d", body: "replaced" });

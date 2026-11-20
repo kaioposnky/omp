@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, spyOn } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
-import { getManagedSkillsDir } from "@oh-my-pi/pi-coding-agent/autolearn/managed-skills";
+import { getManagedSkillsDir, writeManagedSkill } from "@oh-my-pi/pi-coding-agent/autolearn/managed-skills";
 import { disableUserSource, enableUserSource } from "@oh-my-pi/pi-coding-agent/capability";
 import "@oh-my-pi/pi-coding-agent/discovery";
 import { loadSkills } from "@oh-my-pi/pi-coding-agent/extensibility/skills";
@@ -55,6 +55,27 @@ describe("managed-skills discovery", () => {
 		const foo = skills.find(s => s.name === "foo");
 		expect(foo).toBeDefined();
 		expect(foo?.source).toBe("omp-managed:user");
+	});
+
+	it("discovers only the original after rejecting an exact duplicate procedure", async () => {
+		await writeManagedSkill({
+			action: "create",
+			name: "original",
+			description: "Reusable procedure.",
+			body: "# Steps\nRun the check.",
+		});
+		await expect(
+			writeManagedSkill({
+				action: "create",
+				name: "duplicate",
+				description: "Another title.",
+				body: "# Steps  \r\nRun the check.\r\n",
+			}),
+		).rejects.toThrow('body duplicates "original"');
+		const { skills } = await loadSkills({ cwd: tempCwd });
+		expect(skills.filter(skill => skill.source === "omp-managed:user").map(skill => skill.name)).toEqual([
+			"original",
+		]);
 	});
 
 	it("lets an authored skill win a name collision and drops the managed one", async () => {
