@@ -1487,6 +1487,8 @@ export async function discoverMCPServers(cwd?: string): Promise<MCPToolsLoadResu
 export interface BuildSystemPromptOptions {
 	tools?: Tool[];
 	skills?: Skill[];
+	/** Skill discovery and catalog presentation settings. Default catalog mode: full. */
+	skillsSettings?: SkillsSettings;
 	contextFiles?: Array<{ path: string; content: string }>;
 	cwd?: string;
 	customPrompt?: string;
@@ -1521,6 +1523,7 @@ export async function buildSystemPrompt(options: BuildSystemPromptOptions = {}):
 		customPrompt: options.customPrompt,
 		systemPromptTemplate: options.systemPromptTemplate,
 		skills: options.skills,
+		skillsSettings: options.skillsSettings,
 		contextFiles: options.contextFiles,
 		appendSystemPrompt: options.appendPrompt,
 		inlineToolDescriptors: options.inlineToolDescriptors,

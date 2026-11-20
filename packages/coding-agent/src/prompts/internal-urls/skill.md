@@ -1,1 +1,1 @@
-skill://<name>: instructions; append /<path> for a file.
+`skill://<name>`: instructions; append `/<path>` for a file. `skill://?q=<keywords>&offset=0&limit=20`: search names and full descriptions (all keywords must match); empty query lists the catalog. Hidden skills require explicit names. Results include total matches and next offset. Offset is nonnegative; limit is 1–50 (default 20).

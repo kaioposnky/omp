@@ -148,6 +148,7 @@ skills:
 - Namespaced skills resolve through `skill://<namespace>/<name>[/<path>]` and the `/skill:<namespace>/<name>` token, both leading and mid-prompt (a mid-prompt token accepts exactly one `/`; deeper paths are left as prose). Because skill names never contain `/`, an exact `<host>/<first segment>` match is unambiguous and takes precedence over reading that segment as a path relative to a bare skill of the same name as the namespace.
 - Custom-directory skills are merged after provider skills and outrank a same-named default-path provider skill regardless of admission order (#7190): the custom-directory skill keeps the bare name, and the provider skill is re-admitted under its namespaced name (suffixed if that slot is taken) when it differs or dropped when it is identical. Among two custom directories, the first one in `skills.customDirectories` keeps the bare name and the other is namespaced.
 - `disabledExtensions` (`skill:<name>`) and `skills.ignoredSkills` are applied to both the raw and the final name, so a namespaced alias cannot bypass an exclusion. `skills.includeSkills` is applied to the final listing only, after every name is resolved, so `second/*` selects a namespaced skill even though the bare skill it collided with is not itself included.
+- Managed `manage_skill` creation also rejects a different name with an exact normalized body (CRLF normalized, trailing line whitespace removed, outer whitespace trimmed), regardless of description. Update that existing procedure instead. This is not fuzzy similarity detection. Create/update/delete serialize within the managed root in one process; no cross-process lock is added. Symlinks are not followed during duplicate scanning, and malformed/unreadable managed candidates fail creation with their path.
 
 ## Runtime usage behavior
 
@@ -156,7 +157,9 @@ skills:
 System prompt construction (`src/system-prompt.ts`) uses discovered skills as follows:
 
 - if an active tool declares `readsSkillUris: true`:
-   - include the discovered skills list, excluding hidden skills
+   - `skills.catalogMode: "full"` (default) includes the discovered skills list, excluding hidden skills
+   - `skills.catalogMode: "search"` replaces that list with paginated catalog-search guidance and skips description compression; discovery and direct lookup remain unchanged
+   - the guidance names the actual reader: a direct tool under its wire name, a mounted-only device as `xd://<name>` (write the JSON args to it). The same branch is rendered by the default template, the bundled custom-system-prompt template, and the mid-session `/skillful` notice, so enabling skillful in search mode does not re-expand the catalog or schedule description compression
    - mounted `xd://` tools count when their capability metadata is projected
 - otherwise:
    - omit the discovered list
@@ -196,6 +199,9 @@ Invoked skill content is identified by invocation kind, each with its own prompt
 
 - `skill://<name>` → resolves to that skill's `SKILL.md` for `read`; in `bash` it is the skill directory (instructions at `skill://<name>/SKILL.md`), and `realpath`/`readlink` print the physical path
 - `skill://<name>/<relative-path>` → resolves inside that skill directory
+- `skill://?q=<keywords>&offset=0&limit=20` → virtual catalog matching every case-insensitive keyword against names/full descriptions, ordered by name; empty query lists visible skills
+
+Catalog queries exclude hidden skills, return full single-line descriptions, total matches and a next offset. Offset is a nonnegative safe integer; limit is 1–50 (default 20). Invalid/repeated/unknown parameters, fragments and hostless asset paths fail directly rather than falling through to MCP. Hidden skills remain directly accessible by exact name. The public SDK prompt builder accepts `skillsSettings` to select the same presentation mode.
 
 ```text
 skill:// URL resolution

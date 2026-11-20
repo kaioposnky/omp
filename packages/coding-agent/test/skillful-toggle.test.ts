@@ -1,10 +1,11 @@
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "bun:test";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, spyOn } from "bun:test";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
 import type { UserMessage } from "@oh-my-pi/pi-ai";
 import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
 import type { Skill } from "@oh-my-pi/pi-coding-agent/extensibility/skills";
+import { SkillDescriptionCatalog } from "@oh-my-pi/pi-coding-agent/extensibility/skill-descriptions";
 import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
 import { createAgentSession } from "@oh-my-pi/pi-coding-agent/sdk";
 import type { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
@@ -175,6 +176,74 @@ describe("skillful setting and /skillful session toggle", () => {
 		expect(
 			s.agent.state.messages.some(message => message.role === "custom" && message.customType === "skillful-notice"),
 		).toBe(false);
+	});
+
+	it("keeps search mode compact when enabled mid-session", async () => {
+		const renderSpy = spyOn(SkillDescriptionCatalog.prototype, "render");
+		try {
+			const s = await createSession({ skillful: false, "skills.catalogMode": "search" });
+			// Skillful is off at startup, so no skill presentation exists yet at all.
+			expect(s.agent.state.systemPrompt.join("\n")).not.toContain('path="skill://?q=');
+			s.agent.appendMessage(createUserMessage("earlier work"));
+			const promptBefore = s.agent.state.systemPrompt;
+
+			expect(await s.toggleSkillful()).toBe(true);
+			expect(s.agent.state.systemPrompt).toBe(promptBefore);
+			expect(renderSpy).not.toHaveBeenCalled();
+
+			const notices = s.agent.state.messages.filter(
+				message => message.role === "custom" && message.customType === "skillful-notice",
+			);
+			expect(notices.length).toBe(1);
+			const notice = notices[0];
+			const content = notice.role === "custom" ? notice.content : "";
+			expect(content).toContain('with path="skill://?q=');
+			expect(content).not.toContain("- test-skill:");
+			expect(content).not.toContain("A test skill for the skillful toggle.");
+		} finally {
+			renderSpy.mockRestore();
+		}
+	});
+
+	it("rebuilds a search-mode base prompt without expanding the catalog", async () => {
+		const renderSpy = spyOn(SkillDescriptionCatalog.prototype, "render");
+		try {
+			const s = await createSession({ skillful: false, "skills.catalogMode": "search" });
+			expect(s.agent.state.systemPrompt.join("\n")).not.toContain('path="skill://?q=');
+			expect(await s.toggleSkillful()).toBe(true);
+			const rebuilt = s.agent.state.systemPrompt.join("\n");
+			expect(rebuilt).toContain('path="skill://?q=');
+			expect(rebuilt).not.toContain("- test-skill:");
+			expect(rebuilt).not.toContain("A test skill for the skillful toggle.");
+			expect(renderSpy).not.toHaveBeenCalled();
+		} finally {
+			renderSpy.mockRestore();
+		}
+	});
+
+	it("treats a hidden-only search catalog as direct-name guidance", async () => {
+		const hidden: Skill = {
+			name: "hidden-skill",
+			description: "Hidden procedure.",
+			filePath: path.join(tempDir, ".omp", "skills", "hidden-skill", "SKILL.md"),
+			baseDir: path.join(tempDir, ".omp", "skills", "hidden-skill"),
+			source: "project",
+			hide: true,
+		};
+		const s = await createSession({ skillful: false, "skills.catalogMode": "search" }, [hidden]);
+		s.agent.appendMessage(createUserMessage("earlier work"));
+		expect(await s.toggleSkillful()).toBe(true);
+		const notices = s.agent.state.messages.filter(
+			message => message.role === "custom" && message.customType === "skillful-notice",
+		);
+		expect(notices.length).toBe(1);
+		const notice = notices[0];
+		const content = notice.role === "custom" ? notice.content : "";
+		// The hidden skill is not in the searchable catalog, so advertising a search
+		// would only produce empty results; the direct-name branch stays reachable.
+		expect(content).not.toContain('path="skill://?q=');
+		expect(content).toContain("skill://<name>");
+		expect(content).not.toContain("hidden-skill:");
 	});
 
 	it("/skillful slash command toggles skillful and formats status", async () => {

@@ -28,6 +28,13 @@ export const cfgSkillsRegistryUrl = register({
 // Skills
 export const cfgSkillsEnabled = register({ id: "skills.enabled", type: "boolean", default: true });
 
+export const cfgSkillsCatalogMode = register({
+	id: "skills.catalogMode",
+	type: "enum",
+	values: ["full", "search"] as const,
+	default: "full",
+});
+
 export const cfgSkillsEnableSkillCommands = register({
 	id: "skills.enableSkillCommands",
 	type: "boolean",
@@ -89,6 +96,7 @@ export const cfgSkillsIncludeSkills = register({
 /** Skill discovery options (`skills.*` except the `omp skill` registry URL). */
 export const cfgSkills = combine({
 	enabled: cfgSkillsEnabled,
+	catalogMode: cfgSkillsCatalogMode,
 	enableSkillCommands: cfgSkillsEnableSkillCommands,
 	enableCodexUser: cfgSkillsEnableCodexUser,
 	enableClaudeUser: cfgSkillsEnableClaudeUser,

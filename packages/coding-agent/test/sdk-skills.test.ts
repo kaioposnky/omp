@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "bun:test";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, spyOn } from "bun:test";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -6,7 +6,7 @@ import { ModelRegistry } from "@oh-my-pi/pi-coding-agent/config/model-registry";
 import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";
 import { getActiveSkills } from "@oh-my-pi/pi-coding-agent/extensibility/skills";
 import type { Skill } from "@oh-my-pi/pi-coding-agent/sdk";
-import { createAgentSession } from "@oh-my-pi/pi-coding-agent/sdk";
+import { buildSystemPrompt, createAgentSession } from "@oh-my-pi/pi-coding-agent/sdk";
 import type { AgentSession } from "@oh-my-pi/pi-coding-agent/session/agent-session";
 import { AuthStorage } from "@oh-my-pi/pi-coding-agent/session/auth-storage";
 import { SessionManager } from "@oh-my-pi/pi-coding-agent/session/session-manager";
@@ -16,6 +16,8 @@ import { cleanupTempHome } from "./helpers/temp-home-cleanup";
 
 import { cfgAutolearnEnabled } from "@oh-my-pi/pi-coding-agent/autolearn/settings";
 import { cfgSkillsCustomDirectories } from "@oh-my-pi/pi-coding-agent/extensibility/settings";
+import { SkillDescriptionCatalog } from "@oh-my-pi/pi-coding-agent/extensibility/skill-descriptions";
+import { buildSystemPrompt as buildInternalSystemPrompt } from "@oh-my-pi/pi-coding-agent/system-prompt";
 
 function createIsolatedSkillsSettings(extensions: string[] = []): Settings {
 	return Settings.isolated({
@@ -436,5 +438,60 @@ This skill is added after session creation.
 		expect(session.skills).toEqual([customSkill]);
 		// No warnings since we didn't discover
 		expect(session.skillWarnings).toEqual([]);
+	});
+	it("forwards public SDK catalog settings and preserves full as the default", async () => {
+		const skill: Skill = {
+			name: "visible-skill",
+			description: "Visible procedure",
+			baseDir: skillsDir,
+			filePath: path.join(skillsDir, "SKILL.md"),
+			source: "project",
+		};
+		const options = {
+			cwd: tempDir,
+			skills: [skill],
+			contextFiles: [],
+			includeWorkspaceTree: false,
+			systemPromptTemplate:
+				"{{#if skillCatalogSearch}}SEARCH_CATALOG{{else}}{{#each skills}}{{name}}{{/each}}{{/if}}",
+		};
+		expect((await buildSystemPrompt(options)).systemPrompt[0]).toContain("visible-skill");
+		expect(
+			(await buildSystemPrompt({ ...options, skillsSettings: { catalogMode: "search" } })).systemPrompt[0],
+		).toContain("SEARCH_CATALOG");
+	});
+
+	it("skips description rendering in search mode and gates search on visible readable skills", async () => {
+		const skill: Skill = {
+			name: "visible-skill",
+			description: "Visible procedure",
+			baseDir: skillsDir,
+			filePath: path.join(skillsDir, "SKILL.md"),
+			source: "project",
+		};
+		const catalog = new SkillDescriptionCatalog();
+		const render = spyOn(catalog, "render");
+		try {
+			const options = {
+				cwd: tempDir,
+				skills: [skill],
+				contextFiles: [],
+				rules: [],
+				toolNames: ["read"],
+				includeWorkspaceTree: false,
+				skillDescriptions: catalog,
+				skillsSettings: { catalogMode: "search" as const },
+				systemPromptTemplate: "{{#if skillCatalogSearch}}SEARCH_CATALOG{{else}}NO_CATALOG{{/if}}",
+			};
+			expect((await buildInternalSystemPrompt(options)).systemPrompt[0]).toContain("SEARCH_CATALOG");
+			expect(render).not.toHaveBeenCalled();
+			for (const overrides of [{ skills: [] }, { skills: [{ ...skill, hide: true }] }, { toolNames: [] }]) {
+				expect((await buildInternalSystemPrompt({ ...options, ...overrides })).systemPrompt[0]).toContain(
+					"NO_CATALOG",
+				);
+			}
+		} finally {
+			render.mockRestore();
+		}
 	});
 });

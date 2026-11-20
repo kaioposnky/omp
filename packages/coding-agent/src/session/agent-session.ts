@@ -591,7 +591,7 @@ import { cfgFollowUpMode } from "../modes/settings";
 import { cfgSteeringMode } from "../modes/settings";
 import { cfgDisabledProviders, cfgModelRoles } from "../config/model-settings";
 import { cfgEvalJs, cfgEvalPy, cfgEvalToolsEnabled, cfgEvalWorkpoolFreshAgents } from "../eval/settings";
-import { cfgExtensions, type SkillsSettings } from "../extensibility/settings";
+import { cfgExtensions, cfgSkillsCatalogMode, type SkillsSettings } from "../extensibility/settings";
 import {
 	cfgImagesAutoResize,
 	cfgMagicKeyword,
@@ -13447,15 +13447,33 @@ export class AgentSession implements SettingsScope, AgentViewSession {
 			await this.refreshBaseSystemPrompt();
 		} else if (enabled) {
 			// Enabled covers top-level and xd://-mounted tools: every path through
-			// which the model can still reach a reader.
-			const hasSkillReader = this.getEnabledToolNames().some(name => toolReadsSkillUris(this.getToolByName(name)));
-			const renderedSkills = this.#skillDescriptions.render(
-				hasSkillReader ? this.skills.filter(skill => skill.hide !== true) : [],
-			);
+			// which the model can still reach a reader. A mounted reader stays
+			// registry-resolvable, so top-level exposure — not lookup success — decides
+			// whether the model calls it directly or writes to `xd://<name>`.
+			const activeToolNames = new Set(this.getActiveToolNames());
+			const readerName = this.getEnabledToolNames().find(name => toolReadsSkillUris(this.getToolByName(name)));
+			const readerTool = readerName === undefined ? undefined : this.getToolByName(readerName);
+			const skillReaderRef =
+				readerName === undefined
+					? undefined
+					: activeToolNames.has(readerName)
+						? (readerTool?.customWireName ?? readerName)
+						: `xd://${readerName}`;
+			const visibleSkills = this.skills.filter(skill => skill.hide !== true);
+			const searchCatalogMode =
+				(this.skillsSettings?.catalogMode ?? cfgSkillsCatalogMode.get(this.settings)) === "search";
+			// Search mode must not re-expand the catalog: rendering descriptions here
+			// would leak a full listing (and may schedule compression work) after the
+			// base prompt deliberately replaced it with the search instruction.
+			// The catalog also excludes hidden skills, so an empty visible set keeps
+			// the direct-name branch instead of advertising a searchable catalog.
+			const skillCatalogSearch = searchCatalogMode && visibleSkills.length > 0;
+			const renderedSkills =
+				skillCatalogSearch || readerName === undefined ? [] : this.#skillDescriptions.render(visibleSkills);
 			// Hidden-only sessions have no catalog rows, but the notice template
 			// still carries the `skill://<name>` syntax the model needs: hidden
 			// skills stay reachable by URI even though they are never listed.
-			const hasReadableSkills = hasSkillReader && this.skills.length > 0;
+			const hasReadableSkills = readerName !== undefined && this.skills.length > 0;
 			const alreadyAnnounced = this.agent.state.messages.some(
 				message => message.role === "custom" && message.customType === "skillful-notice",
 			);
@@ -13463,7 +13481,12 @@ export class AgentSession implements SettingsScope, AgentViewSession {
 				await this.sendCustomMessage(
 					{
 						customType: "skillful-notice",
-						content: prompt.render(skillfulNoticePrompt, { skills: renderedSkills }),
+						content: prompt.render(skillfulNoticePrompt, {
+							skills: renderedSkills,
+							skillCatalogSearch,
+							skillReaderRef,
+							skillReaderIsXd: skillReaderRef?.startsWith("xd://") === true,
+						}),
 						display: false,
 					},
 					{ deliverAs: "nextTurn" },

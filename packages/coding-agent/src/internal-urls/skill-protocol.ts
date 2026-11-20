@@ -12,7 +12,7 @@
 import type * as fsTypes from "node:fs";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import { isEnoent, logger, withTimeout } from "@oh-my-pi/pi-utils";
+import { escapeXmlText, isEnoent, logger, withTimeout } from "@oh-my-pi/pi-utils";
 import { resolveContainedPath } from "../discovery/contained-path";
 import {
 	findStaleSkillStandIn,
@@ -292,6 +292,59 @@ async function readSkillTarget(url: InternalUrl, target: LocatedSkillTarget): Pr
 	};
 }
 
+function skillCatalogResource(url: InternalUrl, skills: readonly Skill[]): InternalResource {
+	const invalid = (reason: string): never => {
+		throw new Error(`Invalid skill catalog query: ${reason}`);
+	};
+	if (url.rawPathname && url.rawPathname !== "/") invalid("only an empty path or / is allowed");
+	if (url.hash) invalid("fragments are not allowed");
+	for (const key of url.searchParams.keys()) {
+		if (!["q", "offset", "limit"].includes(key)) invalid(`unknown parameter ${key}`);
+		if (url.searchParams.getAll(key).length !== 1) invalid(`repeated parameter ${key}`);
+	}
+	const integer = (name: string, fallback: number, min: number, max: number): number => {
+		const raw = url.searchParams.get(name);
+		if (raw === null) return fallback;
+		if (!/^\d+$/.test(raw)) return invalid(`${name} must be an integer from ${min} to ${max}`);
+		const value = Number(raw);
+		if (!Number.isSafeInteger(value) || value < min || value > max) {
+			return invalid(`${name} must be an integer from ${min} to ${max}`);
+		}
+		return value;
+	};
+	const offset = integer("offset", 0, 0, Number.MAX_SAFE_INTEGER);
+	const limit = integer("limit", 20, 1, 50);
+	const tokens = (url.searchParams.get("q") ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+	const matches = skills
+		.filter(skill => {
+			if (skill.hide === true) return false;
+			const text = `${skill.name} ${skill.description}`.toLowerCase();
+			return tokens.every(token => text.includes(token));
+		})
+		.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+	const page = matches.slice(offset, offset + limit);
+	const lines = [`Skill catalog: ${matches.length} total matches`];
+	if (page.length === 0) {
+		lines.push("No matching skills");
+	} else {
+		lines.push(`Showing ${offset + 1}-${offset + page.length} of ${matches.length}`);
+		for (const skill of page) {
+			const description = escapeXmlText(skill.description.replace(/\s*\r?\n\s*/g, " "));
+			lines.push(`- skill://${escapeXmlText(skill.name)} — ${description}`);
+		}
+		if (offset + page.length < matches.length) lines.push(`Next offset: ${offset + page.length}`);
+	}
+	const content = lines.join("\n");
+	return {
+		url: url.href,
+		content,
+		contentType: "text/plain",
+		size: Buffer.byteLength(content, "utf-8"),
+		notes: [],
+		unbounded: false,
+	};
+}
+
 /**
  * Handler for skill:// URLs.
  */
@@ -311,6 +364,7 @@ export class SkillProtocolHandler implements ProtocolHandler {
 	}
 
 	async resolve(url: InternalUrl, context?: ResolveContext): Promise<InternalResource<string | Buffer>> {
+		if (!(url.rawHost || url.hostname)) return skillCatalogResource(url, context?.skills ?? getActiveSkills());
 		let target: LocatedSkillTarget;
 		try {
 			target = await locateSkillTarget(url, context, false);
@@ -365,6 +419,7 @@ export class SkillProtocolHandler implements ProtocolHandler {
 	 * advertise the URL, which {@link resolve} settles (its servers may still be connecting).
 	 */
 	async locate(url: InternalUrl, context?: ResolveContext, options?: LocateOptions): Promise<string | null> {
+		if (!(url.rawHost || url.hostname)) return null;
 		let target: LocatedSkillTarget;
 		try {
 			target = await locateSkillTarget(

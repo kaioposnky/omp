@@ -1057,11 +1057,17 @@ export async function buildSystemPrompt(options: BuildSystemPromptOptions = {}):
 	//   name, not just `read`, so custom resolvers count once projected; mounted
 	//   xd:// tools count too when their metadata is projected);
 	// - drop skills with frontmatter `hide: true` (still loadable via skill:// and /skill:<name>).
-	const hasSkillReader =
+	// The reader reference is what the prompt tells the model to call: a direct tool
+	// advertised under its wire name, or `xd://<name>` for a mounted-only device.
+	const skillReaderName =
 		tools === undefined
 			? toolNames.includes("read")
-			: toolNames.some(name => toolReadsSkillUris(tools.get(name))) ||
-				xdevTools.some(entry => toolReadsSkillUris(tools.get(entry.name)));
+				? "read"
+				: undefined
+			: (toolNames.find(name => toolReadsSkillUris(tools.get(name))) ??
+				xdevTools.find(entry => toolReadsSkillUris(tools.get(entry.name)))?.name);
+	const hasSkillReader = skillReaderName !== undefined;
+	const skillReaderRef = skillReaderName === undefined ? undefined : toolPromptNames.get(skillReaderName);
 	const hasSkillUriAccess = hasSkillReader && skills.length > 0;
 	const schemeHost: SchemeHost = {
 		skillUriAccess: hasSkillUriAccess,
@@ -1073,9 +1079,12 @@ export async function buildSystemPrompt(options: BuildSystemPromptOptions = {}):
 		crossInstanceAgents,
 		subagent,
 	};
-	const filteredSkills = (options.skillDescriptions ?? new SkillDescriptionCatalog()).render(
-		hasSkillReader ? skills.filter(skill => skill.hide !== true) : [],
-	);
+	const visibleSkills = hasSkillReader ? skills.filter(skill => skill.hide !== true) : [];
+	const searchCatalogMode = (skillsSettings?.catalogMode ?? "full") === "search";
+	const skillCatalogSearch = searchCatalogMode && visibleSkills.length > 0;
+	const filteredSkills = searchCatalogMode
+		? []
+		: (options.skillDescriptions ?? new SkillDescriptionCatalog()).render(visibleSkills);
 
 	const effectiveSystemPromptCustomization = dedupePromptSource(systemPromptCustomization, [
 		resolvedCustomPrompt,
@@ -1126,9 +1135,12 @@ export async function buildSystemPrompt(options: BuildSystemPromptOptions = {}):
 		agentsMdSearch: { files: agentsMdFiles },
 		workspaceTree,
 		hasSkillUriAccess,
+		skillReaderRef,
+		skillReaderIsXd: skillReaderRef?.startsWith(XD_URL_PREFIX) === true,
 		internalUrls: InternalUrlRouter.instance().describe(schemeHost),
 		internalUrlReference: InternalUrlRouter.instance().reference(),
 		skills: filteredSkills,
+		skillCatalogSearch,
 		rules: rules ?? [],
 		alwaysApplyRules: injectedAlwaysApplyRules,
 		cwd: promptCwd,

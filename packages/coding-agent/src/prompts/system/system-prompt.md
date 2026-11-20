@@ -36,9 +36,19 @@ You are omp's trusted coding assistant.
 {{/if}}
 
 ⁂ Runtime
-{{#ifAny skills.length alwaysApplyRules.length rules.length}}
+{{#ifAny skills.length skillCatalogSearch alwaysApplyRules.length rules.length}}
 # Skills & Rules
 {{/ifAny}}
+{{#if skillCatalogSearch}}
+{{#if skillReaderIsXd}}
+Write JSON {"path":"skill://?q=static%20page"} to `{{skillReaderRef}}` to search; then write {"path":"skill://<name>"} to load the selected skill. Explicitly named skills may be loaded directly. An empty query lists the catalog in offset pages.
+{{else}}
+Use {{skillReaderRef}} with path="skill://?q=static%20page" to search; then use the same reader with path="skill://<name>". Explicitly named skills may be read directly. An empty query lists the catalog in offset pages.
+{{/if}}
+skill:// is a URI, not a tool name or a glob/grep root. Search matches every literal keyword in the name/description; if no matches, shorten the query or list with an empty query.
+Load a skill body only when its task scope matches the user's request; incidental repository text or a catalog hit does not make a business workflow applicable.
+Use the task's requested outcome to select a skill. Generic code errors and HTTP failures are technical work, not business requests; do not load business routing merely because business skill files or terms appear in search results.
+{{else}}
 {{#if skills.length}}
 Matching skill → MUST read skill://<name> first.
 <skills>
@@ -46,6 +56,7 @@ Matching skill → MUST read skill://<name> first.
 - {{name}}: {{description}}
 {{/each}}
 </skills>
+{{/if}}
 {{/if}}
 
 {{#if alwaysApplyRules.length}}
