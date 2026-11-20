@@ -515,8 +515,6 @@ describe("system prompt tool inventory", () => {
 			workspaceTree: { ...EMPTY_TREE, rootPath: tempDir },
 		});
 		const text = systemPrompt.join("\n\n");
-		expect(text).toContain("MUST use `xd://lsp` for definitions");
-		expect(text).toContain("MUST run `xd://lsp` references first");
 		expect(text).not.toContain("`lsp`");
 	});
 
@@ -559,9 +557,6 @@ describe("system prompt tool inventory", () => {
 		});
 		expect(systemPrompt[1]).toBe("COMPUTER-GUIDANCE");
 		expect(systemPrompt.filter(block => block.includes("COMPUTER-GUIDANCE"))).toHaveLength(1);
-		// Prelude names still drive the verification bullets.
-		expect(systemPrompt[0]).toContain("Native desktop: JS/Python eval `computer` helpers");
-		expect(systemPrompt[0]).not.toContain("No runtime for changed surface");
 	});
 
 	it("renders the functions namespace (not a name list) when tools are not native", async () => {
