@@ -1,4 +1,4 @@
-import { describe, expect, it, spyOn } from "bun:test";
+import { afterEach, beforeEach, describe, expect, it, spyOn } from "bun:test";
 import * as fs from "node:fs/promises";
 import * as os from "node:os";
 import * as path from "node:path";
@@ -13,6 +13,7 @@ import { requiresApproval, resolveApproval } from "@oh-my-pi/pi-coding-agent/too
 import { Text } from "@oh-my-pi/pi-tui";
 import { githubToolRenderer } from "@oh-my-pi/pi-tui/tools/github";
 import { ToolError } from "@oh-my-pi/pi-tui/tools/tool-errors";
+import { ReadTool } from "@oh-my-pi/pi-coding-agent/tools/read";
 import { WriteTool } from "@oh-my-pi/pi-coding-agent/tools/write";
 import { type WriteRenderContext, writeToolRenderer } from "@oh-my-pi/pi-tui/tools/write";
 import { shortenPath } from "@oh-my-pi/pi-tui/render/render-utils";
@@ -73,6 +74,86 @@ function createTestXdevState(
 	};
 	return state;
 }
+
+describe("built-in report device discovery", () => {
+	let originalAutoQa: string | undefined;
+	beforeEach(() => {
+		originalAutoQa = Bun.env.PI_AUTO_QA;
+		delete Bun.env.PI_AUTO_QA;
+	});
+	afterEach(() => {
+		if (originalAutoQa === undefined) delete Bun.env.PI_AUTO_QA;
+		else Bun.env.PI_AUTO_QA = originalAutoQa;
+	});
+
+	for (const mounted of [false, true]) {
+		for (const enabled of [false, true]) {
+			it(`${enabled ? "lists" : "omits"} report_issue with ${mounted ? "an empty mount" : "no mount"}`, async () => {
+				const session = xdevSession(process.cwd(), {
+					settings: Settings.isolated({ "dev.autoqa": enabled }),
+					xdev: mounted ? createTestXdevState([]) : undefined,
+				});
+				const read = new ReadTool(session);
+				if (!mounted && !enabled) {
+					await expect(read.execute("read-report-list", { path: "xd://" })).rejects.toThrow("not mounted");
+					return;
+				}
+				const result = await read.execute("read-report-list", { path: "xd://" });
+				const text = result.content.find(entry => entry.type === "text")?.text ?? "";
+				expect(text.includes("xd://report_issue")).toBe(enabled);
+				expect(result.isError).not.toBe(true);
+			});
+		}
+	}
+
+	it("appends the enabled built-in without replacing mounted devices", async () => {
+		const device: AgentTool = {
+			name: "peek",
+			label: "Peek",
+			description: "Read-only fixture device",
+			parameters: type({}),
+			async execute() {
+				throw new Error("Listing must not execute devices");
+			},
+		};
+		const read = new ReadTool(
+			xdevSession(process.cwd(), {
+				settings: Settings.isolated({ "dev.autoqa": true }),
+				xdev: createTestXdevState([device]),
+			}),
+		);
+		const listing = await read.execute("read-report-and-mounted", { path: "xd://" });
+		const text = listing.content.find(entry => entry.type === "text")?.text ?? "";
+		expect(text).toContain("xd://peek");
+		expect(text).toContain("xd://report_issue");
+	});
+
+	it("lists the built-in alongside mounted devices without duplicating a mounted report entry", async () => {
+		const device: AgentTool = {
+			name: "report_issue",
+			label: "Report",
+			description: "Mounted report metadata",
+			parameters: type({}),
+			async execute() {
+				throw new Error("Listing must not dispatch a report");
+			},
+		};
+		const session = xdevSession(process.cwd(), {
+			settings: Settings.isolated({ "dev.autoqa": true }),
+			xdev: createTestXdevState([device]),
+		});
+		const read = new ReadTool(session);
+		const listing = await read.execute("read-report-once", { path: "xd://" });
+		const text = listing.content.find(entry => entry.type === "text")?.text ?? "";
+		expect(text.match(/xd:\/\/report_issue\b/g)).toHaveLength(1);
+		const docs = await read.execute("read-report-docs", { path: "xd://report_issue" });
+		expect(docs.content.find(entry => entry.type === "text")?.text).toContain("plain text");
+		const approval = new WriteTool(session).approval;
+		expect(typeof approval).toBe("function");
+		if (typeof approval !== "function") throw new Error("Expected device approval function");
+		expect(approval({ path: "xd://report_issue", content: "read: synthetic report" })).toBe("write");
+	});
+});
 
 describe("read and write route xd:// device URLs", () => {
 	it("lists, documents, and dispatches an ast_edit device", async () => {

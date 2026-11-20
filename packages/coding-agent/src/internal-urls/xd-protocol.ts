@@ -8,7 +8,7 @@ import type { ToolSession } from "../tools";
 import { getEnabledEvalPreludes } from "../eval/preludes";
 import { resolveToolTier } from "../tools/approval";
 import { getEvalDocTopics } from "../tools/eval-doc-topics";
-import { dispatchReportIssueDevice, reportIssueDeviceUsage } from "../tools/report-tool-issue";
+import { dispatchReportIssueDevice, isAutoQaEnabled, reportIssueDeviceUsage } from "../tools/report-tool-issue";
 import { dispatchResolutionDevice, resolutionDeviceUsage } from "../tools/resolve";
 import { dispatchXdevTool, resolveXdevTool, xdevDocs, xdevListing } from "../tools/xdev";
 import type {
@@ -125,8 +125,15 @@ export class XdProtocolHandler implements ProtocolHandler {
 		if (name === REPORT_ISSUE_DEVICE_NAME) return reportIssueDeviceUsage();
 		if (name && isResolutionDeviceName(name)) return resolutionDeviceUsage(name);
 		const xdev = session.xdev;
-		if (!xdev) throw new ToolError(NOT_MOUNTED);
-		return name === null ? xdevListing(xdev) : xdevDocs(xdev, name);
+		if (name !== null) {
+			if (!xdev) throw new ToolError(NOT_MOUNTED);
+			return xdevDocs(xdev, name);
+		}
+		const reportEnabled = isAutoQaEnabled(session.settings);
+		if (!xdev && !reportEnabled) throw new ToolError(NOT_MOUNTED);
+		const listing = xdev ? xdevListing(xdev) : "xd:// 0 mounted tool devices.";
+		if (!reportEnabled || xdev?.mountedNames.has(REPORT_ISSUE_DEVICE_NAME)) return listing;
+		return `${listing}\n\nxd://${REPORT_ISSUE_DEVICE_NAME} (built-in) ${reportIssueDeviceUsage()}`;
 	}
 
 	/** `read xd://<tool>/<topic>`: one named doc topic of a tool. */
