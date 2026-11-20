@@ -46,7 +46,7 @@ async function resolve(input: CodeModeResolveInput): Promise<CodeModeDecision> {
 const NO_SCOPE: CodeModeScope = {};
 
 describe("Code Mode scope resolution (F4)", () => {
-	it.todo("CM-S1 each precedence level beats the ones below it", async () => {
+	it("CM-S1 each precedence level beats the ones below it", async () => {
 		const cases: Array<{ title: string; input: CodeModeResolveInput; source: CodeModeDecision["source"] }> = [
 			{
 				title: "session beats spawn, frontmatter, agents, models, roles, main and default",
@@ -159,7 +159,7 @@ describe("Code Mode scope resolution (F4)", () => {
 		}
 	});
 
-	it.todo("CM-S2 the no-eval hard gate beats the session override", async () => {
+	it("CM-S2 the no-eval hard gate beats the session override", async () => {
 		const decision = await resolve({
 			isMain: true,
 			sessionOverride: true,
@@ -170,7 +170,7 @@ describe("Code Mode scope resolution (F4)", () => {
 		expect(decision.source).toBe("hard-gate:no-eval");
 	});
 
-	it.todo("CM-S3 agent frontmatter tools without eval deny the spawn request", async () => {
+	it("CM-S3 agent frontmatter tools without eval deny the spawn request", async () => {
 		const decision = await resolve({
 			isMain: false,
 			spawnOverride: true,
@@ -184,7 +184,7 @@ describe("Code Mode scope resolution (F4)", () => {
 		expect(decision.denied?.reason).toContain("no eval");
 	});
 
-	it.todo("CM-S4 the first matching model glob wins in array order", async () => {
+	it("CM-S4 the first matching model glob wins in array order", async () => {
 		const decision = await resolve({
 			isMain: false,
 			modelId: "anthropic/claude-haiku-5-5",
@@ -203,7 +203,7 @@ describe("Code Mode scope resolution (F4)", () => {
 		expect(decision.source).toBe("scope.models");
 	});
 
-	it.todo("CM-S5 a role rule applies when no agent or model rule matches", async () => {
+	it("CM-S5 a role rule applies when no agent or model rule matches", async () => {
 		const decision = await resolve({
 			isMain: false,
 			role: "smol",
@@ -215,7 +215,7 @@ describe("Code Mode scope resolution (F4)", () => {
 		expect(decision.source).toBe("scope.roles");
 	});
 
-	it.todo("CM-S6 a child does not inherit the parent's session state", async () => {
+	it("CM-S6 a child does not inherit the parent's session state", async () => {
 		const decision = await resolve({
 			isMain: false,
 			sessionOverride: true,
@@ -226,7 +226,7 @@ describe("Code Mode scope resolution (F4)", () => {
 		expect(decision.source).toBe("default");
 	});
 
-	it.todo("CM-S7 factory defaults disable sonic, scout, smol and tiny only", async () => {
+	it("CM-S7 factory defaults disable sonic, scout, smol and tiny only", async () => {
 		const { cfgCodeModeScope } = await loadPlanned<SettingsModule>("code-mode/settings");
 		const factory = cfgCodeModeScope.definition.default as CodeModeScope;
 		expect(factory.agents?.sonic).toBe(false);
@@ -253,13 +253,13 @@ describe("Code Mode scope resolution (F4)", () => {
 		expect(task.source).toBe("default");
 	});
 
-	it.todo("CM-S8 settings validation rejects a bad glob and accepts unknown agent names", async () => {
+	it("CM-S8 settings validation rejects a bad glob and accepts unknown agent names", async () => {
 		await loadPlanned<SettingsModule>("code-mode/settings");
 		expect(() => Settings.isolated({ "codeMode.scope": { models: [{ match: "[", enabled: true }] } })).toThrow();
 		expect(() => Settings.isolated({ "codeMode.scope": { agents: { not_installed_yet: true } } })).not.toThrow();
 	});
 
-	it.todo("CM-S9 the decision carries the source and detail shown by /code-mode status", async () => {
+	it("CM-S9 the decision carries the source and detail shown by /code-mode status", async () => {
 		const decision = await resolve({
 			isMain: false,
 			role: "smol",
@@ -282,7 +282,7 @@ describe("Code Mode scope resolution (F4)", () => {
 		expect(byModel.detail).toBeTruthy();
 	});
 
-	it.todo("CM-S10 a restricted tool list without eval turns Code Mode off", async () => {
+	it("CM-S10 a restricted tool list without eval turns Code Mode off", async () => {
 		const decision = await resolve({
 			isMain: true,
 			sessionOverride: true,

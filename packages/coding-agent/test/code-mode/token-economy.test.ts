@@ -119,7 +119,7 @@ describe("Code Mode token economy (§12)", () => {
 		}
 	});
 
-	it.todo("CM-E3 bridge catalog sorts stably and collapses a >20-tool MCP server to one line", async () => {
+	it("CM-E3 bridge catalog sorts stably and collapses a >20-tool MCP server to one line", async () => {
 		const catalog = await loadPlanned<{ renderBridgeCatalog: (tools: unknown[]) => string }>("code-mode/catalog");
 		const small = [
 			{ name: "read", description: "Read a file." },
