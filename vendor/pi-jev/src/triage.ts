@@ -98,10 +98,10 @@ export const DANGEROUS_EXEC =
 
 /**
  * Per-prompt Jev triage and the dangerous-execution approval gate. Independent switches:
- * `/jev triage on|off` (env PI_JEV_TRIAGE=0) and `/jev approval on|off` (env PI_JEV_APPROVAL=0). Both on by default.
+ * `/jev triage on|off` (opt-in via PI_JEV_TRIAGE=1) and `/jev approval on|off` (on unless PI_JEV_APPROVAL=0).
  */
 export class Triage {
-  public triageEnabled = process.env.PI_JEV_TRIAGE?.trim() !== "0";
+  public triageEnabled = process.env.PI_JEV_TRIAGE?.trim() === "1";
   public approvalEnabled = process.env.PI_JEV_APPROVAL?.trim() !== "0";
 
   constructor(private jevClient: Pick<JevClient, "isConfigured" | "evaluate">) {}

@@ -154,7 +154,7 @@ export class CompletionVerifier {
   private async check(event: SessionStopEvent, ctx: ExtensionContext): Promise<SessionStopEventResult | undefined> {
     try {
       if (completionOverride.enabled === false) return undefined;
-      if (completionOverride.enabled === null && process.env.PI_JEV_COMPLETION?.trim() === "0") return undefined;
+      if (completionOverride.enabled === null && process.env.PI_JEV_COMPLETION?.trim() !== "1") return undefined;
       // Core re-fires session_stop during continuations with this flag set;
       // continuing again would loop forever.
       if (event.stop_hook_active) return undefined;

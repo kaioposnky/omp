@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Task triage and completion verification are now opt-in (`PI_JEV_TRIAGE=1`, `PI_JEV_COMPLETION=1`). Default conversations skip both Jev requests, unsolicited triage instructions, and completion-triggered extra turns. `/jev triage on` still enables triage for a session; dangerous-execution approval remains enabled independently.
+
 ### Added
 - `jev_browse` tool: TypeScript port of browser-use/jev-ultrafast. One Jev request per step picks operation and target, a small model writes typed text, and freshness/occlusion guards run before every input. Live: Wikipedia article in 5.3s (4 Jev requests); Google Flights Zurich→London one-way search in 10–20s (16–19 Jev requests, 2 text calls).
 - Port fixes over upstream: a headless tab runs unthrottled (otherwise ~1 animation frame/s left CSS menus at opacity 0); a target clipped by a scroll container is scrolled into view instead of being rejected every step (the Flights date picker looped on it until the budget ran out); budget exhaustion returns a `blocked` result with history instead of throwing.

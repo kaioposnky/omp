@@ -16,6 +16,23 @@ test("policy only gets stricter than Jev: risk > clarity > planning > implement"
   assert.equal(decideTriage("tweak button padding").action, "implement");
 });
 
+test("default triage does not judge or interrupt a request", async () => {
+  const previous = process.env.PI_JEV_TRIAGE;
+  delete process.env.PI_JEV_TRIAGE;
+  let calls = 0;
+  try {
+    const triage = new Triage({ isConfigured: () => true, evaluate: async () => { calls++; return { answers: {} }; } } as unknown as JevClient);
+    assert.equal(await triage.triage("refactor authentication"), undefined);
+    assert.equal(calls, 0);
+    triage.triageEnabled = true;
+    assert.equal((await triage.triage("refactor authentication"))?.action, "require_approval");
+    assert.equal(calls, 1);
+  } finally {
+    if (previous === undefined) delete process.env.PI_JEV_TRIAGE;
+    else process.env.PI_JEV_TRIAGE = previous;
+  }
+});
+
 test("risky keywords catch destructive commands but not look-alike words", () => {
   for (const s of ["rm -rf build", "rm -f a.txt", "git push --force", "DROP TABLE x", "update the db schema", "rotate the API secret", "apagar arquivos"]) {
     assert.ok(RISKY.test(s), s);
@@ -28,6 +45,7 @@ test("risky keywords catch destructive commands but not look-alike words", () =>
 test("Jev failure still applies keyword policy; slash commands are skipped", async () => {
   const failing = { isConfigured: () => true, evaluate: async () => { throw new Error("down"); } } as unknown as JevClient;
   const triage = new Triage(failing);
+  triage.triageEnabled = true;
   assert.equal((await triage.triage("delete old backups"))?.action, "require_approval");
   assert.equal((await triage.triage("tweak button padding"))?.action, "implement");
   assert.equal(await triage.triage("/jev status"), undefined);

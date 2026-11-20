@@ -1,4 +1,4 @@
-import test from "node:test";
+import test, { beforeEach, afterEach } from "node:test";
 import assert from "node:assert/strict";
 import { decideCompletion } from "../src/completion.js";
 
@@ -61,6 +61,24 @@ test("no Jev + clean todos fails open", () => {
 import { CompletionVerifier, extractTodoPhases, completionOverride } from "../src/completion.js";
 import type { SessionStopEvent } from "../src/completion.js";
 
+
+let previousCompletion: string | undefined;
+beforeEach(() => {
+  previousCompletion = process.env.PI_JEV_COMPLETION;
+  process.env.PI_JEV_COMPLETION = "1";
+});
+afterEach(() => {
+  if (previousCompletion === undefined) delete process.env.PI_JEV_COMPLETION;
+  else process.env.PI_JEV_COMPLETION = previousCompletion;
+});
+
+test("default completion leaves a finished conversation alone, even with stale todos", async () => {
+  delete process.env.PI_JEV_COMPLETION;
+  const client = mockJev({ premature_stop: { type: "noul", value: 1 } });
+  const result = await install(client)(stopEvent({ messages: [...stopEvent().messages, todoToolResult] }), mockCtx().ctx);
+  assert.equal(result, undefined);
+  assert.equal(client.calls, 0);
+});
 const stopEvent = (overrides: Partial<SessionStopEvent> = {}): SessionStopEvent => ({
   type: "session_stop",
   messages: [

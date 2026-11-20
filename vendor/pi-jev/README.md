@@ -10,10 +10,10 @@ Semantic tool routing and typed decisions for the [Pi coding agent](https://pi.d
 - **Custom Jev Endpoint**: `PI_JEV_BASE_URL` / `TYPESAFE_BASE_URL` points the TypeSafe client at Jev-compatible local servers or proxies such as Laya `laya-serve`.
 - **Dynamic Evaluations (`/jev test <prompt>`)**: The active model designs the Jev question schema for a free-form prompt, then Jev evaluates it.
 - **Automatic Mode (opt-in)**: `--jev-auto` / `PI_JEV_AUTO=1` / `/jev auto on` routes tools and suggests skills before every prompt. Off by default, except for web tasks (URLs, browse, screenshot, website): those are always routed, because it sends the agent straight to the browser skill. Opt out with `PI_JEV_WEB=0`.
-- **Task Triage (on by default)**: `/jev triage [on|off]` / `PI_JEV_TRIAGE=0`. Every prompt gets one Jev triage pass (clarity, risk, planning, next step), run in parallel with routing. A fixed policy can only make Jev's verdict stricter: risky keywords (auth, database, production, deploy, credentials, delete, migrations...) or high risk → `require_approval`; unclear → `ask_user`; broad/architectural → `plan_then_implement`. Non-`implement` verdicts are injected as instructions.
+- **Task Triage (opt-in)**: `/jev triage on` / `PI_JEV_TRIAGE=1`. Off by default: ordinary prompts do not incur a triage request or receive unsolicited planning, clarification, or approval instructions. When enabled, the existing clarity/risk/planning policy applies. Dangerous-execution protection remains independently enabled.
 - **Spawn Model Routing (on by default)**: `PI_JEV_SPAWN=0` to disable. One batched Jev evaluate per auto-spawned subagent (clarity + profile) picks a fast/balanced/reasoning/long_context model pattern via `before_subagent_spawn`. Caller-set `patterns` always win; Jev failures leave the default spawn untouched (fail-open).
 - **Consequence-Gated Approvals (on by default)**: `/jev consequence [on|off]` / `PI_JEV_CONSEQUENCE=0`. Dangerous executions get a Jev blast-radius assess (reversible, scope, blast_radius 0-10): low-risk reversible single-file ops auto-approve, high blast radius requests approval. Fails closed on Jev errors; keyword rules always apply.
-- **Completion Verification (on by default)**: `PI_JEV_COMPLETION=0`. At `session_stop`, a deterministic todo check (pending/in_progress/blocked → always continue) plus Jev judgments (`premature_stop > 0.7` or `all_tasks_done < 0.7`) continue the session with feedback instead of letting it stop early. Loop-guarded via `stop_hook_active`.
+- **Completion Verification (opt-in)**: `PI_JEV_COMPLETION=1`. Off by default: finishing an answer does not call Jev or append another conversation turn. When enabled, pending todos and Jev completion judgments may request a loop-guarded continuation.
 - **MCP Injection Gate (on by default)**: `/jev mcp [on|off]` / `PI_JEV_MCP=0`. Before each agent start, one batched Jev evaluate (a noul question per MCP server) injects a server's inactive tools at p ≥ 0.65 and retracts active ones at p ≤ 0.35; the dead zone in between never churns the toolset. Jev failures leave the toolset untouched (fail-open).
 - **Learn Gate (on by default)**: `/jev learn [on|off]` / `PI_JEV_LEARN=0`. `learn` tool calls are judged (durable, reusable) before reaching the memory bank: lessons below threshold are blocked with an explanation, everything else — including any Jev failure — passes through (fail-open). `novel` is informational only.
 - **Post-Commit Hook Installer (`jev-hook` CLI)**: `npx jev-hook -c "tests pass" --repo /path/to/repo` writes a `.git/hooks/post-commit` that runs `jev-gate` on the commit diff. Exits `0` installed (or skipped, existing hook untouched), `2` on error. `--force` overwrites.
@@ -202,12 +202,12 @@ Extends the dangerous-execution approval gate with a Jev blast-radius assess: `r
 
 ### Completion Verification
 
-A `session_stop` gate checks that the session actually finished before letting it stop:
+Opt in with `PI_JEV_COMPLETION=1`. Otherwise the stop hook returns immediately, without a Jev request or continuation. When enabled, the gate checks completion:
 
 - Deterministic todo check: any `pending`/`in_progress`/`blocked` todo always continues the session (Jev cannot override).
 - Jev noul judgments (`all_tasks_done`, `premature_stop`, state = last user prompt + last assistant text, 6000 chars each):
   `premature_stop > 0.7` or `all_tasks_done < 0.7` continues with injected feedback.
-- Loop-guarded: skips when `stop_hook_active` is set (Pi caps continuations at 8). Disable with `PI_JEV_COMPLETION=0`.
+- Loop-guarded: skips when `stop_hook_active` is set (Pi caps continuations at 8). Disable with `PI_JEV_COMPLETION=0` or leave it unset.
 
 ### Post-Commit Hook Installer
 
