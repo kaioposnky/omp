@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: truncated-tool-names
+          ref: main
           fetch-depth: 0
 
       - name: Configure git author
@@ -73,7 +73,7 @@ jobs:
             echo "Already up to date with upstream/main."
             exit 0
           fi
-          git push --force-with-lease="refs/heads/truncated-tool-names:$BEFORE_SHA" origin truncated-tool-names
+          git push --force-with-lease="refs/heads/main:$BEFORE_SHA" origin main
 
       - name: Track conflict in a single issue
         env:
@@ -87,7 +87,7 @@ jobs:
         run: |
           issue="$(gh issue list --state open --limit 100 --json number,title --jq 'map(select(.title == env.TITLE))[0].number // empty')"
           if [ "$CONFLICT" = "true" ]; then
-            body="$(printf 'Rebasing `truncated-tool-names` onto `upstream/main` hit a conflict. Resolve it locally, push with `--force-with-lease`, then re-run **Sync with upstream**. This issue closes itself on the next clean sync.\n\n%s\n\nLatest failed run: %s\n' "$DETAIL" "$RUN_URL")"
+            body="$(printf 'Rebasing `main` onto `upstream/main` hit a conflict. Resolve it locally, push with `--force-with-lease`, then re-run **Sync with upstream**. This issue closes itself on the next clean sync.\n\n%s\n\nLatest failed run: %s\n' "$DETAIL" "$RUN_URL")"
             if [ -n "$issue" ]; then
               # Body edits send no notification: one alert per conflict episode.
               gh issue edit "$issue" --body "$body"

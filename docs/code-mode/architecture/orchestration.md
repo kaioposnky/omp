@@ -17,11 +17,11 @@ Pré-requisito de leitura para qualquer onda: `docs/code-mode-plan.md` §2–§4
 ## Pré-requisitos antes de iniciar
 
 1. **Working tree limpo.** Todo o WIP anterior precisa estar commitado na branch
-   `truncated-tool-names`: `git status --porcelain` vazio antes de qualquer onda. Nenhum agente de
+   `main`: `git status --porcelain` vazio antes de qualquer onda. Nenhum agente de
    onda reescreve, formata ou descarta trabalho alheio.
 2. **Branch dedicada.** Crie `feat/code-mode` a partir do HEAD atual
    (`git switch -c feat/code-mode`); todo o trabalho de implementação acontece nela. Nenhuma onda
-   commita direto na `truncated-tool-names`.
+   commita direto na `main`.
 3. **Arquivos quentes.** Estes arquivos já foram tocados por trabalho paralelo do usuário e precisam
    de cuidado extra no rebase: `packages/coding-agent/src/sdk.ts`,
    `packages/coding-agent/src/system-prompt.ts`,
@@ -281,9 +281,9 @@ Objetivo: implementar o Code Mode por completo — W0 a W6 — em ondas sequenci
 docs/code-mode/architecture/orchestration.md.
 
 Pré-requisitos (verifique antes de criar qualquer subagente; se um falhar, pare e reporte):
-1. `git status --porcelain` vazio — todo WIP anterior já commitado em `truncated-tool-names`.
+1. `git status --porcelain` vazio — todo WIP anterior já commitado em `main`.
 2. Crie a branch de trabalho a partir do HEAD atual: `git switch -c feat/code-mode`. Nada é
-   commitado na `truncated-tool-names`.
+   commitado na `main`.
 3. Baseline: `cd packages/coding-agent && bun test test/code-mode/` termina com 0 fail e todos os
    IDs ainda em `it.todo`.
 4. Arquivos quentes que exigem cuidado no rebase, porque já foram tocados por trabalho paralelo do

@@ -43,19 +43,19 @@ The most capable agent surface that ships. Continuously tuned by real-world use 
 >
 > **Este é um fork** que acompanha o upstream com uma correção adicional: provedores que derrubam o último caractere do nome da ferramenta (ex.: modelos Verboo) faziam toda chamada falhar com "not found". Aqui o nome truncado é recuperado e a ferramenta correta executa.
 >
-> - **Updates**: a daily workflow rebases this branch onto upstream and ships verified fork releases (SHA256SUMS.txt); the built-in updater reads **this fork's releases**, never upstream. / Um workflow diário sincroniza com o upstream e publica releases verificadas; o atualizador interno aponta para este fork.
-> - **Install / Instalação**: `curl -fsSL https://raw.githubusercontent.com/kaioposnky/omp/truncated-tool-names/install.sh | bash` (bilingual EN/PT-BR installer; Windows: `install.ps1`)
+> - **Updates**: this branch tracks upstream (currently pinned before upstream's xd:// tool-command rewrite) and ships verified fork releases (SHA256SUMS.txt); the built-in updater reads **this fork's releases**, never upstream. / Este branch acompanha o upstream (fixado antes da reescrita de xd:// para tool commands) e publica releases verificadas; o atualizador interno aponta para este fork.
+> - **Install / Instalação**: `curl -fsSL https://raw.githubusercontent.com/kaioposnky/omp/main/install.sh | bash` (bilingual EN/PT-BR installer; Windows: `install.ps1`)
 
 ## Install
 
 **macOS · Linux · Windows (this fork)**
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/kaioposnky/omp/truncated-tool-names/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kaioposnky/omp/main/install.sh | bash
 ```
 
 ```powershell
-irm https://raw.githubusercontent.com/kaioposnky/omp/truncated-tool-names/install.ps1 | iex
+irm https://raw.githubusercontent.com/kaioposnky/omp/main/install.ps1 | iex
 ```
 
 The bilingual (EN/PT-BR) installer downloads the release binary, verifies it

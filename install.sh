@@ -12,7 +12,7 @@
 set -euo pipefail
 
 REPO="kaioposnky/omp"
-BRANCH="truncated-tool-names"
+BRANCH="main"
 BIN_NAME="omp"
 INSTALL_DIR="$HOME/.local/bin"
 NPM_PKG="@oh-my-pi/pi-coding-agent"

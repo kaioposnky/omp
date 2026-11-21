@@ -2,7 +2,7 @@
 
 ## Fork operations (kaioposnky/omp)
 
-- Default branch is `truncated-tool-names`. `.github/workflows/sync-upstream.yml` rebases it onto `upstream/main` daily and force-pushes; a failed rebase means upstream touched our commits — resolve manually, then re-run the workflow.
+- Default branch is `main`, pinned to upstream `02742bc131` (before upstream replaced xd:// devices, which Code Mode needs). `.github/workflows/sync-upstream.yml`, which rebases onto `upstream/main` and force-pushes, is disabled until Code Mode is ported; when it runs, a failed rebase means upstream touched our commits, so resolve manually and re-run it.
 - `.github/workflows/release.yml` builds omp binaries from this branch head and publishes GitHub releases tagged `v<upstream-latest>` with `SHA256SUMS.txt`. CI pins bun via root `package.json` → `packageManager` and installs with a 1-hour release-age floor (the repo's 3-day policy stays for local dev).
 - The built-in updater resolves versions from this fork's releases only (`REPO` in `packages/coding-agent/src/cli/update-cli.ts`, binary channel, GitHub digest-verified). Do not reintroduce npm-based version checks.
 - Root `install.sh` / `install.ps1` are bilingual EN/PT-BR takeover installers: hash-verify before writing, remove manager-owned copies, install to the canonical `omp` path. Keep both languages message-for-message in sync when editing.

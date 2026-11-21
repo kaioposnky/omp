@@ -1,23 +1,23 @@
 ---
 name: omp-fork-release-ops
-description: Maintain and release the kaioposnky/omp fork (branch `truncated-tool-names`). Covers rebase-based sync against upstream, force-with-lease push, verifying fork commits survived a rebase via range-diff, the release workflow's fork-build-sha gate, and how to force a rebuild. Use when rebasing, pushing, tagging, releasing, or debugging the fork's binary updater and CI workflows.
+description: Maintain and release the kaioposnky/omp fork (branch `main`). Covers rebase-based sync against upstream, force-with-lease push, verifying fork commits survived a rebase via range-diff, the release workflow's fork-build-sha gate, and how to force a rebuild. Use when rebasing, pushing, tagging, releasing, or debugging the fork's binary updater and CI workflows.
 ---
 
 # omp fork release ops
 
-Fork: `kaioposnky/omp`, branch `truncated-tool-names` (NOT `main`). Fork commits sit on top of `upstream/main` (can1357/oh-my-pi) and are rebased daily.
+Fork: `kaioposnky/omp`, branch `main` (it replaced `truncated-tool-names` on 2026-11-21; `kaioposnky/oh-my-pi` is archived). Fork commits sit on top of upstream can1357/oh-my-pi, currently pinned at `02742bc131`, the last commit before upstream replaced xd:// devices with bash tool commands, because Code Mode depends on xd://.
 
 ## Branch model
 
-- `upstream/main` advances; `.github/workflows/sync-upstream.yml` (cron `37 5 * * *`, `workflow_dispatch`) runs `git rebase upstream/main` and force-pushes. A conflicting rebase does not fail the run: it opens (or silently refreshes) one issue titled `Upstream sync blocked by a rebase conflict` with the stopped commit and files, and the next clean sync closes it. Resolve locally, push with `--force-with-lease`, re-run the workflow.
+- `.github/workflows/sync-upstream.yml` (cron `37 5 * * *`, `workflow_dispatch`) runs `git rebase upstream/main` and force-pushes. **It is disabled while the fork is pinned**: re-enabling it rebases past the xd:// removal and breaks Code Mode, so only re-enable it after Code Mode is ported to upstream's tool commands. To pick up upstream fixes before then, rebase manually onto a chosen pre-removal commit. A conflicting rebase does not fail the run; it opens or refreshes one issue titled `Upstream sync blocked by a rebase conflict`, and the next clean sync closes it.
 - Consequence: **fork commit SHAs change every rebase**. Never compare fork commits by SHA across a rebase — use `range-diff`.
 - Push fork work with `--force-with-lease`, never a plain push after a rebase:
 
 ```bash
-git fetch upstream main origin truncated-tool-names
-git rev-list --left-right --count origin/truncated-tool-names...HEAD   # ahead/behind
-git range-diff upstream/main..origin/truncated-tool-names upstream/main..HEAD
-git push origin truncated-tool-names --force-with-lease
+git fetch upstream main origin main
+git rev-list --left-right --count origin/main...HEAD   # ahead/behind
+git range-diff upstream/main..origin/main upstream/main..HEAD
+git push origin main --force-with-lease
 ```
 
 `range-diff` `=` lines = patch survived the rebase; `!` = upstream touched the same hunk, inspect. Local HEAD being a superset of origin is the expected, correct state — push it.
@@ -30,7 +30,7 @@ git push origin truncated-tool-names --force-with-lease
 - Gate: release body carries `fork-build-sha:<sha>`. If the tag already has that SHA, the run skips. It also skips with a warning when the tree's `@oh-my-pi/pi-natives` version is not on npm (upstream tagged 18.6.2 without publishing natives); the next upstream bump unblocks it. To force a rebuild:
 
 ```bash
-gh workflow run release.yml --repo kaioposnky/omp --ref truncated-tool-names
+gh workflow run release.yml --repo kaioposnky/omp --ref main
 # or, to rebuild the same commit:  -f force=true
 gh run list --repo kaioposnky/omp --workflow=release.yml --limit 3
 ```
