@@ -23,8 +23,12 @@ const mcpTool: CustomTool = {
 };
 
 describe("/tan prompt-cache tool presentation", () => {
-	for (const xdev of [true, false]) {
-		it(`preserves the parent's request tools with xd:// ${xdev ? "enabled" : "disabled"}`, async () => {
+	for (const [xdev, codeMode] of [
+		[true, false],
+		[false, false],
+		[true, true],
+	] as const) {
+		it(`preserves the parent's request tools with xd:// ${xdev ? "enabled" : "disabled"}${codeMode ? " in Code Mode" : ""}`, async () => {
 			using dir = TempDir.createSync("@omp-tan-tools-");
 			const cwd = dir.path();
 			const settings = Settings.isolated({ "tools.xdev": xdev, "marketplace.autoUpdate": "off" });
@@ -46,24 +50,30 @@ describe("/tan prompt-cache tool presentation", () => {
 				mcpTools: [mcpTool],
 			};
 			const { session: parent } = await createAgentSession({
+				codeMode,
 				...base,
 				settings,
 				hasUI: true,
 				sessionManager: SessionManager.inMemory(cwd),
 			});
 			try {
+				// Mirrors the /tan controller's snapshot of the parent's presentation.
+				const offWire = parent.isCodeModeActive()
+					? [...parent.getMountedXdevToolNames(), ...parent.getBridgeOnlyToolNames()]
+					: parent.getMountedXdevToolNames();
 				const { session: child } = await createAgentSession({
+					codeModeSpawnOverride: parent.isCodeModeActive(),
 					...base,
 					settings: createSubagentSettings(settings),
 					hasUI: false,
 					systemPrompt: [...parent.systemPrompt],
 					toolNames: parent.getEnabledToolNames(),
-					mountedToolNames: parent.getMountedXdevToolNames(),
+					mountedToolNames: offWire,
 					advertiseHeadlessAsk: parent.getActiveToolNames().includes("ask"),
 					parentTaskPrefix: "Tan-fixture",
 					sessionManager: SessionManager.inMemory(cwd),
 				});
-				await child.setActiveToolPresentation(parent.getEnabledToolNames(), parent.getMountedXdevToolNames());
+				await child.setActiveToolPresentation(parent.getEnabledToolNames(), offWire);
 				try {
 					const advertised = (session: typeof parent) =>
 						session.agent.state.tools.map(tool => ({
@@ -71,7 +81,10 @@ describe("/tan prompt-cache tool presentation", () => {
 							description: tool.description,
 							parameters: tool.parameters,
 						}));
-					if (xdev) expect(parent.getMountedXdevToolNames()).toContain(mcpTool.name);
+					expect(parent.isCodeModeActive()).toBe(codeMode);
+					expect(child.isCodeModeActive()).toBe(codeMode);
+					if (codeMode) expect(parent.getBridgeOnlyToolNames()).toContain(mcpTool.name);
+					else if (xdev) expect(parent.getMountedXdevToolNames()).toContain(mcpTool.name);
 					else expect(parent.getMountedXdevToolNames()).toEqual([]);
 					expect(parent.getActiveToolNames()).toContain("ask");
 					expect(child.getMountedXdevToolNames()).toEqual(parent.getMountedXdevToolNames());

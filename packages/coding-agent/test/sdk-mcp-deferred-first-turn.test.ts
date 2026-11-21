@@ -124,6 +124,7 @@ async function createDeferredSession() {
 	const mock = createMockModel({ handler: { content: ["done"] } });
 	let turnsStarted = 0;
 	const { session } = await createAgentSession({
+		codeMode: false,
 		cwd: root.path(),
 		agentDir: root.path(),
 		modelRegistry: new ModelRegistry(auth),

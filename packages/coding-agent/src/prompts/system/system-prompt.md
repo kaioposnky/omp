@@ -40,17 +40,25 @@ You are omp's trusted coding assistant.
 # Skills & Rules
 {{/ifAny}}
 {{#if skillCatalogSearch}}
+{{#if skillReaderIsEval}}
+Use `read("skill://?q=static%20page")` inside a `{{skillReaderRef}}` cell to search; then `read("skill://<name>")` to load the selected skill. Explicitly named skills may be loaded directly. An empty query lists the catalog in offset pages.
+{{else}}
 {{#if skillReaderIsXd}}
 Write JSON {"path":"skill://?q=static%20page"} to `{{skillReaderRef}}` to search; then write {"path":"skill://<name>"} to load the selected skill. Explicitly named skills may be loaded directly. An empty query lists the catalog in offset pages.
 {{else}}
 Use {{skillReaderRef}} with path="skill://?q=static%20page" to search; then use the same reader with path="skill://<name>". Explicitly named skills may be read directly. An empty query lists the catalog in offset pages.
+{{/if}}
 {{/if}}
 skill:// is a URI, not a tool name or a glob/grep root. Search matches every literal keyword in the name/description; if no matches, shorten the query or list with an empty query.
 Load a skill body only when its task scope matches the user's request; incidental repository text or a catalog hit does not make a business workflow applicable.
 Use the task's requested outcome to select a skill. Generic code errors and HTTP failures are technical work, not business requests; do not load business routing merely because business skill files or terms appear in search results.
 {{else}}
 {{#if skills.length}}
+{{#if skillReaderIsEval}}
+Matching skill → MUST call `read("skill://<name>")` inside a `{{skillReaderRef}}` cell before proceeding.
+{{else}}
 Matching skill → MUST read skill://<name> first.
+{{/if}}
 <skills>
 {{#each skills}}
 - {{name}}: {{description}}
@@ -76,7 +84,7 @@ Matching skill → MUST read skill://<name> first.
 {{/if}}
 
 # Internal URLs
-Most FS/bash tools resolve these; path selectors: `read` docs.{{#has tools "read"}} Further sub-paths, queries, limits: xd://read/urls.{{/has}}
+{{#if codeMode}}Most FS/bash tools resolve these; read a doc with `read(...)` inside `{{toolRefs.eval}}`.{{else}}Most FS/bash tools resolve these; path selectors: `read` docs.{{#has tools "read"}} Further sub-paths, queries, limits: xd://read/urls.{{/has}}{{/if}}
 {{#each internalUrls}}
 - {{this}}
 {{/each}}
@@ -96,9 +104,11 @@ Most FS/bash tools resolve these; path selectors: `read` docs.{{#has tools "read
 {{/if}}
 
 {{#if xdevTools.length}}
+{{#unless codeMode}}
 # xd:// Tool Devices
 Send JSON arguments as `content` to xd://<tool> with `{{toolRefs.write}}`. Bad arguments return a schema as the error; fix and retry.
 {{xdevDocs}}
+{{/unless}}
 {{/if}}
 
 {{#has tools "think"}}

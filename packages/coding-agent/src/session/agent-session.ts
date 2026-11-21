@@ -133,6 +133,9 @@ import { planParallel } from "../auto-parallel/planner";
 import { classifyAutoPrewalk } from "../auto-prewalk/classifier";
 import { reset as resetCapabilities } from "../capability";
 import type { EffectiveExtensionRoots } from "../capability/types";
+import { fitRouterHints, ROUTER_HINTS_CUSTOM_TYPE } from "../code-mode/hints";
+import { applyCodeModePartition } from "../code-mode/partition";
+import type { CodeModeDecision } from "../code-mode/scope";
 import type { SessionAccountPoolScope } from "../config/account-pools";
 import { shouldEnableAppendOnlyContext } from "../config/append-only-context-mode";
 import { cfgOffline } from "../config/auxiliary-model-policy";
@@ -521,16 +524,18 @@ import {
 import { classifyTitleDrift } from "./title-drift-classifier";
 import {
 	cleanupEmptyMoveSession,
+	CODE_MODE_ENTRY_TYPE,
 	copySessionArtifacts,
 	extractSessionInit,
 	type PersistedSessionInit,
+	type RecordedCodeMode,
 	type SessionManager,
 } from "./session-manager";
 import { SessionMemory, type SessionMemoryHost } from "./session-memory";
 import { buildSessionMetadata } from "./session-metadata";
 import { SessionProviderBoundary, type SessionProviderBoundaryHost } from "./session-provider-boundary";
 import { SessionStatsTracker, type SessionStatsTrackerHost } from "./session-stats";
-import { promptDigestOfEntry, SessionTools, type SessionToolsHost } from "./session-tools";
+import { promptDigestOfEntry, SessionTools, type SessionToolsHost, type SetActiveToolsOptions } from "./session-tools";
 import { resolveWebsocketPreference } from "./settings-stream-fn";
 import type { ShakeMode, ShakeResult } from "./shake-types";
 import { ToolChoiceQueue } from "./tool-choice-queue";
@@ -1200,6 +1205,8 @@ export class AgentSession implements SettingsScope, AgentViewSession {
 	/** A single model-only notebook reminder queued for the current prompt generation. */
 	#experimentalContextNotesReminder: { prompt: string; generation: number } | undefined;
 	#planModeState: PlanModeState | undefined;
+	/** Frozen Code Mode decision; `installCodeMode` replaces the initial "off" value. */
+	#codeModeDecision: CodeModeDecision = { enabled: false, source: "default" };
 	#vibeModeState: VibeModeState | undefined;
 	#goalModeState: GoalModeState | undefined;
 	#goalRuntime: GoalRuntime;
@@ -7899,6 +7906,139 @@ export class AgentSession implements SettingsScope, AgentViewSession {
 		return this.#tools.advertisedEvalToolNames;
 	}
 
+	/** Whether this session froze Code Mode on at creation. */
+	isCodeModeActive(): boolean {
+		return this.#codeModeDecision.enabled;
+	}
+
+	/** The frozen Code Mode decision (`source` names the rule that decided it). */
+	getCodeModeDecision(): CodeModeDecision {
+		return this.#codeModeDecision;
+	}
+
+	/** Tools reachable through the eval bridge only; empty outside Code Mode. */
+	getBridgeOnlyToolNames(): string[] {
+		return this.#tools.getBridgeOnlyToolNames();
+	}
+
+	/**
+	 * Freezes the Code Mode decision and hands its bridge-only layer to
+	 * {@link SessionTools}. The SDK calls this once, right after construction and
+	 * before any later tool reconcile.
+	 *
+	 * @internal
+	 */
+	installCodeMode(
+		decision: CodeModeDecision,
+		partition: { topLevel: readonly string[]; bridgeOnly: readonly string[] },
+	): void {
+		this.#codeModeDecision = decision;
+		this.#tools.installCodeMode({
+			isActive: () => this.#codeModeDecision.enabled,
+			topLevel: partition.topLevel,
+			bridgeOnly: partition.bridgeOnly,
+		});
+	}
+
+	/**
+	 * Replaces the bridge-only layer. Late registrations (an extension tool
+	 * discovered from a `session_start` handler) join it instead of the wire.
+	 *
+	 * @internal
+	 */
+	setBridgeOnlyToolNames(names: Iterable<string>): void {
+		this.#tools.setBridgeOnlyToolNames(names);
+	}
+
+	/**
+	 * Applies a session-level Code Mode change in place: re-partitions the
+	 * enabled tool slate, swaps the wire, rebuilds the prompt, and records the
+	 * decision for resume.
+	 *
+	 * Only valid while the transcript is empty — from the first message on, the
+	 * wire belongs to that conversation and a toggle must start a fresh session
+	 * instead. `/code-mode` enforces that; returns the decision actually applied
+	 * (a missing eval backend refuses the request).
+	 */
+	async setCodeModeEnabled(enabled: boolean): Promise<CodeModeDecision> {
+		return this.#applyCodeModeState({ enabled, source: "session" }, true);
+	}
+
+	/**
+	 * Replays the decision recorded in a loaded session file. A switch (resume)
+	 * re-partitions the wire for the target transcript; the record wins over the
+	 * current `codeMode.default`. A different transcript without a record (written
+	 * before the record existed, or never in Code Mode) runs in normal mode; a
+	 * reload of the same transcript without a record keeps the live decision.
+	 */
+	async #restoreRecordedCodeMode(
+		record: RecordedCodeMode | undefined,
+		switchingToDifferentSession: boolean,
+	): Promise<void> {
+		if (!record) {
+			if (switchingToDifferentSession && this.isCodeModeActive()) {
+				await this.#applyCodeModeState({ enabled: false, source: "default" }, false);
+			}
+			return;
+		}
+		await this.#applyCodeModeState(
+			{
+				enabled: record.enabled,
+				source: "session",
+				...(record.detail !== undefined ? { detail: record.detail } : {}),
+				...(record.denied !== undefined ? { denied: record.denied } : {}),
+			},
+			false,
+		);
+	}
+
+	async #applyCodeModeState(decision: CodeModeDecision, record: boolean): Promise<CodeModeDecision> {
+		// Enabled names are the full universe (top-level + xd:// mounts + the
+		// current bridge layer); mounted devices count as membership even though
+		// they are absent from the wire.
+		const universe = new Set(this.getEnabledToolNames());
+		for (const name of this.getMountedXdevToolNames()) universe.add(name);
+		// Mirror session creation: `eval` is the only route to every other tool, so
+		// an enabled Code Mode keeps it on the wire even when a tool selection
+		// omitted it (only the absence of the tool itself refuses the request).
+		if (decision.enabled && this.hasBuiltInTool("eval")) universe.add("eval");
+		let applied = decision;
+		if (decision.enabled && !universe.has("eval")) {
+			// Code Mode's only route to every other tool is `eval`; without a
+			// backend the request is refused and the wire stays as it is.
+			applied = {
+				enabled: false,
+				source: "hard-gate:no-eval",
+				detail: "eval backend unavailable",
+				denied: { requested: true, reason: "eval backend unavailable" },
+			};
+		}
+		if (applied.enabled) {
+			// Re-derive the same partition: explicit pins (a requested tool list,
+			// presentation pins) stay on the wire across a toggle on an empty session.
+			const partition = applyCodeModePartition(universe, { pinned: this.#tools.getCodeModePinnedToolNames() });
+			this.installCodeMode(applied, partition);
+			await this.setActiveToolsByName(partition.topLevel);
+		} else if (this.#codeModeDecision.enabled || this.getBridgeOnlyToolNames().length > 0) {
+			this.installCodeMode(applied, { topLevel: [...universe], bridgeOnly: [] });
+			await this.setActiveToolsByName([...universe]);
+		} else {
+			this.#codeModeDecision = applied;
+		}
+		if (record) this.#persistCodeMode(applied);
+		return applied;
+	}
+
+	/** Records the frozen decision in the session file so resume/fork replay it. */
+	#persistCodeMode(decision: CodeModeDecision): void {
+		this.sessionManager.appendCustomEntry(CODE_MODE_ENTRY_TYPE, {
+			enabled: decision.enabled,
+			source: decision.source,
+			...(decision.detail !== undefined ? { detail: decision.detail } : {}),
+			...(decision.denied !== undefined ? { denied: decision.denied } : {}),
+		});
+	}
+
 	/** Whether a registry entry came from a built-in factory. */
 	hasBuiltInTool(name: string): boolean {
 		return this.#tools.hasBuiltInTool(name);
@@ -8043,8 +8183,8 @@ export class AgentSession implements SettingsScope, AgentViewSession {
 	}
 
 	/** Selects enabled tools, ignoring names absent from the registry. */
-	setActiveToolsByName(toolNames: string[]): Promise<void> {
-		return this.#tools.setActiveToolsByName(toolNames);
+	setActiveToolsByName(toolNames: string[], options?: SetActiveToolsOptions): Promise<void> {
+		return this.#tools.setActiveToolsByName(toolNames, options);
 	}
 
 	/** Restores an exact top-level versus `xd://` tool partition. */
@@ -9886,6 +10026,16 @@ export class AgentSession implements SettingsScope, AgentViewSession {
 			const attribution = "attribution" in message ? message.attribution : undefined;
 			for (const payload of result?.messages ?? []) {
 				const normalized = normalizeCustomMessagePayload(payload);
+				// Code Mode router hints ride the user-message suffix under a hard
+				// token budget: trim trailing lines, and drop the hint entirely when
+				// not even one fits. Other custom messages pass through untouched.
+				if (normalized.customType === ROUTER_HINTS_CUSTOM_TYPE && this.isCodeModeActive()) {
+					if (typeof normalized.content === "string") {
+						const fitted = fitRouterHints(normalized.content);
+						if (fitted === undefined) continue;
+						normalized.content = fitted;
+					}
+				}
 				const explicitAttribution =
 					payload !== null &&
 					typeof payload === "object" &&
@@ -12916,6 +13066,9 @@ export class AgentSession implements SettingsScope, AgentViewSession {
 			}
 
 			this.#clearSessionScopedToolState();
+			// `/new` keeps the frozen Code Mode decision; record it on the fresh file
+			// so resuming that session does not fall back to `codeMode.default`.
+			this.#persistCodeMode(this.#codeModeDecision);
 			this.#clearCheckpointRuntimeState();
 			this.setTodoPhases([]);
 			this.#freshProviderSessionId = undefined;
@@ -13451,12 +13604,20 @@ export class AgentSession implements SettingsScope, AgentViewSession {
 			// registry-resolvable, so top-level exposure — not lookup success — decides
 			// whether the model calls it directly or writes to `xd://<name>`.
 			const activeToolNames = new Set(this.getActiveToolNames());
-			const readerName = this.getEnabledToolNames().find(name => toolReadsSkillUris(this.getToolByName(name)));
+			// Code Mode keeps `read` off the wire while `eval`'s prelude `read()`
+			// reaches the same bridged tool, so eval is the reader the notice names.
+			const codeMode = this.isCodeModeActive();
+			const enabledToolNames = this.getEnabledToolNames();
+			const readerName = codeMode
+				? enabledToolNames.includes("eval")
+					? "eval"
+					: undefined
+				: enabledToolNames.find(name => toolReadsSkillUris(this.getToolByName(name)));
 			const readerTool = readerName === undefined ? undefined : this.getToolByName(readerName);
 			const skillReaderRef =
 				readerName === undefined
 					? undefined
-					: activeToolNames.has(readerName)
+					: codeMode || activeToolNames.has(readerName)
 						? (readerTool?.customWireName ?? readerName)
 						: `xd://${readerName}`;
 			const visibleSkills = this.skills.filter(skill => skill.hide !== true);
@@ -13486,6 +13647,7 @@ export class AgentSession implements SettingsScope, AgentViewSession {
 							skillCatalogSearch,
 							skillReaderRef,
 							skillReaderIsXd: skillReaderRef?.startsWith("xd://") === true,
+							skillReaderIsEval: codeMode && readerName !== undefined,
 						}),
 						display: false,
 					},
@@ -14909,6 +15071,16 @@ export class AgentSession implements SettingsScope, AgentViewSession {
 			if (switchingToDifferentSession || didReloadConversationChange) {
 				this.#clearSessionScopedToolState();
 				this.#prunedTerminalFailure = undefined;
+			}
+			// The resumed transcript keeps the Code Mode wire it was created with,
+			// even when `codeMode.default` or the live decision differs now.
+			try {
+				await this.#restoreRecordedCodeMode(this.sessionManager.getRecordedCodeMode(), switchingToDifferentSession);
+			} catch (error) {
+				logger.warn("Failed to restore Code Mode after session switch", {
+					targetSessionFile: sessionPath,
+					error: String(error),
+				});
 			}
 			this.#reconnectToAgent();
 			try {

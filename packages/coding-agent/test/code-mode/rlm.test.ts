@@ -1,10 +1,6 @@
 /**
- * Code Mode "long inputs" (phase 3): large pastes become `local://paste-N.md`
- * handles, eval reads them lazily through `inputs[...]`, and the model-facing
- * `elide` tool blanks chosen tool results without touching protected history.
- *
- * Code Mode is `[planned]`; every case is an `it.todo` with a real body so
- * `bun test --todo` runs it as the implementation checklist.
+ * Code Mode long-input tests: paste handles, lazy `inputs[...]` reads in eval,
+ * and eliding tool results while preserving protected history.
  */
 import { afterEach, describe, expect, it, vi } from "bun:test";
 import * as fs from "node:fs/promises";
@@ -107,7 +103,7 @@ afterEach(() => {
 });
 
 describe("Code Mode long inputs (RLM)", () => {
-	it.todo("CM-R1 a paste over input.largeInputAsHandle becomes local://paste-N.md plus its size", async () => {
+	it("CM-R1 a paste over input.largeInputAsHandle becomes local://paste-N.md plus its size", async () => {
 		const artifactsDir = await fs.mkdtemp(path.join(os.tmpdir(), "omp-cm-paste-"));
 		try {
 			const { controller, spies } = createPasteController({ tokens: 120, artifactsDir });
@@ -127,7 +123,7 @@ describe("Code Mode long inputs (RLM)", () => {
 		}
 	});
 
-	it.todo("CM-R2 eval exposes a saved paste lazily through inputs[...] in code mode", async () => {
+	it("CM-R2 eval exposes a saved paste lazily through inputs[...] in code mode", async () => {
 		using dir = TempDir.createSync("@omp-cm-inputs-");
 		const sessionsDir = path.join(dir.path(), "sessions");
 		const manager = SessionManager.create(dir.path(), sessionsDir);
@@ -158,7 +154,7 @@ describe("Code Mode long inputs (RLM)", () => {
 		}
 	});
 
-	it.todo("CM-R3 elide is registered only with compaction.experimentalContextManagement", async () => {
+	it("CM-R3 elide is registered only with compaction.experimentalContextManagement", async () => {
 		using dir = TempDir.createSync("@omp-cm-elide-gate-");
 		const off = await makeCodeModeSession({
 			cwd: dir.path(),
@@ -180,7 +176,7 @@ describe("Code Mode long inputs (RLM)", () => {
 		}
 	});
 
-	it.todo("CM-R4 elide blanks its targets, sparing keepBoundaryId history and skill:// reads", async () => {
+	it("CM-R4 elide blanks its targets, sparing keepBoundaryId history and skill:// reads", async () => {
 		using dir = TempDir.createSync("@omp-cm-elide-");
 		const manager = SessionManager.create(dir.path(), path.join(dir.path(), "sessions"));
 		manager.appendMessage(userMessage("start"));
@@ -216,7 +212,7 @@ describe("Code Mode long inputs (RLM)", () => {
 		}
 	});
 
-	it.todo("CM-R5 elide defers a target inside the warm prompt-cache lookback window", async () => {
+	it("CM-R5 elide defers a target inside the warm prompt-cache lookback window", async () => {
 		using dir = TempDir.createSync("@omp-cm-elide-warm-");
 		const manager = SessionManager.create(dir.path(), path.join(dir.path(), "sessions"));
 		manager.appendMessage(userMessage("start"));

@@ -65,6 +65,18 @@ function surfaceBridgedToolImages(value: unknown, hooks: RuntimeHooks): unknown 
 	return { ...rest, images: `(${displayed} image${displayed === 1 ? "" : "s"} displayed)` };
 }
 
+// Printing a tool result shows its `.text` (error-tagged) instead of the inspected
+// `{ text, details }` object, which doubles the bytes and pushes cells past the Code Mode
+// inline cap; `details` stays readable as a property and JSON serialization is unchanged.
+const INSPECT_CUSTOM = Symbol.for("nodejs.util.inspect.custom");
+function leanToolResult(value: unknown): unknown {
+	if (!isRecord(value) || typeof value.text !== "string") return value;
+	const render = () => (value.hasError === true ? `[tool error] ${value.text}` : (value.text as string));
+	Object.defineProperty(value, INSPECT_CUSTOM, { value: render, enumerable: false });
+	Object.defineProperty(value, "toString", { value: render, enumerable: false });
+	return value;
+}
+
 export interface RunContext {
 	runId: string;
 	hooks: RuntimeHooks;
@@ -665,7 +677,8 @@ export class JsRuntime {
 			__omp_call_tool__: async (name: string, args: unknown) => {
 				const hooks = this.#activeHooks("tool");
 				if (!hooks) return undefined;
-				return surfaceBridgedToolImages(await hooks.callTool(name, args, this.#callSiteAls.getStore()), hooks);
+				const value = surfaceBridgedToolImages(await hooks.callTool(name, args, this.#callSiteAls.getStore()), hooks);
+				return leanToolResult(value);
 			},
 			__omp_prelude__: async (name: string, parameters: unknown) => {
 				const hooks = this.#activeHooks("prelude");

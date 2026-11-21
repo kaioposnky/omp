@@ -97,8 +97,10 @@ describe("createAgentSession defaultInactive tool activation", () => {
 	// that are irrelevant to tool activation: these tests assert only which tools are
 	// registered/active and that tool names appear in the system prompt. The shared
 	// `modelRegistry` is injected here; each call still returns fresh
-	// `settings`/`sessionManager` instances to keep tests isolated.
+	// `settings`/`sessionManager` instances to keep tests isolated. These tests assert
+	// the direct-tool surface, so they pin normal mode over `codeMode.default`.
 	const baseOptions = (tempDir: string): CreateAgentSessionOptions => ({
+		codeMode: false,
 		cwd: tempDir,
 		agentDir: tempDir,
 		modelRegistry,

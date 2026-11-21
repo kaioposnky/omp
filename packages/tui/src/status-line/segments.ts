@@ -356,6 +356,17 @@ function modelAdvisorBadge(ctx: SegmentContext): { icon: string; color: ThemeCol
 	return icon ? { icon, color } : undefined;
 }
 
+/**
+ * Code Mode marker for the model segment: absent while the frozen state is off,
+ * dimmed when the current scope rule points to the other state, accented otherwise.
+ */
+function modelCodeModeBadge(ctx: SegmentContext): { icon: string; diverged: boolean } | undefined {
+	const icon = theme.icon.codeMode;
+	if (!ctx.session.isCodeModeActive?.() || !icon) return undefined;
+	const decision = ctx.session.getCodeModeDecision?.();
+	return { icon, diverged: decision !== undefined && decision.enabled !== true };
+}
+
 const modelSegment: StatusLineSegment = {
 	id: "model",
 	render(ctx) {
@@ -386,6 +397,12 @@ const modelSegment: StatusLineSegment = {
 		// Per-advisor detail lives in `/advisor status`.
 		const advisor = modelAdvisorBadge(ctx);
 		if (advisor) content += theme.fg(advisor.color, ` ${advisor.icon}`);
+		const codeMode = modelCodeModeBadge(ctx);
+		if (codeMode) {
+			content += codeMode.diverged
+				? ` ${theme.fg("dim", codeMode.icon)}`
+				: accentFg(ctx, "statusLineModel", ` ${codeMode.icon}`);
+		}
 		if (tail) {
 			content += accentFg(ctx, "statusLineModel", tail);
 		}
@@ -403,6 +420,8 @@ const modelSegment: StatusLineSegment = {
 		const spans: TspSpan[] = [span(modelDisplayName(ctx), token)];
 		const advisor = modelAdvisorBadge(ctx);
 		if (advisor) spans.push(span(` ${advisor.icon}`, advisor.color));
+		const codeMode = modelCodeModeBadge(ctx);
+		if (codeMode) spans.push(span(` ${codeMode.icon}`, codeMode.diverged ? "muted" : token));
 		if (ctx.session.isFastModeActive() && theme.icon.fast) spans.push(span(` ${theme.icon.fast}`, token));
 		const level = ctx.options.model?.showThinkingLevel === false ? undefined : thinkingLevelWord(ctx.session);
 		if (level !== undefined) spans.push(span(" · ", "dim"), span(level, thinkingLevelToken(level)));

@@ -29,7 +29,8 @@ function rawSummary(tool: CatalogTool): string {
 function catalogSummary(tool: CatalogTool): string {
 	const cleaned = rawSummary(tool).replace(SUMMARY_CONTROL_CHARS, " ").trim();
 	const words = cleaned.split(/\s+/).filter(Boolean);
-	let text = words.length > SUMMARY_MAX_WORDS ? `${words.slice(0, SUMMARY_MAX_WORDS).join(" ")}${ELLIPSIS}` : words.join(" ");
+	let text =
+		words.length > SUMMARY_MAX_WORDS ? `${words.slice(0, SUMMARY_MAX_WORDS).join(" ")}${ELLIPSIS}` : words.join(" ");
 	if (Buffer.byteLength(text, "utf-8") > SUMMARY_MAX_BYTES) {
 		const budget = SUMMARY_MAX_BYTES - Buffer.byteLength(ELLIPSIS, "utf-8");
 		text = `${truncateHeadBytes(text, budget).text.trimEnd()}${ELLIPSIS}`;
@@ -58,9 +59,11 @@ export function renderBridgeCatalog(tools: readonly CatalogTool[]): string {
 			lines.set(tool.name, `${tool.name}: ${catalogSummary(tool)}`);
 		}
 	}
-	return [...lines.keys()]
-		// UTF-8 byte order is Unicode code point order (unlike UTF-16 `<` or locale-dependent `localeCompare`).
-		.sort((a, b) => Buffer.compare(Buffer.from(a), Buffer.from(b)))
-		.map(key => lines.get(key) as string)
-		.join("\n");
+	return (
+		[...lines.keys()]
+			// UTF-8 byte order is Unicode code point order (unlike UTF-16 `<` or locale-dependent `localeCompare`).
+			.sort((a, b) => Buffer.compare(Buffer.from(a), Buffer.from(b)))
+			.map(key => lines.get(key) as string)
+			.join("\n")
+	);
 }

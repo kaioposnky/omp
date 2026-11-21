@@ -1774,6 +1774,9 @@ export async function buildSessionOptions(
 	} else if (parsed.tools) {
 		options.toolNames = parsed.tools;
 	}
+	if (parsed.codeMode !== undefined) {
+		options.codeMode = parsed.codeMode;
+	}
 
 	if (parsed.noLsp) {
 		options.enableLsp = false;

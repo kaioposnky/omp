@@ -201,6 +201,8 @@ export interface RpcSessionState {
 	autoCompactionEnabled: boolean;
 	fastModeEnabled: boolean;
 	fastModeActive: boolean;
+	/** Session runs in Code Mode (frozen at creation): only eval and control tools on the wire. */
+	codeModeEnabled: boolean;
 	/** `/slow` applies to the active model (flex tier on OpenAI/Google, low priority on Claude subscriptions). */
 	slowModeSupported: boolean;
 	/** `/slow` is on for the active model; always `false` when `slowModeSupported` is `false`. */

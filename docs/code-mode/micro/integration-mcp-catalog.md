@@ -15,7 +15,7 @@ Com o Code Mode ligado, o bloco "MCP Tool Routes" (`xd://`) desaparece do system
 - Tools MCP nunca entram no wire em Code Mode: elas não são top-level e, portanto, não pagam schema por request (`docs/code-mode-plan.md` §12.3).
 - O bloco `xd://` deixa de valer porque `read`/`write` saíram do top-level; o catálogo bridge-only é o substituto (RF6.2).
 - `tool.describe(name)` devolve o schema sob demanda e `tool.search(query, k)` devolve top-k; o catálogo por si só não carrega schemas (`docs/code-mode-plan.md` §4.4).
-- O catálogo é gerado em ordem estável para não alterar o prefixo (`[planned] packages/coding-agent/src/code-mode/catalog.ts#renderBridgeCatalog`).
+- O catálogo é gerado em ordem estável para não alterar o prefixo (`packages/coding-agent/src/code-mode/catalog.ts#renderBridgeCatalog`).
 
 ## Edge cases and failure modes
 

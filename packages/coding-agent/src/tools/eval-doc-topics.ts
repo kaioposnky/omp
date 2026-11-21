@@ -9,6 +9,7 @@ import evalHelpersTopic from "../prompts/tools/eval-helpers.md" with { type: "te
 import evalJudgeTopic from "../prompts/tools/eval-judge.md" with { type: "text" };
 import type { PerCallModelAdvertisement } from "../task/model-approval";
 import { resolveSpawnPolicy } from "../task/spawn-policy";
+import type { CodeModeGuidance } from "../code-mode/workflow";
 
 export interface EvalToolDescriptionOptions {
 	py?: boolean;
@@ -46,6 +47,12 @@ export interface EvalToolDescriptionOptions {
 	perCallModelAdvertisement?: PerCallModelAdvertisement;
 	/** Canonical and wire names currently accepted by the session tool bridge. */
 	toolNames?: readonly string[];
+	/** Code Mode: only `eval` and control tools are on the wire; every other tool rides the bridge. */
+	codeMode?: boolean;
+	/** Rendered bridge-only catalog (`renderBridgeCatalog`); omitted when empty. */
+	bridgeCatalog?: string;
+	/** Code Mode per-family prompt guidance (`code-mode/workflow.ts`). */
+	guidance?: CodeModeGuidance;
 }
 
 export function evalTemplateContext(options: EvalToolDescriptionOptions) {
@@ -63,6 +70,9 @@ export function evalTemplateContext(options: EvalToolDescriptionOptions) {
 		autoProvision: options.autoProvision ?? true,
 		perCallModel: options.perCallModel ?? false,
 		perCallModelAdvertisement: options.perCallModelAdvertisement,
+		codeMode: options.codeMode === true,
+		cellWorkflow: options.codeMode === true && options.guidance?.cells === true,
+		scopeRule: options.codeMode === true && options.guidance?.scope === true,
 	};
 }
 

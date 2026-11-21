@@ -88,7 +88,7 @@ export function withHardTimeout(signal: AbortSignal | undefined, ms: number = SE
 export function searchReasoningEffort(
 	model: Model<Api>,
 	thinkingLevel: ConfiguredThinkingLevel | undefined,
-): string | undefined {
+): string | number | undefined {
 	const effort = clampThinkingLevelForModel(model, toReasoningEffort(concreteThinkingLevel(thinkingLevel)));
 	if (effort === undefined) return undefined;
 	const compat = model.compat && "reasoningEffortMap" in model.compat ? model.compat : undefined;

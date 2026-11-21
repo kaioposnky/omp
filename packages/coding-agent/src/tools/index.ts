@@ -57,7 +57,7 @@ import { AstGrepTool } from "./ast-grep";
 import { BashTool } from "./bash";
 import { type BuiltinToolName, type HiddenToolName, normalizeToolNames } from "./builtin-names";
 import { type CheckpointState, CheckpointTool, type CompletedRewindState, RewindTool } from "./checkpoint";
-import { ContextNotesTool, NewContextTool } from "./context-notes";
+import { ContextNotesTool, ElideTool, NewContextTool } from "./context-notes";
 import { DebugTool } from "./debug";
 import { EvalTool } from "./eval";
 import { resolveEvalBackends } from "./eval-backends";
@@ -368,7 +368,9 @@ export interface ToolSession {
 	 * cost ledger (`appendModelUsage`) without changing advisor-local IDs.
 	 */
 	sessionManager?: Pick<SessionManager, "appendCustomEntry" | "ensureOnDisk" | "flush" | "getBranch" | "getEntries"> &
-		Partial<Pick<SessionManager, "getSessionId" | "getLeafId" | "appendModelUsage" | "getArtifactsDir">>;
+		Partial<
+			Pick<SessionManager, "getSessionId" | "getLeafId" | "appendModelUsage" | "getArtifactsDir" | "rewriteEntries">
+		>;
 	/**
 	 * Session-owned raw SSE capture, shared with the `/debug` report. Optional:
 	 * helper and standalone contexts without one simply forgo `/debug` capture.
@@ -410,6 +412,10 @@ export interface ToolSession {
 	getToolContext?: () => AgentToolContext | undefined;
 	/** Tool names the eval description advertises as callable from cells; frozen with the cached prompt prefix. */
 	getAdvertisedEvalToolNames?: () => readonly string[];
+	/** Names currently authorized for invocation through the eval bridge (Code Mode tool discovery). */
+	getEvalBridgeToolNames?: () => readonly string[];
+	/** Whether the session froze Code Mode on (wire is the top-level set; the rest is bridge-only). */
+	isCodeModeActive?: () => boolean;
 	/** Return whether a built-in tool is active in this turn's tool set. */
 	isToolActive?: (name: string) => boolean;
 	/** Update the active built-in tool predicate when a session changes tools mid-run. */
@@ -645,6 +651,7 @@ export const BUILTIN_TOOLS: Record<BuiltinToolName, ToolFactory> = {
 	rewind: RewindTool.createIf,
 	context_notes: ContextNotesTool.createIf,
 	new_context: NewContextTool.createIf,
+	elide: ElideTool.createIf,
 	task: s => TaskTool.create(s),
 	wait: s => new WaitTool(s),
 	todo: s => new TodoTool(s),
@@ -757,6 +764,7 @@ export async function resolveBuiltinToolPlan(session: ToolSession, toolNames?: s
 		) {
 			if (!requestedTools.includes("context_notes")) requestedTools.push("context_notes");
 			if (!requestedTools.includes("new_context")) requestedTools.push("new_context");
+			if (!requestedTools.includes("elide")) requestedTools.push("elide");
 		}
 		if (goalModeActive && !requestedTools.includes("goal")) {
 			requestedTools.push("goal");
@@ -832,7 +840,7 @@ export async function resolveBuiltinToolPlan(session: ToolSession, toolNames?: s
 		if (name === "security_scan") return cfgSecurityEnabled.get(session.settings);
 		if (name === "think") return externalThinkingActive;
 		if (name === "ask") return cfgAskEnabled.get(session.settings);
-		if (name === "context_notes" || name === "new_context")
+		if (name === "context_notes" || name === "new_context" || name === "elide")
 			return cfgCompactionExperimentalContextManagement.get(session.settings);
 		if (name === "checkpoint" || name === "rewind")
 			return (

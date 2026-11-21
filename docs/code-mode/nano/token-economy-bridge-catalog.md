@@ -2,7 +2,7 @@
 
 Parent: [micro/token-economy-minimal-wire.md](../micro/token-economy-minimal-wire.md)
 
-Code: `[planned] packages/coding-agent/src/code-mode/catalog.ts#renderBridgeCatalog`, `packages/coding-agent/src/tools/xdev.ts#toolSummary`, `packages/coding-agent/src/tools/xdev.ts#sanitizeCatalogSummary`, `packages/tui/src/tools/streaming-output.ts#truncateHeadBytes`
+Code: `packages/coding-agent/src/code-mode/catalog.ts#renderBridgeCatalog`, `packages/coding-agent/src/tools/xdev.ts#toolSummary`, `packages/coding-agent/src/tools/xdev.ts#sanitizeCatalogSummary`, `packages/tui/src/tools/streaming-output.ts#truncateHeadBytes`
 
 ## How it works
 

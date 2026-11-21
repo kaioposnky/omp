@@ -613,6 +613,11 @@ export interface BuildSystemPromptOptions {
 	 * keep it; names also set the `browserEnabled`/`computerEnabled` template flags.
 	 */
 	evalPreludes?: readonly Pick<EvalPreludeDefinition, "name" | "guidance">[];
+	/**
+	 * Code Mode: the model wire carries only `eval` and the control tools, so
+	 * custom templates can branch on it. Default: false.
+	 */
+	codeMode?: boolean;
 	/** Active model identifier (e.g. "anthropic/claude-opus-4") surfaced in the workstation block. */
 	model?: string;
 	/** Whether to surface `model` in the workstation block. Default: true. */
@@ -762,6 +767,7 @@ export async function buildSystemPrompt(options: BuildSystemPromptOptions = {}):
 		outReplies = false,
 		crossInstanceAgents = false,
 		evalPreludes = [],
+		codeMode = false,
 		model,
 		includeModelInPrompt = true,
 		personality = "default",
@@ -1059,13 +1065,25 @@ export async function buildSystemPrompt(options: BuildSystemPromptOptions = {}):
 	// - drop skills with frontmatter `hide: true` (still loadable via skill:// and /skill:<name>).
 	// The reader reference is what the prompt tells the model to call: a direct tool
 	// advertised under its wire name, or `xd://<name>` for a mounted-only device.
+	// Code Mode puts only `eval` on the wire, and its prelude `read()` delegates
+	// to the bridged `read` tool, so `eval` is the skill reader there. Project
+	// the capability onto eval's prompt metadata (never the wire schema) so one
+	// capability check keeps driving the block and the mid-session notices.
+	const codeModeReaderName = codeMode && toolNames.includes("eval") ? "eval" : undefined;
+	const promptToolMetadata =
+		codeModeReaderName !== undefined &&
+		tools?.has(codeModeReaderName) &&
+		!toolReadsSkillUris(tools.get(codeModeReaderName))
+			? new Map(tools).set(codeModeReaderName, { ...tools.get(codeModeReaderName)!, readsSkillUris: true })
+			: tools;
 	const skillReaderName =
-		tools === undefined
+		codeModeReaderName ??
+		(promptToolMetadata === undefined
 			? toolNames.includes("read")
 				? "read"
 				: undefined
-			: (toolNames.find(name => toolReadsSkillUris(tools.get(name))) ??
-				xdevTools.find(entry => toolReadsSkillUris(tools.get(entry.name)))?.name);
+			: (toolNames.find(name => toolReadsSkillUris(promptToolMetadata.get(name))) ??
+				xdevTools.find(entry => toolReadsSkillUris(promptToolMetadata.get(entry.name)))?.name));
 	const hasSkillReader = skillReaderName !== undefined;
 	const skillReaderRef = skillReaderName === undefined ? undefined : toolPromptNames.get(skillReaderName);
 	const hasSkillUriAccess = hasSkillReader && skills.length > 0;
@@ -1137,6 +1155,7 @@ export async function buildSystemPrompt(options: BuildSystemPromptOptions = {}):
 		hasSkillUriAccess,
 		skillReaderRef,
 		skillReaderIsXd: skillReaderRef?.startsWith(XD_URL_PREFIX) === true,
+		skillReaderIsEval: codeModeReaderName !== undefined,
 		internalUrls: InternalUrlRouter.instance().describe(schemeHost),
 		internalUrlReference: InternalUrlRouter.instance().reference(),
 		skills: filteredSkills,
@@ -1161,6 +1180,7 @@ export async function buildSystemPrompt(options: BuildSystemPromptOptions = {}):
 		resultShaping,
 		browserEnabled: evalPreludes.some(prelude => prelude.name === "browser"),
 		computerEnabled: evalPreludes.some(prelude => prelude.name === "computer"),
+		codeMode,
 		includeWorkspaceTree,
 		renderMermaid,
 		renderSvg,

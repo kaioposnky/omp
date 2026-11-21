@@ -14,13 +14,13 @@ não pode alterar silenciosamente o wire de uma conversa em andamento.
 
 | | What | From / To |
 | --- | --- | --- |
-| Input | `codeMode.default` (boolean, default `false`) | settings (`Settings.isolated`, arquivo do usuário) |
-| Input | `--code-mode` / `--no-code-mode` | `parseArgs` (`packages/coding-agent/src/cli/args.ts#parseArgs`) → `Args.codeMode` `[planned]` |
-| Input | `/code-mode on\|off\|status\|default on\|default off` (spec `[planned]`) | `BUILTIN_MODE_SLASH_COMMANDS` (`packages/coding-agent/src/slash-commands/builtin-modes.ts#BUILTIN_MODE_SLASH_COMMANDS`) |
+| Input | `codeMode.default` (boolean, default `true`) | settings (`Settings.isolated`, arquivo do usuário) |
+| Input | `--code-mode` / `--no-code-mode` | `parseArgs` (`packages/coding-agent/src/cli/args.ts#parseArgs`) → `Args.codeMode` |
+| Input | `/code-mode on\|off\|status\|default on\|default off` | `BUILTIN_MODE_SLASH_COMMANDS` (`packages/coding-agent/src/slash-commands/builtin-modes.ts#BUILTIN_MODE_SLASH_COMMANDS`) |
 | Input | Estado gravado no arquivo de sessão | `SessionManager` (resume, fork) |
-| Output | `session.isCodeModeActive()` / `getCodeModeDecision()` | status line, `/code-mode status`, subagentes `[planned]` |
+| Output | `session.isCodeModeActive()` / `getCodeModeDecision()` | status line, `/code-mode status`, subagentes |
 | Output | Sessão nova no estado pedido | `/code-mode on` ou `off` numa sessão com mensagens |
-| Output | `codeModeEnabled` no snapshot de estado | RPC (`packages/coding-agent/src/modes/rpc/wire/state.ts#stateDefs`) `[planned]` |
+| Output | `codeModeEnabled` no snapshot de estado | RPC (`packages/coding-agent/src/modes/rpc/wire/state.ts#stateDefs`) |
 
 ## Entry points
 

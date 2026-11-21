@@ -312,6 +312,8 @@ export interface ParsedAgentFields {
 	prewalk?: boolean | string;
 	/** `true` = advise with the default advisor-role model; string = advise with that model pattern. */
 	advisor?: boolean | string;
+	/** Per-agent Code Mode preference for spawns; absent falls through to `codeMode.scope`/default. */
+	codeMode?: boolean;
 }
 
 /**
@@ -381,6 +383,7 @@ export function parseAgentFields(frontmatter: Record<string, unknown>): ParsedAg
 	const blocking = parseBoolean(frontmatter.blocking);
 	const structured = parseBoolean(frontmatter.structured);
 	const readSummarize = parseBoolean(frontmatter.readSummarize);
+	const codeMode = parseBoolean(frontmatter.codeMode);
 	// prewalk: true → hand off to the default prewalk target; "<pattern>" → custom target.
 	let prewalk: boolean | string | undefined = parseBoolean(frontmatter.prewalk);
 	if (prewalk === undefined && typeof frontmatter.prewalk === "string") {
@@ -410,6 +413,7 @@ export function parseAgentFields(frontmatter: Record<string, unknown>): ParsedAg
 		readSummarize,
 		prewalk,
 		advisor,
+		codeMode,
 	};
 }
 

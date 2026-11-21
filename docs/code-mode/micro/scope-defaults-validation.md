@@ -25,7 +25,7 @@ desconhecido é aceito.
 - `unknown agent name accepted`: o arquivo de settings pode citar agente que só existe em outro
   projeto ou que será criado depois; a validação não pode quebrar o omp por isso.
 - Glob validado na escrita/leitura, não no uso: erro cedo e legível.
-- Defaults e validação vivem em `src/code-mode/settings.ts` `[planned]`, não em código de sessão.
+- Defaults e validação vivem em `src/code-mode/settings.ts`, não em código de sessão.
 - Round-trip do `/settings`: a ordem de `models` é semântica (primeiro match vence), então set +
   persistência não podem reordenar nem deduplicar a lista; chaves desconhecidas de `agents`/`roles`
   sobrevivem à gravação.

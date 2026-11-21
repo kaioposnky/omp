@@ -2,7 +2,7 @@
 
 Parent: [micro/token-economy-router-hints.md](../micro/token-economy-router-hints.md)
 
-Code: `[planned] packages/coding-agent/src/code-mode/hints.ts`, `packages/coding-agent/src/session/session-tools.ts#getEnabledToolNames`, `packages/agent/src/compaction/pruning.ts#pruneSupersededToolResults`, `packages/coding-agent/src/commands/toks.ts`
+Code: `packages/coding-agent/src/code-mode/hints.ts`, `packages/coding-agent/src/session/session-tools.ts#getEnabledToolNames`, `packages/agent/src/compaction/pruning.ts#pruneSupersededToolResults`, `packages/coding-agent/src/commands/toks.ts`
 
 ## How it works
 

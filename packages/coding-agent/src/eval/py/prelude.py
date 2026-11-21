@@ -482,10 +482,27 @@ if "__omp_prelude_loaded__" not in globals():
             raise RuntimeError(msg or f"bridge call {name!r} failed")
         return data.get("value")
 
+    class _ToolResult(dict):
+        """Tool result dict that prints as its `.text` (error-tagged) and exposes keys as attributes."""
+
+        def __getattr__(self, key):
+            try:
+                return self[key]
+            except KeyError:
+                raise AttributeError(key) from None
+
+        def __str__(self):
+            text = self.get("text") or ""
+            return f"[tool error] {text}" if self.get("hasError") else text
+
+        __repr__ = __str__
+
     def _surface_bridged_tool_images(value):
         """Surface bridge metadata/images without leaking opaque payloads to cell code."""
         if not isinstance(value, dict):
             return value
+        if isinstance(value.get("text"), str):
+            value = _ToolResult(value)
         images = value.get("images")
         if not isinstance(images, list) or not images:
             return value
@@ -495,7 +512,7 @@ if "__omp_prelude_loaded__" not in globals():
                 shown += 1
         if shown == 0:
             return value
-        surfaced = {key: item for key, item in value.items() if key != "images"}
+        surfaced = _ToolResult({key: item for key, item in value.items() if key != "images"})
         suffix = "" if shown == 1 else "s"
         surfaced["images"] = f"({shown} image{suffix} displayed)"
         return surfaced
@@ -508,6 +525,11 @@ if "__omp_prelude_loaded__" not in globals():
             {"name": name, "parameters": parameters},
         )
         return _surface_bridged_tool_images(value)
+
+    async def _host_has_tool(name: str) -> bool:
+        """Whether a real bridge tool with this exact name exists."""
+        value = await _omp_asyncio.to_thread(_bridge_call, "__has_tool__", {"name": name})
+        return value is True
 
     class _ToolCallable:
         """Invokes one host-side tool via the loopback HTTP bridge."""
@@ -522,7 +544,8 @@ if "__omp_prelude_loaded__" not in globals():
 
         async def __call__(self, args=None, /, **kwargs):
             if isinstance(args, str) and not kwargs:
-                # FREEFORM tools (e.g. `edit`) take their raw text; the host maps it to `{input}`.
+                # A bare string goes to the host as is: FREEFORM tools (e.g. `edit`) take it as
+                # `{input}`; otherwise it fills the schema's only required string field (`tool.bash("ls")`).
                 merged: dict | str = args
             elif args is None:
                 merged = dict(kwargs)
@@ -530,7 +553,7 @@ if "__omp_prelude_loaded__" not in globals():
                 merged = {**args, **kwargs}
             else:
                 raise TypeError(
-                    f"tool.{self._name}(...) expects a dict of arguments or a FREEFORM tool's raw text (got {type(args).__name__})"
+                    f"tool.{self._name}(...) expects a dict of arguments or one string (got {type(args).__name__})"
                 )
             value = await _omp_asyncio.to_thread(_bridge_call, self._name, merged)
             return _surface_bridged_tool_images(value)
@@ -702,6 +725,32 @@ if "__omp_prelude_loaded__" not in globals():
         def undefine(self, name) -> bool:
             return __omp_tools__.pop(name, None) is not None
 
+        async def describe(self, name) -> str:
+            """TypeScript signature of a host tool's arguments; unknown names raise."""
+            if await _host_has_tool("describe"):
+                return await _omp_asyncio.to_thread(_bridge_call, "describe", name)
+            value = await _omp_asyncio.to_thread(
+                _bridge_call,
+                "__describe__",
+                {"name": name},
+            )
+            if not isinstance(value, str):
+                raise RuntimeError(f"tool.describe({name!r}) returned no signature")
+            return value
+
+        async def search(self, query, k: int = 5) -> list[dict]:
+            """Up to `k` host tools reachable through the bridge, best match first."""
+            if await _host_has_tool("search"):
+                return await _omp_asyncio.to_thread(_bridge_call, "search", query)
+            value = await _omp_asyncio.to_thread(
+                _bridge_call,
+                "__search__",
+                {"query": query, "limit": k},
+            )
+            if not isinstance(value, list):
+                raise RuntimeError("tool.search returned an invalid result")
+            return value
+
         def __getattr__(self, name: str) -> _ToolCallable:
             if name.startswith("_"):
                 raise AttributeError(name)
@@ -719,6 +768,17 @@ if "__omp_prelude_loaded__" not in globals():
             )
 
     tool = _ToolProxy()
+
+    class _Inputs:
+        """Large pastes saved as `local://paste-N.md` handles; `inputs["paste-N"]` reads one on demand."""
+
+        def __getitem__(self, key: str) -> str:
+            return read(f"local://{key}.md")
+
+        def __repr__(self) -> str:
+            return "<inputs: local://<name>.md handles, read on access>"
+
+    inputs = _Inputs()
 
     _HANDLE_UNSET = object()
 

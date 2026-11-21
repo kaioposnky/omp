@@ -2,7 +2,7 @@
 
 Parent: [micro/integration-extension-active-tools.md](../micro/integration-extension-active-tools.md)
 
-Code: `packages/coding-agent/src/extensibility/extensions/runner.ts#ExtensionRunner.initialize`, `packages/coding-agent/src/extensibility/extensions/types.ts#ExtensionAPI`, `packages/coding-agent/src/extensibility/extensions/types.ts#SetActiveToolsHandler`, `packages/coding-agent/src/session/session-tools.ts#setActiveToolsByName`, `packages/coding-agent/src/session/session-tools.ts#getEnabledToolNames`, `[planned] packages/coding-agent/src/session/session-tools.ts#applyBridgeOnlyDelta`
+Code: `packages/coding-agent/src/extensibility/extensions/runner.ts#ExtensionRunner.initialize`, `packages/coding-agent/src/extensibility/extensions/types.ts#ExtensionAPI`, `packages/coding-agent/src/extensibility/extensions/types.ts#SetActiveToolsHandler`, `packages/coding-agent/src/session/session-tools.ts#setActiveToolsByName`, `packages/coding-agent/src/session/session-tools.ts#getEnabledToolNames`, `packages/coding-agent/src/session/session-tools.ts#applyExtensionActiveTools`
 
 ## How it works
 
@@ -10,7 +10,7 @@ Toda extensão passa por um único objeto `runtime`: `ExtensionRunner.initialize
 
 Com Code Mode ativo:
 
-1. `added = next − currentActive` (nomes que a extensão quer ligar) → entram na camada bridge-only (campo `[planned]` `#bridgeOnlyToolNames`, paralelo a `xdev.mountedNames`).
+1. `added = next − currentActive` (nomes que a extensão quer ligar) → entram na camada bridge-only (campo `#bridgeOnlyToolNames`, paralelo a `xdev.mountedNames`).
 2. `removed = currentActive − next` → para nomes bridge-only, no-op; para nomes top-level, ignorado (o top-level é imutável).
 3. O wire (`agent.state.tools`) e o system prompt não são tocados.
 4. Registrar um aviso de debug com a origem da chamada (nome da extensão/quando disponível).

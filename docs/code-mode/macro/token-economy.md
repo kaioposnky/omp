@@ -12,11 +12,11 @@ Fazer o Code Mode pagar o próprio custo. O perfil troca N chamadas de tool por 
 |---|---|---|
 | Input | Lista de tools habilitadas (top-level + bridge-only) | `packages/coding-agent/src/session/session-tools.ts#getEnabledToolNames` |
 | Input | Resumos de tools montadas (uma linha) | `packages/coding-agent/src/tools/xdev.ts#renderXdevPromptDocs` |
-| Input | Top-k tools/skills sugeridos por prompt | `[planned] packages/coding-agent/src/code-mode/hints.ts` |
+| Input | Top-k tools/skills sugeridos por prompt | `packages/coding-agent/src/code-mode/hints.ts` |
 | Input | Output bruto de cada cell | `packages/coding-agent/src/eval/js/executor.ts#executeJs` |
 | Output | System prompt + wire de tools byte-estáveis durante a sessão | `packages/coding-agent/src/system-prompt.ts#buildSystemPrompt` |
-| Output | Catálogo bridge-only ordenado (`name: summary`) | `[planned] packages/coding-agent/src/code-mode/catalog.ts#renderBridgeCatalog` |
-| Output | Mensagem `customType: "router-hints"` após a mensagem do usuário, ≤ 600 tokens | `[planned] packages/coding-agent/src/code-mode/hints.ts` |
+| Output | Catálogo bridge-only ordenado (`name: summary`) | `packages/coding-agent/src/code-mode/catalog.ts#renderBridgeCatalog` |
+| Output | Mensagem `customType: "router-hints"` após a mensagem do usuário, ≤ 600 tokens | `packages/coding-agent/src/code-mode/hints.ts` |
 | Output | Overflow de output em artifact `artifact://N` | `packages/tui/src/tools/streaming-output.ts#OutputSink`, `packages/coding-agent/src/tools/output-meta.ts#resolveOutputSinkHeadBytes` |
 
 ## Modelo de custo
@@ -75,3 +75,4 @@ Métricas por tarefa: cache read, cache write, input não cacheado, output, nº 
 - [micro/token-economy-minimal-wire.md](../micro/token-economy-minimal-wire.md)
 - [micro/token-economy-router-hints.md](../micro/token-economy-router-hints.md)
 - [micro/token-economy-output-discipline.md](../micro/token-economy-output-discipline.md)
+- [micro/token-economy-model-behaviors.md](../micro/token-economy-model-behaviors.md) — comportamento por modelo no Code Mode (evidência, não requisito)

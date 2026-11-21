@@ -18,7 +18,7 @@ Em Code Mode, `pi.setActiveTools(...)` vindo de uma extensão nunca altera o con
 - RF6.3: adicionar nomes → camada bridge-only; remover nomes bridge-only → no-op; o top-level (`eval`, `wait`, `yield`, `ask`, `todo`, `checkpoint`, `rewind`) não pode ser removido por extensão.
 - Toda decisão de guarda deve registrar um aviso de debug com a origem da chamada (RF6.3).
 - O wrapper de `setActiveTools` já espera a barreira de registro de tools antes de aplicar (`packages/coding-agent/src/extensibility/extensions/runner.ts#ExtensionRunner.initialize`); a guarda entra nesse ponto único.
-- O estado do Code Mode é congelado na criação da sessão (`[planned] packages/coding-agent/src/session/agent-session.ts#isCodeModeActive`), então a guarda não pode ser reavaliada por prompt.
+- O estado do Code Mode é congelado na criação da sessão (`packages/coding-agent/src/session/agent-session.ts#isCodeModeActive`), então a guarda não pode ser reavaliada por prompt.
 - A emissão de `tool_call` já é deduplicada por `${toolCallId}:${toolName}` (`packages/coding-agent/src/extensibility/extensions/runner.ts#ExtensionRunner.markToolCallEmitted`); o despacho bridgeado reusa o `toolCallId` do `eval` com o nome da tool interna, então a chave composta é o que garante um evento só — `eval` não pode engolir nem duplicar o hook.
 
 ## Edge cases and failure modes

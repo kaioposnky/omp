@@ -5,6 +5,7 @@ import { resolveDelegationBias } from "@oh-my-pi/pi-catalog/compat/delegation";
 import { isRecord, logger, prompt, stringProperty, structuredCloneJSON, untilAborted } from "@oh-my-pi/pi-utils";
 import { reset as resetCapabilities } from "../capability";
 import type { EffectiveExtensionRoots } from "../capability/types";
+import { CODE_MODE_TOP_LEVEL } from "../code-mode/partition";
 import { shouldInlineToolDescriptors } from "../config/inline-tool-descriptors-mode";
 import type { ModelRegistry } from "../config/model-registry";
 import { formatModelString } from "../config/model-resolver";
@@ -33,6 +34,7 @@ import { MEMORY_BACKEND_TOOL_NAMES } from "../memory-backend/tool-names";
 import { invalidateToolSchemaMetadata, type SystemPromptSources } from "@oh-my-pi/pi-tui/status-line/context-usage";
 import type { MemoryBackendStartOptions, MemoryPromptPreparation } from "../memory-backend/types";
 import { getPerCallModelAdvertisement, type PerCallModelAdvertisement } from "../task/model-approval";
+import { READ_ONLY_TOOL_NAMES } from "../task/read-only-policy";
 import type { AgentDefinition } from "../task/types";
 import evalPreludeNoticePrompt from "../prompts/system/eval-prelude-notice.md" with { type: "text" };
 import evalPreludeGuidePrompt from "../prompts/tools/eval-prelude-first-call.md" with { type: "text" };
@@ -434,6 +436,16 @@ interface XdevMountNoticeProjection {
 	announcedMounts: Set<string>;
 }
 
+/** Who requested an active-tool selection via {@link SessionTools.setActiveToolsByName}. */
+export interface SetActiveToolsOptions {
+	/**
+	 * Set by the extension action layer (`pi.setActiveTools`). Code Mode guards
+	 * those selections; internal reconciles (goal/plan mode, MCP refresh,
+	 * settings) keep selecting the wire as before.
+	 */
+	origin?: "extension";
+}
+
 /** Owns tool registration, presentation, prompt rebuilding, skills, and permissions. */
 export class SessionTools {
 	readonly #host: SessionToolsHost;
@@ -488,6 +500,15 @@ export class SessionTools {
 	#announcedMountsSeeded = false;
 	#presentationPinnedToolNames: ReadonlySet<string> | undefined;
 	#runtimeSelectedToolNames: ReadonlySet<string> | undefined;
+	/**
+	 * Code Mode layer, installed once the frozen decision exists: the wire
+	 * allowlist the partition produced, the caller's explicit pins inside it, and
+	 * whether the mode is active. Absent in normal sessions, where the bridge-only
+	 * set stays empty.
+	 */
+	#codeMode: { isActive: () => boolean; topLevel: ReadonlySet<string>; pinned: ReadonlySet<string> } | undefined;
+	/** Tools reachable through the eval bridge only (never on the wire) while Code Mode is active. */
+	#bridgeOnlyToolNames = new Set<string>();
 	#baseSystemPrompt: string[];
 	#systemPromptSources: SystemPromptSources | undefined;
 	/**
@@ -900,14 +921,68 @@ export class SessionTools {
 	getActiveToolNames(): string[] {
 		return this.#host.agent.state.tools.map(t => t.name);
 	}
-	/** Enabled top-level and `xd://` tool names. */
+
+	/**
+	 * Installs the frozen Code Mode layer. `topLevel` is the wire allowlist the
+	 * partition produced; `bridgeOnly` are the tools the model may reach only
+	 * through the eval bridge. Normal sessions never call this.
+	 *
+	 * Everything in `topLevel` beyond {@link CODE_MODE_TOP_LEVEL} is an explicit
+	 * caller pin (requested tool list, presentation pins); it is kept so a later
+	 * re-partition (`/code-mode` on an empty session) reproduces the same wire.
+	 * Installing an inactive layer keeps the previous pins for the next `on`.
+	 */
+	installCodeMode(layer: { isActive: () => boolean; topLevel: Iterable<string>; bridgeOnly: Iterable<string> }): void {
+		const topLevel = [...layer.topLevel];
+		const pinned = layer.isActive()
+			? topLevel.filter(name => !CODE_MODE_TOP_LEVEL.includes(name))
+			: [...(this.#codeMode?.pinned ?? [])];
+		this.#codeMode = { isActive: layer.isActive, topLevel: new Set(topLevel), pinned: new Set(pinned) };
+		this.setBridgeOnlyToolNames(layer.bridgeOnly);
+		// The eval description's tool-name snapshot was taken at construction, before
+		// this layer existed: republish it so bridge-only tools are advertised to cells.
+		this.#promptSurface = this.#derivePromptSurface();
+	}
+
+	/** Explicit pins carried through the last Code Mode partition; empty otherwise. */
+	getCodeModePinnedToolNames(): string[] {
+		return [...(this.#codeMode?.pinned ?? [])];
+	}
+
+	/** Replaces the bridge-only layer (Code Mode partition or a late MCP discovery). */
+	setBridgeOnlyToolNames(names: Iterable<string>): void {
+		this.#bridgeOnlyToolNames = new Set(names);
+	}
+
+	/** Tools reachable through the eval bridge only; empty outside Code Mode. */
+	getBridgeOnlyToolNames(): string[] {
+		return [...this.#bridgeOnlyToolNames];
+	}
+
+	/** Whether the frozen Code Mode decision has this session in Code Mode. */
+	isCodeModeActive(): boolean {
+		return this.#codeMode?.isActive() === true;
+	}
+
+	/**
+	 * Whether a bridge resolution may reach `name` now. Plan mode narrows the
+	 * bridge to read-only tools without touching the wire or the decision.
+	 */
+	#bridgeReaches(name: string): boolean {
+		if (this.isCodeModeActive() && this.#host.planModeEnabled() && !READ_ONLY_TOOL_NAMES.has(name)) {
+			return false;
+		}
+		return true;
+	}
+
+	/** Enabled top-level, `xd://` and bridge-only tool names. */
 	getEnabledToolNames(): string[] {
 		// Union live xd:// mounts so devices mounted out-of-band (plugins writing
 		// to xdev state directly) survive the next apply.
 		const mountedNames = this.#xdev?.mountedNames;
 		const base = this.#enabledToolNames.size > 0 ? [...this.#enabledToolNames] : this.getActiveToolNames();
-		if (!mountedNames || mountedNames.size === 0) return base;
-		return [...new Set([...base, ...mountedNames])];
+		if ((!mountedNames || mountedNames.size === 0) && this.#bridgeOnlyToolNames.size === 0) return base;
+		return [...new Set([...base, ...(mountedNames ?? []), ...this.#bridgeOnlyToolNames])];
 	}
 
 	/** Names currently presented as `xd://` devices. */
@@ -957,9 +1032,13 @@ export class SessionTools {
 		const enabled = new Set(this.getEnabledToolNames());
 		const named = resolveToolWireName(this.#toolRegistry, bareName);
 		// A registered name never falls through to an alias guess, even when disabled.
-		if (named) return enabled.has(named.name) ? this.#wrapToolForAcpPermission(named) : undefined;
+		if (named) {
+			return enabled.has(named.name) && this.#bridgeReaches(named.name)
+				? this.#wrapToolForAcpPermission(named)
+				: undefined;
+		}
 		const alias = resolveMCPToolAlias(bareName, candidate =>
-			enabled.has(candidate) ? this.#toolRegistry.get(candidate) : undefined,
+			enabled.has(candidate) && this.#bridgeReaches(candidate) ? this.#toolRegistry.get(candidate) : undefined,
 		);
 		return alias && this.#wrapToolForAcpPermission(alias);
 	}
@@ -969,7 +1048,7 @@ export class SessionTools {
 		const names = new Set<string>();
 		for (const name of this.getEnabledToolNames()) {
 			const tool = this.#toolRegistry.get(name);
-			if (!tool || !isEvalBridgeToolCallable(tool)) continue;
+			if (!tool || !isEvalBridgeToolCallable(tool) || !this.#bridgeReaches(name)) continue;
 			names.add(name);
 			if (tool.customWireName && resolveToolWireName(this.#toolRegistry, tool.customWireName) === tool) {
 				names.add(tool.customWireName);
@@ -1497,6 +1576,23 @@ export class SessionTools {
 	async #applyActiveToolsByName(toolNames: string[], forcePromptRefresh = false, signal?: AbortSignal): Promise<void> {
 		signal?.throwIfAborted();
 		toolNames = normalizeToolNames(toolNames);
+		// Code Mode: the frozen wire survives whatever caller (goal mode, extensions,
+		// ACP, MCP refresh) built the next list. Top-level names are re-added so no
+		// path can strip `eval` and the rest of the allowlist; bridge-only names are
+		// dropped, so neither listing nor omitting one promotes it to the wire.
+		if (this.isCodeModeActive()) {
+			const topLevel = this.#codeMode?.topLevel;
+			if (topLevel !== undefined) {
+				const restored = new Set(toolNames);
+				for (const name of topLevel) {
+					if (!restored.has(name) && this.#toolRegistry.has(name)) restored.add(name);
+				}
+				toolNames = [...restored];
+			}
+			if (this.#bridgeOnlyToolNames.size > 0) {
+				toolNames = toolNames.filter(name => !this.#bridgeOnlyToolNames.has(name));
+			}
+		}
 		let builtInWriteAvailable = this.#builtInToolNames.has("write");
 		const fullWriteSelected =
 			toolNames.includes("write") &&
@@ -1566,7 +1662,11 @@ export class SessionTools {
 			builtInWriteAvailable = writeRegistration ? (await untilAborted(signal, writeRegistration)) === true : false;
 			if (builtInWriteAvailable) this.#builtInToolNames.add("write");
 		}
-		if (transportNeeded && builtInWriteAvailable) {
+		// Code Mode normally keeps `write` off the wire (the bridge replays writes as
+		// tool calls), but plan mode's only proposal route is a top-level `write` to
+		// `xd://propose`: while plan mode is enabled the transport stays wired so a
+		// plan can be submitted. The bridge itself still denies write tools.
+		if (transportNeeded && builtInWriteAvailable && (!this.isCodeModeActive() || this.#host.planModeEnabled())) {
 			const write = this.#toolRegistry.get("write");
 			if (write && !validToolNames.includes("write")) {
 				tools.push(this.#wrapToolForAcpPermission(write));
@@ -2482,8 +2582,12 @@ export class SessionTools {
 	}
 
 	/** Selects enabled tools, ignoring names absent from the registry. */
-	setActiveToolsByName(toolNames: string[]): Promise<void> {
+	setActiveToolsByName(toolNames: string[], options?: SetActiveToolsOptions): Promise<void> {
 		return this.runToolRegistryMutation(async () => {
+			if (options?.origin === "extension" && this.isCodeModeActive()) {
+				this.#applyExtensionActiveTools(toolNames);
+				return;
+			}
 			const normalized = normalizeToolNames(toolNames);
 			// Transport-write eligibility keys off the *current* active set: an ordinary
 			// selection change should not demote `write` unless it is already active.
@@ -2492,6 +2596,33 @@ export class SessionTools {
 				this.#xdev?.mountedNames ?? new Set(),
 				this.getActiveToolNames().includes("write"),
 			);
+		});
+	}
+
+	/**
+	 * Code Mode guard for `pi.setActiveTools`: the wire (and therefore the
+	 * prompt prefix) is frozen, so names the extension adds become bridge-only
+	 * and names it omits keep their current reachability. Dropping a bridge-only
+	 * name is the common case and a no-op, as is dropping a top-level tool; a
+	 * `write` transport that plan mode keeps on the wire also survives.
+	 */
+	#applyExtensionActiveTools(toolNames: string[]): void {
+		const normalized = normalizeToolNames(toolNames);
+		const enabled = new Set(this.getEnabledToolNames());
+		const topLevel = this.#codeMode?.topLevel;
+		const bridgeOnly = new Set(this.#bridgeOnlyToolNames);
+		const addedBridgeOnly: string[] = [];
+		for (const name of normalized) {
+			if (topLevel?.has(name) === true || enabled.has(name) || bridgeOnly.has(name)) continue;
+			if (!this.#toolRegistry.has(name)) continue;
+			bridgeOnly.add(name);
+			addedBridgeOnly.push(name);
+		}
+		if (addedBridgeOnly.length > 0) this.setBridgeOnlyToolNames(bridgeOnly);
+		logger.debug("Code Mode setActiveTools guard", {
+			origin: "extension",
+			addedBridgeOnly,
+			wire: this.getActiveToolNames(),
 		});
 	}
 
@@ -2976,6 +3107,7 @@ export class SessionTools {
 		}
 		const previousMcpManagerToolNames = new Set(this.#mcpManagerToolNames);
 		const previousActiveMcpToolNames = new Set(this.getEnabledToolNames().filter(isMCPToolName));
+		const previousBridgeOnlyToolNames = new Set(this.#bridgeOnlyToolNames);
 		const restorePreviousMcpTools = () => {
 			for (const name of this.#toolRegistry.keys()) {
 				if (isMCPToolName(name)) this.#toolRegistry.delete(name);
@@ -3018,6 +3150,27 @@ export class SessionTools {
 			}
 		}
 		try {
+			if (this.isCodeModeActive()) {
+				// Code Mode: every MCP tool discovered at runtime stays off the wire and
+				// reachable through the eval bridge only. The union in
+				// `getEnabledToolNames` keeps them discoverable after the apply narrows
+				// the slate to the top-level set.
+				//
+				// Explicit pins live on the wire, so a pinned MCP name is never demoted;
+				// names the registry no longer knows (a disconnected server, a suspended
+				// extension) leave the layer with it instead of lingering forever.
+				const topLevel = this.#codeMode?.topLevel;
+				const bridgeOnly = new Set<string>();
+				for (const name of this.#bridgeOnlyToolNames) {
+					if (topLevel?.has(name) === true) continue;
+					if (!this.#toolRegistry.has(name)) continue;
+					bridgeOnly.add(name);
+				}
+				for (const name of nextActive) {
+					if (isMCPToolName(name) && topLevel?.has(name) !== true) bridgeOnly.add(name);
+				}
+				this.setBridgeOnlyToolNames(bridgeOnly);
+			}
 			await this.#applyActiveToolsByName(nextActive);
 			if (this.#host.isDisposed()) {
 				restorePreviousMcpTools();
@@ -3028,6 +3181,7 @@ export class SessionTools {
 				previousMcpTools.clear();
 			}
 		} catch (error) {
+			this.setBridgeOnlyToolNames(previousBridgeOnlyToolNames);
 			restorePreviousMcpTools();
 			throw error;
 		}

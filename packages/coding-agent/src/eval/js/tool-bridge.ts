@@ -37,6 +37,15 @@ import {
 import type { EvalShadowCellSession } from "../speculation/cell-session";
 import { getActiveEvalShadowCell } from "../speculation/runtime-context";
 import { isEvalBridgeToolCallable, withEvalBridgeToolCall } from "../tool-bridge-policy";
+import {
+	bridgeToolExists,
+	describeBridgeTool,
+	EVAL_DESCRIBE_BRIDGE_NAME,
+	EVAL_HAS_TOOL_BRIDGE_NAME,
+	EVAL_SEARCH_BRIDGE_NAME,
+	searchBridgeTools,
+	type ToolSearchEntry,
+} from "../tool-discovery";
 import { EVAL_WORKPOOL_BRIDGE_NAME, type EvalWorkpoolResult, runEvalWorkpool } from "../workpool-bridge";
 import {
 	EVAL_MCP_BRIDGE_NAME,
@@ -72,6 +81,8 @@ export interface ToolBridgeOptions {
 
 type ToolValue =
 	| string
+	| boolean
+	| ToolSearchEntry[]
 	| EvalBudgetResult
 	| EvalShellResult
 	| EvalAgentHandleResult
@@ -301,6 +312,16 @@ async function dispatchSessionTool(name: string, args: unknown, options: ToolBri
 	if (name === EVAL_WORKPOOL_BRIDGE_NAME) {
 		return await runEvalWorkpool(args, options);
 	}
+	if (name === EVAL_DESCRIBE_BRIDGE_NAME) {
+		return describeBridgeTool(options.session, isRecord(args) ? args.name : undefined);
+	}
+	if (name === EVAL_HAS_TOOL_BRIDGE_NAME) {
+		return bridgeToolExists(options.session, isRecord(args) ? args.name : undefined);
+	}
+	if (name === EVAL_SEARCH_BRIDGE_NAME) {
+		const request = isRecord(args) ? args : {};
+		return searchBridgeTools(options.session, request.query, request.limit);
+	}
 	if (name === EVAL_MCP_BRIDGE_NAME) {
 		return await runEvalMcpCall(args, options);
 	}
@@ -346,8 +367,12 @@ async function runSessionTool(
 	// invalid value to make another branch match could select a different operation.
 	// Harness `i` is dropped here exactly as `extractIntent` drops it on the direct
 	// path, so tools see identical args from both entry points.
-	const intentIsDeclared = schemaDeclaresIntentField(toolWireSchema(tool));
-	const validationArgs = isRecord(args) ? { ...args } : args;
+	const wireSchema = toolWireSchema(tool);
+	const intentIsDeclared = schemaDeclaresIntentField(wireSchema);
+	// `tool.bash("ls")` / `tool.read("a.ts")`: a bare string fills the schema's only
+	// required string field. Any other shape stays as written and fails validation.
+	const soleField = typeof args === "string" ? soleRequiredStringField(wireSchema) : undefined;
+	const validationArgs = soleField !== undefined ? { [soleField]: args } : isRecord(args) ? { ...args } : args;
 	if (isRecord(validationArgs) && !intentIsDeclared) delete validationArgs[INTENT_FIELD];
 	let validatedArgs: unknown;
 	try {
@@ -432,4 +457,13 @@ async function runSessionTool(
 		});
 		throw error;
 	}
+}
+
+/** The schema's single required property when that property is a string; otherwise undefined. */
+function soleRequiredStringField(schema: unknown): string | undefined {
+	if (!isRecord(schema) || !Array.isArray(schema.required) || schema.required.length !== 1) return undefined;
+	const [field] = schema.required;
+	if (typeof field !== "string" || !isRecord(schema.properties)) return undefined;
+	const property = schema.properties[field];
+	return isRecord(property) && property.type === "string" ? field : undefined;
 }

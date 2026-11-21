@@ -1,7 +1,18 @@
-import { logger, toError } from "@oh-my-pi/pi-utils";
+import * as fs from "node:fs";
+import * as os from "node:os";
+import * as path from "node:path";
+import { logger, Snowflake, toError } from "@oh-my-pi/pi-utils";
 import { Settings } from "../config/settings";
-import { type ArtifactAllocator, type OutputArtifactError, OutputSink } from "@oh-my-pi/pi-tui/tools/streaming-output";
+import {
+	type ArtifactAllocator,
+	DEFAULT_MAX_BYTES,
+	type OutputArtifactError,
+	OutputSink,
+	type OutputSummary,
+} from "@oh-my-pi/pi-tui/tools/streaming-output";
 import { statusEventKey } from "@oh-my-pi/pi-tui/tools/eval";
+import { registerArtifactsDir } from "../internal-urls/registry-helpers";
+import { ArtifactManager } from "../session/artifacts";
 import type { ToolSession } from "../tools";
 import { ToolAbortError } from "../tools/tool-errors";
 import {
@@ -14,6 +25,79 @@ import type { JsStatusEvent } from "./js/shared/types";
 import { registerPyToolBridge } from "./py/tool-bridge";
 import { getActiveEvalShadowCell } from "./speculation/runtime-context";
 import type { EvalDisplayOutput } from "./types";
+
+/**
+ * Inline body budget (bytes) for one `eval` cell under Code Mode
+ * (`docs/code-mode-plan.md` §12.5 uses 4 KB). Results spill the remainder to an
+ * `artifact://N` file instead of entering the transcript.
+ */
+export const CODE_MODE_EVAL_INLINE_BYTES = 4 * 1024;
+
+export interface EvalInlineBudget {
+	/** Code Mode is frozen on for this session: tighter cap, artifact on overflow. */
+	codeMode: boolean;
+	/** {@link OutputSink} inline body budget (bytes). */
+	spillThreshold: number;
+}
+
+/** Resolve the per-cell inline output budget: Code Mode's cap, else the historical 50 KB. */
+export function resolveEvalInlineBudget(session: ToolSession | undefined): EvalInlineBudget {
+	const codeMode = session?.isCodeModeActive?.() === true;
+	return { codeMode, spillThreshold: codeMode ? CODE_MODE_EVAL_INLINE_BYTES : DEFAULT_MAX_BYTES };
+}
+
+/**
+ * Embedded (non-persistent) sessions have no artifacts directory, so
+ * `allocateOutputArtifact` yields nothing there. Lease one temporary directory
+ * per session and register it so `artifact://N` resolution still finds the
+ * spill; the session's dispose unregisters and removes it.
+ */
+const embeddedArtifactManagers = new WeakMap<ToolSession, ArtifactManager>();
+
+function embeddedArtifactManager(session: ToolSession): ArtifactManager {
+	let manager = embeddedArtifactManagers.get(session);
+	if (manager === undefined) {
+		const dir = path.join(os.tmpdir(), `omp-eval-artifacts-${Snowflake.next()}`);
+		const unregister = registerArtifactsDir(dir);
+		session.registerDisposeCallback?.(() => {
+			unregister();
+			fs.rmSync(dir, { recursive: true, force: true });
+		});
+		manager = new ArtifactManager(dir, null);
+		embeddedArtifactManagers.set(session, manager);
+	}
+	return manager;
+}
+
+/**
+ * Artifact allocator for an `eval` cell. A caller-supplied allocator wins and
+ * normal mode uses only that one; Code Mode falls back to the session's
+ * allocator, then to a per-session temporary directory, so overflow past its
+ * tighter cap stays recoverable. {@link OutputSink} calls it only once output
+ * overflows, so cells under the cap allocate nothing.
+ */
+export function resolveEvalArtifactAllocator(
+	session: ToolSession | undefined,
+	existing: ArtifactAllocator | undefined,
+): ArtifactAllocator | undefined {
+	if (existing !== undefined || session?.isCodeModeActive?.() !== true) return existing;
+	return async () => {
+		const allocated = await session.allocateOutputArtifact?.();
+		if (allocated?.path !== undefined && allocated.id !== undefined) return allocated;
+		return await embeddedArtifactManager(session).allocatePath();
+	};
+}
+
+/** Append the `[raw output: artifact://N]` recovery link the Code Mode cap promises. */
+export function appendEvalArtifactFooter(
+	output: string,
+	summary: Pick<OutputSummary, "truncated" | "artifactId">,
+	codeMode: boolean,
+): string {
+	if (!codeMode || !summary.truncated || summary.artifactId === undefined) return output;
+	const footer = `[raw output: artifact://${summary.artifactId}]`;
+	return output.length > 0 ? `${output}\n${footer}` : footer;
+}
 
 /**
  * Constructor for a language executor's cancellation error. Each backend
@@ -486,9 +570,11 @@ export async function executeWithKernelBase<
 	} = params;
 
 	const settings = await Settings.init();
+	const budget = resolveEvalInlineBudget(options?.toolSession);
 	const sink = new OutputSink({
 		onChunk: options?.onChunk,
-		allocateArtifact: options?.allocateArtifact,
+		allocateArtifact: resolveEvalArtifactAllocator(options?.toolSession, options?.allocateArtifact),
+		spillThreshold: budget.spillThreshold,
 		headBytes: resolveOutputSinkHeadBytes(settings),
 		artifactMaxBytes: resolveOutputSinkArtifactMaxBytes(settings),
 		maxColumns: resolveOutputMaxColumns(settings),
@@ -585,7 +671,7 @@ export async function executeWithKernelBase<
 				exitCode: undefined,
 				cancelled: true,
 				truncated: dumped.truncated,
-				output: dumped.output,
+				output: appendEvalArtifactFooter(dumped.output, dumped, budget.codeMode),
 				artifactId: dumped.artifactId ?? undefined,
 				artifactElidedBytes: dumped.artifactElidedBytes,
 				artifactError: dumped.artifactError,
@@ -604,7 +690,7 @@ export async function executeWithKernelBase<
 				exitCode: 1,
 				cancelled: false,
 				truncated: dumped.truncated,
-				output: dumped.output,
+				output: appendEvalArtifactFooter(dumped.output, dumped, budget.codeMode),
 				artifactId: dumped.artifactId ?? undefined,
 				artifactElidedBytes: dumped.artifactElidedBytes,
 				artifactError: dumped.artifactError,
@@ -623,7 +709,7 @@ export async function executeWithKernelBase<
 			exitCode,
 			cancelled: false,
 			truncated: dumped.truncated,
-			output: dumped.output,
+			output: appendEvalArtifactFooter(dumped.output, dumped, budget.codeMode),
 			artifactId: dumped.artifactId ?? undefined,
 			artifactElidedBytes: dumped.artifactElidedBytes,
 			artifactError: dumped.artifactError,
@@ -648,7 +734,7 @@ export async function executeWithKernelBase<
 				exitCode: undefined,
 				cancelled: true,
 				truncated: dumped.truncated,
-				output: dumped.output,
+				output: appendEvalArtifactFooter(dumped.output, dumped, budget.codeMode),
 				artifactId: dumped.artifactId ?? undefined,
 				artifactElidedBytes: dumped.artifactElidedBytes,
 				artifactError: dumped.artifactError,

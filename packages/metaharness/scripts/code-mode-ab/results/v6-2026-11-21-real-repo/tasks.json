@@ -1,0 +1,18 @@
+[
+  {
+    "id": "bytes",
+    "prompt": "In this repository (the oh-my-pi monorepo), `formatBytes` in `packages/utils/src/format.ts` prints `1024.0KB` for values just under 1 MB (e.g. 1048575 bytes) and never drops a trailing `.0`. Fix it so the unit is chosen after rounding (1048575 must print `1MB`, never `1024.0KB`) and a trailing `.0` is dropped (`2048` prints `2KB`, `1536` prints `1.5KB`). Also add a `TB` unit above 1024 GB. Negative or non-finite input must return `0B`. Keep the function signature and every other existing output. Add tests for these cases in `packages/utils/test/format.test.ts`. Run the package's tests with `bun test` from `packages/utils`."
+  },
+  {
+    "id": "age",
+    "prompt": "In this repository (the oh-my-pi monorepo), `formatAge` in `packages/utils/src/format.ts` returns `\"\"` for 0 and for negative inputs, which callers show as an empty cell. Change it so a negative or non-finite `ageSeconds` returns `\"just now\"` (clock skew), 0 also returns `\"just now\"`, while `null` and `undefined` keep returning `\"\"`. Do not change any other output. Add tests in a new `packages/utils/test/format-age.test.ts`. Run `bun test` from `packages/utils`."
+  },
+  {
+    "id": "lru",
+    "prompt": "In this repository (the oh-my-pi monorepo), add a method `oldestKeys(): K[]` to `LRUCache` in `packages/utils/src/lru.ts` that returns the live (non-expired) keys as an array ordered from least to most recently used. It must not change recency and must not dispose or remove anything. Keep every existing method, including the existing `keys()` generator, unchanged. Add tests in `packages/utils/test/lru.test.ts`. Run `bun test` from `packages/utils`."
+  },
+  {
+    "id": "truncate",
+    "prompt": "In this repository (the oh-my-pi monorepo), `truncate` in `packages/utils/src/format.ts` misbehaves when `maxLen` is smaller than the ellipsis: `truncate(\"hello\", 0)` returns `\"…\"` (longer than allowed) and `truncate(\"hello\", 2, \"...\")` returns `\"...\"`. Make the result never exceed `maxLen` characters: when `maxLen` is less than or equal to the ellipsis length, return the first `maxLen` characters of the ellipsis; a negative or non-finite `maxLen` returns `\"\"`. Keep every other existing output, including the default ellipsis. Add tests in `packages/utils/test/format.test.ts`. Run `bun test` from `packages/utils`."
+  }
+]

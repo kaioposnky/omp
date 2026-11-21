@@ -29,7 +29,7 @@ flowchart LR
 
 ### Requisitos
 
-- **RF2.1** Setting persistente `codeMode.default` (`boolean`), que define o estado inicial de toda sessão nova. Default de fábrica: `false` até a medição do plano §7.
+- **RF2.1** Setting persistente `codeMode.default` (`boolean`), que define o estado inicial de toda sessão nova. Default de fábrica: `true`, adotado após a medição do plano §7 (`docs/code-mode/micro/token-economy-model-behaviors.md`).
 - **RF2.2** Slash command `/code-mode [on|off|status|default on|default off]`.
   - `on`/`off` não alteram a sessão atual (D2.1). Eles abrem uma sessão nova já no estado pedido, como `/new` com override. Se a sessão atual estiver vazia (sem mensagens), aplicam nela mesma.
   - `default on|off` grava `codeMode.default` (persistente) sem mexer na sessão atual.
@@ -45,7 +45,7 @@ flowchart LR
 ### Requisitos não funcionais
 
 - **RNF2.1 Estado congelado por sessão.** O conjunto de tools e o system prompt são definidos na criação da sessão e não mudam depois (D2.1). Isso elimina a perda de cache no meio da sessão e o risco de o provider rejeitar tool calls antigas cujas tools saíram do schema.
-- **RNF2.2 Fork e resume.** `/fork`, `/resume` e `seance` herdam o estado gravado na sessão de origem, porque reaproveitam o histórico dela.
+- **RNF2.2 Fork e resume.** `/fork` e `/resume` herdam o estado gravado na sessão de origem, porque reaproveitam o histórico dela.
 
 ### Decisões (fechadas)
 

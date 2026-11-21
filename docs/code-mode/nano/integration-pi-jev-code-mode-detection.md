@@ -4,7 +4,7 @@ Parent: [micro/integration-pi-jev.md](../micro/integration-pi-jev.md)
 
 Code: `vendor/pi-jev/src/mcp-gate.ts#McpGate.route`, `vendor/pi-jev/src/router.ts#ToolRouter.activateTools`, `vendor/pi-jev/src/auto.ts#AutoJev.route`, `vendor/pi-jev/src/tool-guard.ts#ToolGuard`, `vendor/pi-jev/src/skills.ts#JEV_THRESHOLD`, `vendor/pi-jev/src/tools.ts#registerJevTools`, `vendor/pi-jev/src/types.ts#JEV_TOOL_NAMES`
 
-`[planned] packages/coding-agent/src/extensibility/extensions/types.ts#ExtensionAPI.isCodeModeActive`
+`packages/coding-agent/src/extensibility/extensions/types.ts#ExtensionAPI.isCodeModeActive`
 
 ## How it works
 

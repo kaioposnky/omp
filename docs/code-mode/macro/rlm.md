@@ -11,11 +11,11 @@ Transformar contexto grande em dado manipulável pelo modelo, em vez de texto co
 | | O quê | De / Para |
 |---|---|---|
 | Input | Paste/arquivo anexado acima do limite `input.largeInputAsHandle` | `packages/coding-agent/src/modes/controllers/input-controller.ts#attachPasteAsFile` |
-| Input | `elide({ toolCallIds, reason? })` do modelo | `[planned] packages/coding-agent/src/tools/context-notes.ts` (tool nova) |
+| Input | `elide({ toolCallIds, reason? })` do modelo | `packages/coding-agent/src/tools/context-notes.ts` (tool nova) |
 | Input | Config de cache/lookback do próximo request | `packages/agent/src/compaction/pruning.ts#PruneConfig` |
-| Output | Prompt com `local://paste-3.md (≈1.8M tokens, 41k linhas). Disponível no eval como inputs["paste-3"].` | `[planned] packages/coding-agent/src/modes/controllers/input-controller.ts` |
-| Output | `inputs` no prelude JS/Python | `[planned] packages/coding-agent/src/eval/js/shared/prelude.ts` |
-| Output | Tool results blankados com `[Elided by model - N tokens]` | `[planned] packages/agent/src/compaction/pruning.ts` (reuso de `blankToolResult`) |
+| Output | Prompt com `local://paste-3.md (≈1.8M tokens, 41k linhas). Disponível no eval como inputs["paste-3"].` | `packages/coding-agent/src/modes/controllers/input-controller.ts` |
+| Output | `inputs` no prelude JS/Python | `packages/coding-agent/src/eval/js/shared/prelude.ts` |
+| Output | Tool results blankados com `[Elided by model - N tokens]` | `packages/agent/src/compaction/pruning.ts` (reuso de `blankToolResult`) |
 | Output | Estado adiado quando o alvo está na janela de cache quente | `packages/agent/src/compaction/pruning.ts#PruneConfig.cacheWarmSuffixTokens` |
 
 ## Entry points

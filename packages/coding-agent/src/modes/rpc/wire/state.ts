@@ -123,6 +123,10 @@ export const stateDefs = {
 		autoCompactionEnabled: absentAs("boolean", false),
 		fastModeEnabled: absentAs("boolean", false),
 		fastModeActive: absentAs("boolean", false),
+		codeModeEnabled: absentAs(
+			doc("boolean", "Session runs in Code Mode (frozen at creation): only eval and control tools on the wire."),
+			false,
+		),
 		slowModeSupported: absentAs(doc("boolean", "`/slow` applies to the active model."), false),
 		slowModeEnabled: absentAs(
 			doc("boolean", "`/slow` is on for the active model; always `false` when `slowModeSupported` is `false`."),

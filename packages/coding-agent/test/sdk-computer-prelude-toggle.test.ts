@@ -47,6 +47,7 @@ describe("AgentSession eval preludes", () => {
 			"disassembler.backend": "none",
 		});
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: registryDir,
 			agentDir: registryDir,
 			modelRegistry,
@@ -134,6 +135,7 @@ describe("AgentSession eval preludes", () => {
 			"disassembler.backend": "none",
 		});
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: registryDir,
 			agentDir: registryDir,
 			modelRegistry,
@@ -204,6 +206,7 @@ describe("AgentSession eval preludes", () => {
 			"computer.enabled": true,
 		});
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: registryDir,
 			agentDir: registryDir,
 			modelRegistry,
@@ -235,6 +238,7 @@ describe("AgentSession eval preludes", () => {
 		const reconcile = vi.spyOn(manager, "reconcileBrowserFilter");
 		const settings = Settings.isolated({ "browser.enabled": false });
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: registryDir,
 			agentDir: registryDir,
 			modelRegistry,
@@ -277,6 +281,7 @@ describe("AgentSession eval preludes", () => {
 			"computer.enabled": true,
 		});
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: registryDir,
 			agentDir: registryDir,
 			modelRegistry,

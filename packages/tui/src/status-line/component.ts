@@ -485,6 +485,8 @@ class StatusLineExternalInputs {
 	isStreaming: boolean | undefined = undefined;
 	isAutoThinking: boolean | undefined = undefined;
 	isFastModeActive = false;
+	codeModeActive = false;
+	codeModeDiverged = false;
 	anthropicSlowModeLabel: string | undefined = undefined;
 	compactionSpeculation: unknown = undefined;
 	/** The freshest running job widget's view (stable identity while its data is unchanged). */
@@ -2932,6 +2934,12 @@ export class StatusLineComponent<TSession extends StatusLineSession = StatusLine
 		target.isAutoThinking = this.session.isAutoThinking;
 		target.isFastModeActive =
 			typeof this.session.isFastModeActive === "function" ? this.session.isFastModeActive() : false;
+		target.codeModeActive =
+			typeof this.session.isCodeModeActive === "function" ? this.session.isCodeModeActive() : false;
+		const codeModeDecision =
+			typeof this.session.getCodeModeDecision === "function" ? this.session.getCodeModeDecision() : undefined;
+		target.codeModeDiverged =
+			target.codeModeActive && codeModeDecision !== undefined && codeModeDecision.enabled !== true;
 		target.anthropicSlowModeLabel =
 			typeof this.session.getAnthropicSlowModeLabel === "function"
 				? this.session.getAnthropicSlowModeLabel()
@@ -2996,6 +3004,8 @@ export class StatusLineComponent<TSession extends StatusLineSession = StatusLine
 			left.isStreaming === right.isStreaming &&
 			left.isAutoThinking === right.isAutoThinking &&
 			left.isFastModeActive === right.isFastModeActive &&
+			left.codeModeActive === right.codeModeActive &&
+			left.codeModeDiverged === right.codeModeDiverged &&
 			left.anthropicSlowModeLabel === right.anthropicSlowModeLabel &&
 			left.compactionSpeculation === right.compactionSpeculation &&
 			left.jobWidgetRef === right.jobWidgetRef

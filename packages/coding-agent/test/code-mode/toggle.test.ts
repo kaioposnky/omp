@@ -1,8 +1,6 @@
 /**
- * Code Mode F2: settings default, CLI flags, session persistence/resume/fork,
- * `/code-mode` slash spec, and the RPC state field.
- *
- * Every test is `it.todo` with the real assertions; Code Mode is `[planned]`.
+ * Code Mode F2: settings defaults, CLI flags, session persistence/resume/fork,
+ * `/code-mode` slash behavior, and the RPC state field.
  */
 import { describe, expect, it } from "bun:test";
 // Must evaluate before `builtin-modes`: the SDK graph initializes the slash
@@ -34,7 +32,7 @@ function makeRuntime(session: CodeModeSession, outputs: string[]) {
 const userMessage = (text: string): Message => ({ role: "user", content: text, timestamp: Date.now() });
 
 describe("Code Mode toggle (F2)", () => {
-	it.todo("CM-T1 codeMode.default decides the new session's state", async () => {
+	it("CM-T1 codeMode.default decides the new session's state", async () => {
 		using dir = TempDir.createSync("@omp-cm-t1-");
 		const cwd = dir.path();
 		const { session: on } = await makeCodeModeSession({
@@ -59,7 +57,7 @@ describe("Code Mode toggle (F2)", () => {
 		}
 	});
 
-	it.todo("CM-T2 --code-mode and --no-code-mode parse into Args.codeMode", () => {
+	it("CM-T2 --code-mode and --no-code-mode parse into Args.codeMode", () => {
 		const enabled = parseArgs(["--code-mode"]) as Args & { codeMode?: boolean };
 		const disabled = parseArgs(["--no-code-mode"]) as Args & { codeMode?: boolean };
 		const absent = parseArgs([]) as Args & { codeMode?: boolean };
@@ -68,7 +66,7 @@ describe("Code Mode toggle (F2)", () => {
 		expect(absent.codeMode).toBeUndefined();
 	});
 
-	it.todo("CM-T3 resume keeps the state recorded in the session file", async () => {
+	it("CM-T3 resume keeps the state recorded in the session file", async () => {
 		using dir = TempDir.createSync("@omp-cm-t3-");
 		const cwd = dir.path();
 		const sessionDir = `${cwd}/sessions`;
@@ -102,7 +100,7 @@ describe("Code Mode toggle (F2)", () => {
 		}
 	});
 
-	it.todo("CM-T4 fork inherits the source session's state", async () => {
+	it("CM-T4 fork inherits the source session's state", async () => {
 		using dir = TempDir.createSync("@omp-cm-t4-");
 		const cwd = dir.path();
 		const sessionDir = `${cwd}/sessions`;
@@ -136,7 +134,7 @@ describe("Code Mode toggle (F2)", () => {
 		}
 	});
 
-	it.todo("CM-T5 /code-mode is a builtin mode command with on/off/status/default", () => {
+	it("CM-T5 /code-mode is a builtin mode command with on/off/status/default", () => {
 		const spec = BUILTIN_MODE_SLASH_COMMANDS.find(command => command.name === "code-mode");
 		expect(spec).toBeDefined();
 		const subcommands = (spec?.subcommands ?? []).map(subcommand => subcommand.name);
@@ -144,22 +142,23 @@ describe("Code Mode toggle (F2)", () => {
 		expect(typeof spec?.handle).toBe("function");
 	});
 
-	it.todo("CM-T6 /code-mode on only applies in place to an empty session", async () => {
+	it("CM-T6 /code-mode on only applies in place to an empty session", async () => {
 		using dir = TempDir.createSync("@omp-cm-t6-");
 		const cwd = dir.path();
 		const spec = BUILTIN_MODE_SLASH_COMMANDS.find(command => command.name === "code-mode");
 		const handle = spec?.handle;
 		if (!handle) throw new Error("/code-mode handler is not registered");
 
+		// Both sessions start in normal mode so `/code-mode on` has something to switch.
 		const { session: empty } = await makeCodeModeSession({
 			cwd,
 			hasUI: true,
-			settings: Settings.isolated({ "marketplace.autoUpdate": "off" }),
+			settings: Settings.isolated({ "marketplace.autoUpdate": "off", "codeMode.default": false }),
 		});
 		const { session: used } = await makeCodeModeSession({
 			cwd,
 			hasUI: true,
-			settings: Settings.isolated({ "marketplace.autoUpdate": "off" }),
+			settings: Settings.isolated({ "marketplace.autoUpdate": "off", "codeMode.default": false }),
 			sessionManager: SessionManager.inMemory(cwd),
 		});
 		try {
@@ -180,7 +179,7 @@ describe("Code Mode toggle (F2)", () => {
 		}
 	});
 
-	it.todo("CM-T7 RPC session state exposes codeModeEnabled", () => {
+	it("CM-T7 RPC session state exposes codeModeEnabled", () => {
 		const bundle = buildRpcWireBundle();
 		const sessionState = bundle.$defs.SessionState as { properties?: Record<string, unknown> } | undefined;
 		expect(sessionState?.properties).toHaveProperty("codeModeEnabled");

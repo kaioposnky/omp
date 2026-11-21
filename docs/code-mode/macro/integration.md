@@ -15,9 +15,9 @@ Manter funcionando, com o Code Mode ligado, tudo aquilo que hoje depende de uma 
 | Input | `pi.setActiveTools([...])` de extensões | `packages/coding-agent/src/extensibility/extensions/types.ts#ExtensionAPI` |
 | Input | Roteamento por prompt do pi-jev (`McpGate`, `AutoJev`, `jev_find_tools`) | `vendor/pi-jev/src/mcp-gate.ts#McpGate`, `vendor/pi-jev/src/auto.ts#AutoJev`, `vendor/pi-jev/src/tools.ts#registerJevTools` |
 | Output | Bloco de skills no system prompt, com instrução de leitura via `eval` | `packages/coding-agent/src/system-prompt.ts#toolReadsSkillUris` |
-| Output | Catálogo bridge-only (`tool.<nome>` + resumo) no prompt | `[planned] packages/coding-agent/src/code-mode/catalog.ts#renderBridgeCatalog` |
-| Output | Camada bridge-only mutável, fora do wire | `[planned] packages/coding-agent/src/session/session-tools.ts` (conjunto paralelo a `xd://` mounts) |
-| Output | `pi.isCodeModeActive()` para extensões | `[planned] packages/coding-agent/src/extensibility/extensions/types.ts#ExtensionAPI.isCodeModeActive` |
+| Output | Catálogo bridge-only (`tool.<nome>` + resumo) no prompt | `packages/coding-agent/src/code-mode/catalog.ts#renderBridgeCatalog` |
+| Output | Camada bridge-only mutável, fora do wire | `packages/coding-agent/src/session/session-tools.ts` (conjunto paralelo a `xd://` mounts) |
+| Output | `pi.isCodeModeActive()` para extensões | `packages/coding-agent/src/extensibility/extensions/types.ts#ExtensionAPI.isCodeModeActive` |
 
 ## Entry points
 

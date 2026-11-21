@@ -952,6 +952,7 @@ export class ExtensionRunner {
 		this.runtime.appendEntry = actions.appendEntry;
 		this.runtime.getActiveTools = actions.getActiveTools;
 		this.runtime.getAllTools = actions.getAllTools;
+		this.runtime.isCodeModeActive = actions.isCodeModeActive ?? (() => false);
 		this.runtime.setActiveTools = async toolNames => {
 			const registrationBarrier = this.#toolRegistrationBarrier;
 			if (registrationBarrier) await registrationBarrier;

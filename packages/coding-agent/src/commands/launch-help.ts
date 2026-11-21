@@ -74,6 +74,8 @@ export const launchHelp = {
 		"no-session": Flags.boolean({ description: "Don't save session (ephemeral)" }),
 		models: Flags.string({ description: `Comma-separated model patterns for ${formatKeyHint("ctrl+p")} cycling` }),
 		"no-tools": Flags.boolean({ description: "Disable all built-in tools" }),
+		"code-mode": Flags.boolean({ description: "Start in Code Mode: only eval and control tools on the wire" }),
+		"no-code-mode": Flags.boolean({ description: "Start in normal mode even when codeMode.default is on" }),
 		"no-judge": Flags.boolean({ description: "Restrict judge calls to the active model's provider" }),
 		"no-spotlight": Flags.boolean({ description: "Restrict Spotlight calls to the active model's provider" }),
 		offline: Flags.boolean({

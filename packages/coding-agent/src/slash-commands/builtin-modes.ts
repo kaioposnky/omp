@@ -43,6 +43,7 @@ import {
 import { cfgPrewalkFrom, cfgPrewalkInto, cfgSkillful } from "../session/settings";
 import { formatSlowModeResetClock } from "../session/anthropic-slow-mode";
 import { cfgExtendedContext } from "../session/context-settings";
+import { cfgCodeModeDefault } from "../code-mode/settings";
 import { cfgGoalEnabled } from "../goals/settings";
 import { cfgPlanEnabled } from "../plan-mode/settings";
 
@@ -110,6 +111,56 @@ function runFastCommand(arg: string, session: AgentSession): string | undefined 
 
 const SLOW_UNSUPPORTED =
 	"The current model has no slow mode: /slow uses the flex tier on OpenAI/Google models and low priority on Anthropic subscriptions.";
+
+const CODE_MODE_USAGE = "Usage: /code-mode [on|off|status|default on|default off]";
+
+/** A frozen decision is visible but only a new session can apply a change to it. */
+const CODE_MODE_NEW_SESSION =
+	"Code Mode is frozen for this conversation. Start a new session (/new) to apply the change.";
+
+/** `/code-mode status`: the frozen decision, its rule, and any refused request. */
+function formatCodeModeStatus(session: AgentSession): string {
+	const decision = session.getCodeModeDecision();
+	const rule = decision.detail ? `${decision.source}: ${decision.detail}` : decision.source;
+	const denied = decision.denied ? ` Denied request: ${decision.denied.reason}.` : "";
+	return `Code Mode is ${decision.enabled ? "on" : "off"} (${rule}).${denied}`;
+}
+
+/**
+ * `/code-mode [on|off|status|default on|default off]`. `on`/`off` re-partition
+ * the wire only while the transcript is empty: once a conversation exists its
+ * tool schema is frozen, so a change requires a fresh session instead of
+ * silently swapping the wire under history. `default` persists
+ * `codeMode.default` for new sessions.
+ */
+async function runCodeModeCommand(arg: string, session: AgentSession, settings: Settings): Promise<string | undefined> {
+	const [verb = "", value = ""] = arg.split(/\s+/);
+	switch (verb) {
+		case "":
+		case "status":
+			return formatCodeModeStatus(session);
+		case "default": {
+			if (value !== "on" && value !== "off") return undefined;
+			cfgCodeModeDefault.set(settings, value === "on");
+			return `Code Mode default: ${value} (applies to new sessions).`;
+		}
+		case "on":
+		case "off": {
+			const enabled = verb === "on";
+			if (session.messages.length > 0) return CODE_MODE_NEW_SESSION;
+			if (session.isStreaming)
+				return "Wait for the current response to finish or abort it before changing Code Mode.";
+			if (session.isCodeModeActive() === enabled) return formatCodeModeStatus(session);
+			const applied = await session.setCodeModeEnabled(enabled);
+			if (enabled && !applied.enabled) {
+				return `Code Mode cannot be enabled: ${applied.denied?.reason ?? applied.detail ?? "unavailable"}.`;
+			}
+			return formatCodeModeStatus(session);
+		}
+		default:
+			return undefined;
+	}
+}
 
 /**
  * `/slow [on|off|status]` for the active model: the `flex` service tier on
@@ -557,6 +608,37 @@ export const BUILTIN_MODE_SLASH_COMMANDS: ReadonlyArray<SlashCommandSpec> = [
 			const message = runSlowCommand(command.args.trim().toLowerCase(), runtime.ctx.session);
 			refreshStatusLine(runtime.ctx);
 			runtime.ctx.showStatus(message ?? "Usage: /slow [on|off|status]");
+			clearSubmittedText(runtime);
+		},
+	},
+	{
+		name: "code-mode",
+		icon: "tools",
+		description: "Toggle Code Mode: the model sees eval and a few control tools; other tools live behind the bridge",
+		acpDescription: "Toggle Code Mode",
+		acpInputHint: "[on|off|status|default on|default off]",
+		subcommands: [
+			{ name: "on", description: "Enable Code Mode for this (empty) session" },
+			{ name: "off", description: "Disable Code Mode for this (empty) session" },
+			{ name: "status", description: "Show the frozen Code Mode decision and its source" },
+			{ name: "default", description: "Persist codeMode.default for new sessions", usage: "on|off" },
+		],
+		allowArgs: true,
+		getTuiAutocompleteDescription: runtime => `Code Mode: ${runtime.ctx.session.isCodeModeActive() ? "on" : "off"}`,
+		handle: async (command, runtime) => {
+			const message = await runCodeModeCommand(command.args.trim().toLowerCase(), runtime.session, runtime.settings);
+			if (message === undefined) return usage(CODE_MODE_USAGE, runtime);
+			await runtime.output(message);
+			return commandConsumed();
+		},
+		handleTui: async (command, runtime) => {
+			const message = await runCodeModeCommand(
+				command.args.trim().toLowerCase(),
+				runtime.ctx.session,
+				runtime.ctx.settings,
+			);
+			refreshStatusLine(runtime.ctx);
+			runtime.ctx.showStatus(message ?? CODE_MODE_USAGE);
 			clearSubmittedText(runtime);
 		},
 	},

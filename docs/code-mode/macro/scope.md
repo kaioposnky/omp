@@ -16,20 +16,19 @@ carrega `source` e `detail`, que alimentam `/code-mode status` e o indicador.
 | | What | From / To |
 | --- | --- | --- |
 | Input | `codeMode.scope` (`main`, `agents`, `roles`, `models`) e `codeMode.default` | settings ([macro/toggle.md](toggle.md)) |
-| Input | Frontmatter `codeMode` e `tools` do agente | descoberta de agentes (`packages/coding-agent/src/task/discovery.ts` / `types.ts`) `[planned]` |
+| Input | Frontmatter `codeMode` e `tools` do agente | descoberta de agentes (`packages/coding-agent/src/task/discovery.ts` / `types.ts`) |
 | Input | `codeMode` no spawn (`task` item, `agent()`, `workpool()`) | [macro/spawn.md](spawn.md) |
 | Input | Role e `provider/id` do modelo já resolvido | resolução de modelo da sessão |
 | Input | `evalAvailable`, `restrictedToolNames`, `planMode` | sessão |
-| Output | `CodeModeDecision` (`enabled`, `source`, `detail`, `denied`) | `resolveCodeMode` `[planned]` |
+| Output | `CodeModeDecision` (`enabled`, `source`, `detail`, `denied`) | `resolveCodeMode` |
 | Output | Estado da sessão filha passado ao `createAgentSession` | [macro/core.md](core.md) |
 
 ## Entry points
 
-- `resolveCodeMode(input)` em `packages/coding-agent/src/code-mode/scope.ts` `[planned]` — função
+- `resolveCodeMode(input)` em `packages/coding-agent/src/code-mode/scope.ts` — função
   pura; é a única fonte de precedência.
 - `params.scope` / `params.codeMode` no spawn do subagente
-  (`packages/coding-agent/src/task/structured-subagent.ts#runStructuredSubagent`) — ponto planejado
-  `[planned]` que resolve depois do modelo.
+  (`packages/coding-agent/src/task/structured-subagent.ts#runStructuredSubagent`) — resolve depois do modelo.
 - `/code-mode status` — imprime a decisão efetiva e sua origem.
 - Settings `codeMode.scope` — validação na leitura (`validate`).
 

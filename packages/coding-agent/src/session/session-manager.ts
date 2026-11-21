@@ -2435,7 +2435,18 @@ export class SessionManager {
 		this.#sessionClaim = undefined;
 
 		const resolvedSessionFile = path.resolve(sessionFile);
-		const loaded = loadedSession ?? (await loadSessionFile(resolvedSessionFile, this.#storage));
+		let loaded = loadedSession ?? (await loadSessionFile(resolvedSessionFile, this.#storage));
+		// A manager whose storage cannot see this path (in-memory fixtures, embedded
+		// runtimes) can still resume a session that exists on the local filesystem:
+		// read it from disk. Writes stay in this manager's own storage.
+		if (
+			loadedSession === undefined &&
+			loaded.entries.length === 0 &&
+			!this.#storage.existsSync(resolvedSessionFile) &&
+			fs.existsSync(resolvedSessionFile)
+		) {
+			loaded = await loadSessionFile(resolvedSessionFile, new FileSessionStorage());
+		}
 		const sourceSize =
 			loaded.sourceSize !== undefined
 				? loaded.sourceSize
@@ -2928,6 +2939,11 @@ export class SessionManager {
 	/** Flush pending writes. Call before switching sessions or on shutdown. */
 	async flush(): Promise<void> {
 		if (!this.#persist || !this.#sessionFile) return;
+		// An explicit flush of a transcript that never crossed the lazy creation gate (a session
+		// with messages but no assistant output yet) still asked for durability, so materialize it.
+		if (!this.#shouldHaveSessionFile() && this.#entries.some(entry => entry.type === "message")) {
+			await this.ensureOnDisk();
+		}
 		await this.#scheduleDiskWork(async () => {
 			if (this.#writer?.isOpen()) await this.#writer.flush();
 		});
@@ -3784,6 +3800,14 @@ export class SessionManager {
 		const entry: CustomEntry = { type: "custom", customType, data, ...this.#freshEntryFields() };
 		this.#recordEntry(entry);
 		return entry.id;
+	}
+
+	/**
+	 * Code Mode decision recorded on the active branch. Resume and fork replay
+	 * it; absence means the session predates the record (keep the live decision).
+	 */
+	getRecordedCodeMode(): RecordedCodeMode | undefined {
+		return readRecordedCodeMode(this.getBranch());
 	}
 
 	/**
@@ -4781,6 +4805,37 @@ export class SessionManager {
 /** True when already-loaded entries carry at least one real user/assistant message. */
 export function hasConversationalHistory(entries: readonly FileEntry[]): boolean {
 	return entries.some(e => e.type === "message" && (e.message.role === "user" || e.message.role === "assistant"));
+}
+
+/** Session `custom` entry type recording the frozen Code Mode decision. */
+export const CODE_MODE_ENTRY_TYPE = "code_mode";
+
+/** Persisted Code Mode decision; resume and fork replay it over `codeMode.default`. */
+export interface RecordedCodeMode {
+	enabled: boolean;
+	/** Rule that produced the decision (`session`, `default`, `scope.models`, …). */
+	source: string;
+	detail?: string;
+	denied?: { requested: boolean; reason: string };
+}
+
+/** Latest recorded Code Mode decision on `entries` (last write wins), if any. */
+export function readRecordedCodeMode(entries: readonly SessionEntry[]): RecordedCodeMode | undefined {
+	for (let index = entries.length - 1; index >= 0; index--) {
+		const entry = entries[index]!;
+		if (entry.type !== "custom" || entry.customType !== CODE_MODE_ENTRY_TYPE) continue;
+		const data = entry.data;
+		if (typeof data !== "object" || data === null) continue;
+		const record = data as Partial<RecordedCodeMode>;
+		if (typeof record.enabled !== "boolean" || typeof record.source !== "string") continue;
+		return {
+			enabled: record.enabled,
+			source: record.source,
+			...(typeof record.detail === "string" ? { detail: record.detail } : {}),
+			...(record.denied ? { denied: record.denied } : {}),
+		};
+	}
+	return undefined;
 }
 
 /**

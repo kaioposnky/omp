@@ -5,7 +5,8 @@ Parent: [macro/toggle.md](../macro/toggle.md)
 ## Requirement statement
 
 `codeMode.default` define o estado inicial de toda sessão nova: `true` liga o Code Mode, `false`
-desliga, e o valor de fábrica é `false`.
+desliga, e o valor de fábrica é `true` (decidido pelas medições em
+[token-economy-model-behaviors.md](token-economy-model-behaviors.md)).
 
 ## Acceptance criteria
 
@@ -25,8 +26,8 @@ desliga, e o valor de fábrica é `false`.
 
 | Caso | Comportamento esperado |
 | --- | --- |
-| Setting ausente no arquivo | Default de fábrica `false` |
-| Valor com tipo errado no YAML | Validação do setting rejeita; sessão usa `false` |
+| Setting ausente no arquivo | Default de fábrica `true` |
+| Valor com tipo errado no YAML | Validação do setting rejeita; sessão usa o default de fábrica (`true`) |
 | `codeMode.default` true mas backend de `eval` ausente | Gate duro vence: sessão inativa |
 | Setting mudado durante a sessão | Sessão atual mantém o estado congelado |
 

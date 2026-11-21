@@ -14,9 +14,9 @@ Parent: [micro/toggle-slash-command.md](../micro/toggle-slash-command.md)
   sessão.
 - `packages/coding-agent/src/session/session-manager.ts#SessionManager.forkFrom` — herança de estado.
 - `packages/coding-agent/src/session/session-manager.ts#SessionManager.inMemory` — fixture de teste.
-- `[planned] packages/coding-agent/src/session/agent-session.ts#AgentSession.isCodeModeActive`
-- `[planned] packages/coding-agent/src/session/agent-session.ts#AgentSession.getCodeModeDecision`
-- `[planned] packages/coding-agent/src/sdk.ts#createAgentSession` — opção `codeMode` e resolução do
+- `packages/coding-agent/src/session/agent-session.ts#AgentSession.isCodeModeActive`
+- `packages/coding-agent/src/session/agent-session.ts#AgentSession.getCodeModeDecision`
+- `packages/coding-agent/src/sdk.ts#createAgentSession` — opção `codeMode` e resolução do
   default.
 
 ## How it works

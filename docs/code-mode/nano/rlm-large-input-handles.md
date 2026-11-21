@@ -2,7 +2,7 @@
 
 Parent: [micro/rlm-large-input-handle.md](../micro/rlm-large-input-handle.md)
 
-Code: `packages/coding-agent/src/modes/controllers/input-controller.ts#attachPasteAsFile`, `packages/coding-agent/src/eval/js/shared/prelude.txt#read`, `packages/coding-agent/src/internal-urls/local-protocol.ts`, `[planned] packages/coding-agent/src/code-mode/settings.ts#cfgInputLargeInputAsHandle`
+Code: `packages/coding-agent/src/modes/controllers/input-controller.ts#attachPasteAsFile`, `packages/coding-agent/src/eval/js/shared/prelude.txt#read`, `packages/coding-agent/src/internal-urls/local-protocol.ts`, `packages/coding-agent/src/code-mode/settings.ts#cfgInputLargeInputAsHandle`
 
 ## How it works
 
@@ -12,7 +12,7 @@ Code: `packages/coding-agent/src/modes/controllers/input-controller.ts#attachPas
 local://paste-3.md (≈1.8M tokens, 41k linhas). Disponível no eval como inputs["paste-3"].
 ```
 
-No prelude, `inputs` `[planned]` será um mapa lazy: cada chave resolve para um leitor que chama a tool `read` sob demanda (mesmo `readToolText`/`callHelper` já usados por `read`). Nada é carregado na criação do kernel; `Object.keys(inputs)` não lê conteúdo.
+No prelude, `inputs` é um mapa lazy (`eval/js/shared/prelude.txt`, `globalThis.inputs`): cada chave resolve para um leitor que chama a tool `read` sob demanda (mesmo `readToolText`/`callHelper` já usados por `read`). Nada é carregado na criação do kernel; `Object.keys(inputs)` não lê conteúdo.
 
 ## Invariants
 

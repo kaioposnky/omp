@@ -36,6 +36,7 @@ const agentArgsSchema = type({
 	"apply?": "boolean",
 	"merge?": "boolean",
 	"tools?": "string[]",
+	"codeMode?": "boolean",
 	"+": "delete",
 });
 
@@ -50,6 +51,8 @@ interface EvalAgentArgs {
 	apply?: boolean;
 	merge?: boolean;
 	tools?: string[];
+	/** Per-spawn Code Mode request; the child resolves it independently of the parent. */
+	codeMode?: boolean;
 }
 
 export interface EvalAgentBridgeOptions {
@@ -144,7 +147,10 @@ async function buildEvalAgentResult(execution: StructuredSubagentResult): Promis
 
 	const hasData = structured && structuredOutput !== undefined && Object.hasOwn(structuredOutput, "data");
 	const data = structuredOutput?.data;
-	const text = structured ? result.output : result.output + mergeSummary;
+	const resultText = structured ? result.output : result.output + mergeSummary;
+	const text = policy.codeModeDenialReason
+		? `${resultText}\n\ncodeMode ignored: ${policy.codeModeDenialReason}`
+		: resultText;
 	const schemaSource = structuredOutput?.source === "none" ? undefined : structuredOutput?.source;
 	const schemaMode = structured ? structuredOutput?.mode : undefined;
 	const schemaStatus = structuredOutput?.status === "unavailable" ? undefined : structuredOutput?.status;
@@ -207,6 +213,7 @@ export async function runEvalAgent(args: unknown, options: EvalAgentBridgeOption
 			...(parsed.model !== undefined ? { perCallModel: parsed.model } : {}),
 			...(Object.hasOwn(parsed, "schema") ? { outputSchema: parsed.schema } : {}),
 			...(parsed.schemaMode !== undefined ? { schemaMode: parsed.schemaMode } : {}),
+			...(parsed.codeMode !== undefined ? { codeMode: parsed.codeMode } : {}),
 			...(isolation ? { isolation } : {}),
 			...(customTools ? { customTools } : {}),
 		});
@@ -231,6 +238,7 @@ export async function runEvalAgent(args: unknown, options: EvalAgentBridgeOption
 						...(parsed.model !== undefined ? { perCallModel: parsed.model } : {}),
 						...(Object.hasOwn(parsed, "schema") ? { outputSchema: parsed.schema } : {}),
 						...(parsed.schemaMode !== undefined ? { schemaMode: parsed.schemaMode } : {}),
+						...(parsed.codeMode !== undefined ? { codeMode: parsed.codeMode } : {}),
 						identity: { id, label: parsed.label },
 						...(isolation ? { isolation } : {}),
 						...(customTools ? { customTools } : {}),

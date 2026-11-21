@@ -7,7 +7,7 @@ import type {
 import { JevClient } from "../src/jev.js";
 import { ToolRouter } from "../src/router.js";
 import { SkillRouter } from "../src/skills.js";
-import { AutoJev } from "../src/auto.js";
+import { AutoJev, skillHintMessage } from "../src/auto.js";
 import { registerJevTools } from "../src/tools.js";
 import { registerJevCommands } from "../src/commands.js";
 import { AutoModelRouter, promptHasUrl } from "../src/model-router.js";
@@ -214,11 +214,7 @@ export default function (pi: ExtensionAPI) {
       message: {
         customType: "jev-auto",
         display: true,
-        content:
-          "Jev auto-matched skill(s) for this task. Load the matching SKILL.md before proceeding:\n" +
-          result.skills
-            .map((s) => `• /skill:${s.name} (P=${s.probability.toFixed(2)})`)
-            .join("\n"),
+        content: skillHintMessage(result.skills),
       },
     };
   }

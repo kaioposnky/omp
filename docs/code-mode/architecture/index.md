@@ -9,10 +9,11 @@ Code Mode é um perfil de apresentação de tools do omp: o modelo vê apenas um
 histórico, sem tirar nenhuma capacidade da sessão. Usuários são as próprias sessões do omp e os
 subagentes que rodam com o perfil ligado por escopo.
 
-**Estado deste documento:** a funcionalidade está **planejada**; não há código de produção
-implementado nesta árvore. O que existe hoje é a infraestrutura de bridge do `eval`, a partição do
-`xd://` e os pontos de integração citados abaixo. Tudo que é novo está marcado `[planned]`; os
-testes vivem em `packages/coding-agent/test/code-mode/` como `it.todo` com corpo real.
+**Estado deste documento:** a funcionalidade está **implementada** (ondas W0–W6 de
+[orchestration.md](orchestration.md)). Os testes vivem em `packages/coding-agent/test/code-mode/`
+e passam todos (CM-P3 e CM-C2 tiveram o corpo corrigido). O default `codeMode.default` é `true`;
+a medição por modelo está em
+[micro/token-economy-model-behaviors.md](../micro/token-economy-model-behaviors.md).
 
 ## Stack
 
@@ -55,13 +56,13 @@ topo. Detalhes de implementação:
 - **Reusar a camada bridge-only do `xd://`, sem reusar `xdev.mountedNames`** — tools montadas do
   `xd://` também anunciam devices e exigem `read`/`write` top-level como transporte, exatamente as
   tools que o Code Mode tira do schema.
-- **Módulos concentrados em `src/code-mode/`** `[planned]` — `settings.ts`, `scope.ts`,
+- **Módulos concentrados em `src/code-mode/`** — `settings.ts`, `scope.ts`,
   `partition.ts`, `catalog.ts`, `hints.ts`. Motivo: `sdk.ts` e `session/session-tools.ts` são
   arquivos quentes no upstream; a lógica pura fica isolada para reduzir conflito no
   `oh-my-pi-fork-release-sync`.
-- **Default `false`** — o ganho de custo não foi medido no omp; vira default só depois do A/B de
-  `packages/metaharness` com sucesso igual ou maior em pelo menos dois modelos (um Anthropic e um
-  OpenAI/Codex).
+- **Default `true`** — o A/B de `packages/metaharness` mostrou 30–70% menos tokens em todos os 7
+  modelos medidos, correção igual (testes ocultos) e revisão cega empatada ou favorável com a regra
+  de escopo; ver [micro/token-economy-model-behaviors.md](../micro/token-economy-model-behaviors.md).
 - **Decisão de escopo resolvida uma vez por sessão** — trocar de modelo no meio da sessão não
   reavalia o estado; a regra é reavaliada só para o indicador e para `/code-mode status`.
 - **Gates duros vencem qualquer override** — sem backend de `eval`, com frontmatter `tools` sem
@@ -97,6 +98,6 @@ topo. Detalhes de implementação:
   Mode.
 - [macro/token-economy.md](../macro/token-economy.md) — catálogo compacto, dicas no sufixo, teto de
   saída do eval e prefixo congelado.
-- [macro/spawn.md](../macro/spawn.md) — `codeMode` no spawn de subagentes e `agent(fork)`.
+- [macro/spawn.md](../macro/spawn.md) — `codeMode` no spawn de subagentes.
 - [macro/rlm.md](../macro/rlm.md) — input grande como handle e tool `elide`.
 - [macro/needle.md](../macro/needle.md) — spike de medição da Needle 3 para tool calling.

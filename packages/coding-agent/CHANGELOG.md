@@ -5,6 +5,11 @@
 ### Added
 
 - Extensions can take over a built-in provider through `registerProvider`: `stream` replaces its request adapter, `generateImage` its image generation, and `webSearch` its grounded search request, and `discoverModels` its model discovery request. `rules` sets KDL rule directives (such as `prompt-perturbation`) for its models.
+- Code Mode is on by default (`codeMode.default: true`): the model sees `eval` plus control tools and reaches every other tool from a cell; `--no-code-mode`, `/code-mode off` or `codeMode.default: false` restore direct tools. Measured 30–70% fewer tokens across Anthropic, OpenAI and open-weights models with identical hidden-test correctness
+- Code Mode eval prompt adapts to the model family: OpenAI and other non-Anthropic models get a few-cells workflow (one discovery cell, one edit+verify cell, no standalone `todo` turns); Anthropic and OpenAI models get a scope rule (targeted edits, no unrequested behavior changes)
+- Printing a bridged tool result in an eval cell shows its `.text` instead of the full `{ text, details }` object (JS and Python); Python results also expose `r.text`
+- Anthropic web search and Files API uploads follow `PI_ANTHROPIC_API_VERSION=2026-10-21`; web search omits `temperature` under that version ([#16706](https://github.com/can1357/oh-my-pi/pull/16706) by [@H4vC](https://github.com/H4vC))
+- llama.cpp auto-discovery now also finds local servers on llama-server's new default port 9931 when nothing answers on 8080 ([#16675](https://github.com/can1357/oh-my-pi/pull/16675) by [@bartbroere](https://github.com/bartbroere))
 
 ### Fixed
 

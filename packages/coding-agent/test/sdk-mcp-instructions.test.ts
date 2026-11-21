@@ -133,6 +133,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 			}),
 		);
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -170,6 +171,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 			}),
 		);
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -197,6 +199,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 
 	it("folds server instructions into the prompt once deferred discovery connects", async () => {
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -238,6 +241,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 
 	it("keeps the user append prompt out of the MCP instructions section", async () => {
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -287,6 +291,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 			}),
 		);
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -339,6 +344,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 			}),
 		);
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -389,6 +395,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 
 	it("adds no route summary for an MCP tool whose docs are inlined", async () => {
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -428,6 +435,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 			}),
 		);
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -459,6 +467,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 
 	it("mounts deferred MCP tools when CLI filtering grants read but omits write", async () => {
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -507,6 +516,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 
 	it("keeps an explicitly requested deferred MCP tool top-level after connection", async () => {
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -546,6 +556,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 
 	it("keeps deferred tools top-level when an explicit session omitted read", async () => {
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			modelRegistry,
@@ -587,6 +598,7 @@ describe("createAgentSession MCP server instructions (deferred UI)", () => {
 			try {
 				for (const name of connectOrder) await manager.connectServers({ [name]: config }, {}, undefined, 0);
 				const { session } = await createAgentSession({
+					codeMode: false,
 					cwd: tempDir,
 					agentDir: tempDir,
 					modelRegistry,

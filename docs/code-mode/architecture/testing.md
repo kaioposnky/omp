@@ -22,7 +22,7 @@ sempre começa pelo ID (`"CM-P1 code mode advertises only the top-level set"`).
 | `packages/coding-agent/test/code-mode/scope.test.ts` | CM-S1..CM-S10 | Escopo F4 puro: escada de precedência, gates duros, frontmatter sem `eval`, glob de modelo (primeiro match), role, não-herança do pai, defaults de fábrica, validação de settings, `source`/`detail` para `/code-mode status`, lista restrita sem `eval`. |
 | `packages/coding-agent/test/code-mode/skills-mcp.test.ts` | CM-C1..CM-C6 | Integração F6: bloco de skills continua no prompt, `skill://<name>` legível pelo `read` bridgeado, sem bloco `xd://` de MCP, `setActiveTools` de extensão não muda o wire, `pi.isCodeModeActive()`. |
 | `packages/coding-agent/test/code-mode/token-economy.test.ts` | CM-E1..CM-E6 | Economia §12: prefixo congelado, wire menor que o normal, catálogo estável com colapso `mcp__<server>__*` acima de 20 tools, dicas depois da mensagem do usuário, teto de 600 tokens nas dicas, teto de saída inline do eval. |
-| `packages/coding-agent/test/code-mode/spawn.test.ts` | CM-A1..CM-A5 | Spawn: `agent({ codeMode })` e item de `task` aceitam o parâmetro, negação com motivo `codeMode ignored: agent has no eval`, `agent({ fork: true })` e falha clara sem sessão pai persistida. |
+| `packages/coding-agent/test/code-mode/spawn.test.ts` | CM-A1..CM-A3 | Spawn: `agent({ codeMode })` e item de `task` aceitam o parâmetro e negação com motivo `codeMode ignored: agent has no eval`. |
 | `packages/coding-agent/test/code-mode/rlm.test.ts` | CM-R1..CM-R5 | RLM: paste grande vira `local://paste-N.md`, `inputs["paste-N"]` lazy, `elide` só com `compaction.experimentalContextManagement`, blanking com `[Elided by model - N tokens]` e adiamento por cache quente. |
 | `packages/coding-agent/test/code-mode/gap.test.ts` | CM-G1..CM-G6 | Lacunas de descoberta e restrição: `tool.describe`/`tool.search` nas preludes JS (CM-G1/G2) e Python (CM-G3), plan mode restringindo o alcance do bridge sem desligar o modo (CM-G4), hook `tool_call` disparado exatamente uma vez com o nome da tool interna em chamada bridgeada (CM-G5) e round-trip de `codeMode.scope` pelo caminho de persistência do `Settings` lido de volta por `resolveCodeMode` (CM-G6). |
 | `vendor/pi-jev/test/code-mode.test.ts` | JEV-CM1..JEV-CM6 | pi-jev sob Code Mode: `McpGate` não chama `setActiveTools`, auto-ativação do router devolve nomes, `jev_find_tools` sugere `tool.<name>`, `ToolGuard` ignora `eval`, hint em `skill://<name>`, fallback quando o host não tem `isCodeModeActive`. |
@@ -100,8 +100,8 @@ Obrigatório antes de fechar qualquer onda:
 cd packages/coding-agent && bunx tsgo -p tsconfig.json --noEmit
 ```
 
-Os testes usam import dinâmico com interface de contrato local para módulos `[planned]`, então a
-árvore compila hoje sem os módulos existirem. Ao implementar, o import dinâmico pode virar import
+Os testes foram escritos com import dinâmico e interface de contrato local, para a árvore compilar
+antes dos módulos existirem. Com os módulos implementados, o import dinâmico pode virar import
 estático — desde que o typecheck continue limpo e a asserção continue sendo comportamental.
 
 ## Regras de estilo dos testes

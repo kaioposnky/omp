@@ -82,6 +82,20 @@ const EXACT_LONG_MIN_REPEATED_CHARS = 1024;
  *  one punctuation cycle back-to-back is degenerate, while the short separators
  *  real output produces (table rules, dividers) never reach it. */
 const EXACT_PUNCTUATION_MIN_REPEATED_CHARS = EXACT_LONG_MIN_REPEATED_CHARS;
+/** Consecutive whitespace characters inside one tool call's streamed arguments
+ *  that count as a runaway. JSON allows unbounded insignificant whitespace, and a
+ *  stuck model emits tabs/spaces/newlines in no fixed period, which the cycle
+ *  detector deliberately ignores. The largest legitimate run in this repo is 5000
+ *  spaces (tokenizer fixtures); a stuck model can trickle one space per chunk for
+ *  minutes, so the limit sits just above real content rather than at the Codex
+ *  Responses provider's 16 KB. */
+const TOOL_ARGS_WHITESPACE_RUN_LIMIT = 8 * 1024;
+/** Repeated characters an exact cycle must cover inside tool-call arguments.
+ *  Payloads legitimately repeat a few hundred characters (fixtures, tables,
+ *  generated literals), so tool arguments only trip once a cycle fills most of
+ *  the exact-detection tail (the scan certifies at most `tail - unit` chars); a
+ *  runaway streams megabytes of it. */
+const TOOL_ARGS_EXACT_MIN_REPEATED_CHARS = EXACT_TAIL_WINDOW - EXACT_MAX_UNIT;
 
 /** Char cap for an unterminated segment; forces a flush so a wall-of-text loop
  *  (no blank lines / headings) still segments. */
@@ -175,7 +189,11 @@ export class ThinkingLoopDetector {
 	 *  path/identifier every paragraph is still caught. */
 	#anchorWindow: Set<string>[] = [];
 
-	constructor(private readonly semanticHeuristics = true) {}
+	/** `minRepeatedChars` raises the exact-cycle floor (tool-call arguments). */
+	constructor(
+		private readonly semanticHeuristics = true,
+		private readonly minRepeatedChars = 0,
+	) {}
 
 	push(delta: string): string | null {
 		if (!delta) return null;
@@ -188,7 +206,7 @@ export class ThinkingLoopDetector {
 		if (this.#exactScannedAt >= EXACT_CHECK_STRIDE || delta.length >= EXACT_CHECK_STRIDE) {
 			this.#exactScannedAt = 0;
 			const exact = detectExactSuffixCycle(this.#tail);
-			if (exact) {
+			if (exact && exact[0].length * exact[1] >= this.minRepeatedChars) {
 				const [unit, times] = exact;
 				return `repeated an exact ${unit.length}-character cycle ${times}× back-to-back`;
 			}
@@ -409,6 +427,10 @@ export function guardThinkingLoopStream(
 	const semanticHeuristics = loopGuardLevel(model, options) === "semantic";
 	const thinkingDetector = new ThinkingLoopDetector(semanticHeuristics);
 	const textDetector = new ThinkingLoopDetector(semanticHeuristics);
+	// Tool-call arguments are JSON, not prose: only the exact-cycle and
+	// whitespace-run checks apply. Reset per call so each payload stands alone.
+	let toolArgsDetector = new ThinkingLoopDetector(false, TOOL_ARGS_EXACT_MIN_REPEATED_CHARS);
+	let toolArgsWhitespaceRun = 0;
 	const checkAssistantContent = options?.loopGuard?.checkAssistantContent !== false;
 
 	void (async () => {
@@ -464,8 +486,21 @@ export function guardThinkingLoopStream(
 					if (textArmed) {
 						detail = textDetector.push(event.delta);
 					}
-				} else if (event.type === "toolcall_start" || event.type === "toolcall_delta") {
+				} else if (event.type === "toolcall_start") {
 					textArmed = false;
+					toolArgsDetector = new ThinkingLoopDetector(false, TOOL_ARGS_EXACT_MIN_REPEATED_CHARS);
+					toolArgsWhitespaceRun = 0;
+				} else if (event.type === "toolcall_delta") {
+					textArmed = false;
+					detail = toolArgsDetector.push(event.delta);
+					const trimmed = event.delta.trimEnd();
+					toolArgsWhitespaceRun =
+						trimmed.length === 0
+							? toolArgsWhitespaceRun + event.delta.length
+							: event.delta.length - trimmed.length;
+					if (!detail && toolArgsWhitespaceRun >= TOOL_ARGS_WHITESPACE_RUN_LIMIT) {
+						detail = `streamed ${toolArgsWhitespaceRun} consecutive whitespace characters into tool-call arguments`;
+					}
 				} else if (event.type === "done") {
 					if (thinkingArmed) {
 						detail = thinkingDetector.flush();

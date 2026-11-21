@@ -81,6 +81,8 @@ export interface Args {
 	models?: string[];
 	tools?: string[];
 	noTools?: boolean;
+	/** `--code-mode` / `--no-code-mode`: session-level Code Mode request; `undefined` defers to settings. */
+	codeMode?: boolean;
 	noLsp?: boolean;
 	noPty?: boolean;
 	noJudge?: boolean;
@@ -368,6 +370,10 @@ export function parseArgs(inputArgs: string[], extensionFlags?: Map<string, { ty
 			result.noSession = true;
 		} else if (arg === "--no-tools") {
 			result.noTools = true;
+		} else if (arg === "--code-mode") {
+			result.codeMode = true;
+		} else if (arg === "--no-code-mode") {
+			result.codeMode = false;
 		} else if (arg === "--no-lsp") {
 			result.noLsp = true;
 		} else if (arg === "--no-pty") {

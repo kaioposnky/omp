@@ -39,6 +39,8 @@ export interface StatusLineStartupData {
 	readonly thinkingLevel?: ThinkingLevel;
 	readonly autoThinking: boolean;
 	readonly fastMode: boolean;
+	/** Whether the next fresh session starts in Code Mode (absent in snapshots from older versions). */
+	readonly codeMode?: boolean;
 	/** Whether `model` bills through a subscription (drives the cost segment's prefix). */
 	readonly usingSubscription: boolean;
 	readonly autoCompactEnabled: boolean;
@@ -77,6 +79,7 @@ function startupSession(data: StatusLineStartupData): StatusLineSession {
 			data.model?.contextWindow ? { tokens: 0, contextWindow: data.model.contextWindow, percent: null } : undefined,
 		autoResolvedThinkingLevel: () => undefined,
 		isFastModeActive: () => data.fastMode,
+		isCodeModeActive: () => data.codeMode === true,
 		getAsyncJobSnapshot: () => null,
 		getGoalModeState: () => undefined,
 	};
@@ -143,6 +146,7 @@ const StartupDataShape = type({
 	"thinkingLevel?": "string",
 	autoThinking: "boolean",
 	fastMode: "boolean",
+	"codeMode?": "boolean",
 	usingSubscription: "boolean",
 	autoCompactEnabled: "boolean",
 	compactionBoundaries: type({ "+": "delete", thresholdPercent: "number", speculationPercent: "number | null" }).or(

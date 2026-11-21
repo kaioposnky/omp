@@ -2509,6 +2509,7 @@ export async function runRpcMode(session: AgentSession, options: RpcModeOptions 
 					fastModeEnabled: session.isFastModeEnabled(),
 					tokensPerSecond: calculateTokensPerSecond(session.messages, session.isStreaming),
 					fastModeActive: session.isFastModeActive(),
+					codeModeEnabled: session.isCodeModeActive(),
 					slowModeSupported: session.isSlowModeSupported(),
 					slowModeEnabled: session.isSlowModeEnabled(),
 					slowModeScope: session.getSlowModeScope(),

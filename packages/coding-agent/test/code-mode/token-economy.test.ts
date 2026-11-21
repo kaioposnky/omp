@@ -1,11 +1,6 @@
 /**
- * Code Mode §12 token economy: frozen prompt prefix, fewer wire tokens, a
- * collapsed bridge catalog, router hints on the suffix, and a tighter eval
- * output cap.
- *
- * Code Mode is `[planned]` (`src/code-mode/`, `createAgentSession({ codeMode })`).
- * Every case is an `it.todo` with a real body so `bun test --todo` turns the
- * suite into the implementation checklist.
+ * Code Mode token economy: prompt-prefix stability, wire-token reduction,
+ * bridge catalog output, suffix router hints, and eval output limits.
  */
 import { describe, expect, it } from "bun:test";
 import { type } from "@oh-my-pi/omptype";
@@ -48,7 +43,7 @@ function resultText(result: { content: Array<{ type: string; text?: string }> })
 }
 
 describe("Code Mode token economy (§12)", () => {
-	it.todo("CM-E1 extension setActiveTools calls leave the wire prefix byte-identical", async () => {
+	it("CM-E1 extension setActiveTools calls leave the wire prefix byte-identical", async () => {
 		using dir = TempDir.createSync("@omp-cm-prefix-");
 		const auth = createInMemoryAuthStorage();
 		auth.keys.setRuntime("mock", "test-key");
@@ -99,7 +94,7 @@ describe("Code Mode token economy (§12)", () => {
 		}
 	});
 
-	it.todo("CM-E2 code-mode wire costs fewer ClaudeV5 tokens than the normal wire", async () => {
+	it("CM-E2 code-mode wire costs fewer ClaudeV5 tokens than the normal wire", async () => {
 		using dir = TempDir.createSync("@omp-cm-tokens-");
 		const settings = Settings.isolated(BASE_SETTINGS);
 		const normal = await makeCodeModeSession({ cwd: dir.path(), codeMode: false, mcpTools: [mcpTool], settings });
@@ -142,7 +137,7 @@ describe("Code Mode token economy (§12)", () => {
 		expect(serverLines[0]).toMatch(/mcp__big__\*\s*\(21 tools\)/);
 	});
 
-	it.todo("CM-E4 router hints land after the user message and never change the system prompt", async () => {
+	it("CM-E4 router hints land after the user message and never change the system prompt", async () => {
 		using dir = TempDir.createSync("@omp-cm-hints-");
 		const auth = createInMemoryAuthStorage();
 		auth.keys.setRuntime("mock", "test-key");
@@ -180,7 +175,7 @@ describe("Code Mode token economy (§12)", () => {
 		}
 	});
 
-	it.todo("CM-E5 router hints over 600 tokens are trimmed or dropped", async () => {
+	it("CM-E5 router hints over 600 tokens are trimmed or dropped", async () => {
 		using dir = TempDir.createSync("@omp-cm-hints-budget-");
 		const auth = createInMemoryAuthStorage();
 		auth.keys.setRuntime("mock", "test-key");
@@ -216,7 +211,7 @@ describe("Code Mode token economy (§12)", () => {
 		}
 	});
 
-	it.todo("CM-E6 code-mode eval caps inline output below normal and spills the rest to an artifact", async () => {
+	it("CM-E6 code-mode eval caps inline output below normal and spills the rest to an artifact", async () => {
 		using dir = TempDir.createSync("@omp-cm-eval-cap-");
 		const settings = Settings.isolated(BASE_SETTINGS);
 		const normal = await makeCodeModeSession({ cwd: dir.path(), codeMode: false, settings });

@@ -71,11 +71,11 @@ tarefas da mesma onda são explícitas; tarefas sem dependência rodam concorren
 | W3 | Escopo no runtime (frontmatter), `codeMode` no spawn e persistência do escopo | W2 | `spawn.test.ts` → CM-A1..CM-A3; `gap.test.ts` → CM-G6 |
 | W4 | Skills, MCP, ExtensionAPI e pi-jev | W2 | `skills-mcp.test.ts` → CM-C1..CM-C6; `gap.test.ts` → CM-G5; pi-jev → JEV-CM1..JEV-CM6 |
 | W5 | Economia de tokens: catálogo, dicas no sufixo, teto de saída, A/B | W4 | `token-economy.test.ts` → CM-E1..CM-E6 |
-| W6 | RLM: input grande, `inputs`, `elide`, `agent(fork)` | W3 (fork), W5 (opcional) | `rlm.test.ts` → CM-R1..CM-R5; `spawn.test.ts` → CM-A4, CM-A5 |
+| W6 | RLM: input grande, `inputs`, `elide` | W5 (opcional) | `rlm.test.ts` → CM-R1..CM-R5 |
 | Needle | Spike de medição encerrado em **NO-GO** — sem onda de implementação | — | NDL-1..NDL-3 (só o relatório; nada a implementar) |
 
-W5 não bloqueia W6: `CM-R1..CM-R3` só dependem de W1 (o `eval` precisa estar de pé) e `CM-A4`,
-`CM-A5` dependem de W3. As dependências reais estão por tarefa, abaixo.
+W5 não bloqueia W6: `CM-R1..CM-R3` só dependem de W1 (o `eval` precisa estar de pé). As
+dependências reais estão por tarefa, abaixo.
 
 ## W0 — módulos de contrato
 
@@ -176,7 +176,7 @@ cd packages/coding-agent && bun test --todo test/code-mode/spawn.test.ts
 cd packages/coding-agent && bun test --todo test/code-mode/gap.test.ts --test-name-pattern CM-G6
 ```
 
-O gate de W3 cobre `CM-A1..CM-A3` e `CM-G6`; `CM-A4`/`CM-A5` só fecham em W6.4. A resolução precisa
+O gate de W3 cobre `CM-A1..CM-A3` e `CM-G6`. A resolução precisa
 acontecer **depois** do modelo, porque role e glob dependem dele. `CM-G6` não cria um segundo
 registro de settings: exercita o `cfgCodeModeScope` de W0.1 pelo mesmo caminho que a TUI usa e
 confirma que a ordem de `models` (primeiro match vence) sobrevive à persistência.
@@ -231,22 +231,20 @@ W5.5 é a única tarefa que gasta orçamento de verdade: antes de executá-la, p
 do usuário para o **conjunto de modelos**, o **orçamento de tokens/custo** e o **número de
 repetições**. Sem essa aprovação, W5 fecha com W5.1–W5.4 verdes e W5.5 registrada como pendente.
 
-## W6 — RLM: input grande, `elide` e fork
+## W6 — RLM: input grande e `elide`
 
-Objetivo: contexto como dado. W6.1..W6.3 são independentes entre si; W6.4 depende de W3.
+Objetivo: contexto como dado. W6.1..W6.3 são independentes entre si.
 
 | Tarefa | Arquivos possuídos | Depende de | IDs | Agente |
 | --- | --- | --- | --- | --- |
 | W6.1 `input.largeInputAsHandle`: paste/anexo acima do limite vira `local://paste-N.md`; o prompt leva só handle, tamanho aproximado e instrução de acesso | `packages/coding-agent/src/modes/controllers/input-controller.ts` | W1 | CM-R1 | task |
 | W6.2 `inputs` como mapa lazy de handles no prelude JS/Python, sem carregar conteúdo na criação do kernel | `packages/coding-agent/src/eval/js/shared/prelude.ts`, `packages/coding-agent/src/eval/py/prelude.py` | W6.1 | CM-R2 | task |
 | W6.3 Tool `elide`: registrada só com `compaction.experimentalContextManagement`, blanking `[Elided by model - N tokens]`, respeita `keepBoundaryId` e `skill://`, adia quando o alvo está na janela de cache quente | `packages/coding-agent/src/tools/context-notes.ts` | W5.4 | CM-R3, CM-R4, CM-R5 | task |
-| W6.4 `agent({ fork: true })`: `prepareSeance` aceita `invocationKind: "eval"` com a sessão atual como origem; falha clara sem sessão pai persistida | `packages/coding-agent/src/task/seance.ts`, `packages/coding-agent/src/eval/agent-bridge.ts` | W3.1, W3.2 | CM-A4, CM-A5 | task |
 
 Portões:
 
 ```bash
 cd packages/coding-agent && bun test --todo test/code-mode/rlm.test.ts
-cd packages/coding-agent && bun test --todo test/code-mode/spawn.test.ts
 ```
 
 `CM-R5` é o único que pode devolver "agendado": aplicar o blanking com cache quente invalidaria o
@@ -335,9 +333,8 @@ Ordem e portões (cada linha é uma onda; a tabela da onda define tarefas, arqui
 - W5: economia de tokens — `code-mode/catalog.ts`, `code-mode/hints.ts`, `agent-session.ts`,
   `eval/js/executor.ts`, `eval/py/executor.ts`, `session-tools.ts` e, só com aprovação,
   `packages/metaharness/src/experiments.ts`. Gate: token-economy.test.ts → CM-E1..CM-E6.
-- W6: RLM — `modes/controllers/input-controller.ts`, preludes JS/Python, `tools/context-notes.ts`,
-  `task/seance.ts` e `eval/agent-bridge.ts`. Gates: rlm.test.ts → CM-R1..CM-R5; spawn.test.ts →
-  CM-A4, CM-A5.
+- W6: RLM — `modes/controllers/input-controller.ts`, preludes JS/Python e `tools/context-notes.ts`.
+  Gate: rlm.test.ts → CM-R1..CM-R5.
 
 Protocolo todo -> pass, repetido por onda:
 1. Rode o portão da onda (por exemplo `bun test --todo test/code-mode/partition.test.ts`) a partir

@@ -173,6 +173,14 @@ export class ExtensionRuntime implements IExtensionRuntime {
 		throw new ExtensionRuntimeNotInitializedError();
 	}
 
+	/**
+	 * Read-only session state, so it answers before the runner is initialized
+	 * instead of throwing like the action methods above.
+	 */
+	isCodeModeActive(): boolean {
+		return false;
+	}
+
 	getCommands(): never {
 		throw new ExtensionRuntimeNotInitializedError();
 	}
@@ -413,6 +421,10 @@ class ConcreteExtensionAPI implements ExtensionAPI, IExtensionRuntime {
 
 	setActiveTools(toolNames: string[]): Promise<void> {
 		return this.runtime.setActiveTools(toolNames);
+	}
+
+	isCodeModeActive(): boolean {
+		return this.runtime.isCodeModeActive?.() ?? false;
 	}
 
 	getCommands() {

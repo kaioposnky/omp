@@ -69,7 +69,10 @@ export function registerJevTools(
       );
 
       let summaryText = "";
-      if (result.activated.length > 0) {
+      const hints = result.hintedTools ?? [];
+      if (hints.length > 0) {
+        summaryText = `Code Mode: load these tools in eval:\n${hints.map((name) => `• tool.${name}`).join("\n")}`;
+      } else if (result.activated.length > 0) {
         summaryText = `Activated tools: ${result.activated.join(", ")}`;
       } else if (result.candidates.length > 0) {
         summaryText = `No tools met the activation threshold among candidates: ${result.candidates.join(", ")}`;
@@ -124,9 +127,9 @@ export function registerJevTools(
       let summaryText = "";
       if (result.recommended.length > 0) {
         const lines = result.recommended.map(
-          (r) => `• /skill:${r.name} (P=${r.probability.toFixed(2)})${r.location ? ` - ${r.location}` : ""}\n  ${r.description}`
+          (r) => `• skill://${r.name} (P=${r.probability.toFixed(2)})${r.location ? ` - ${r.location}` : ""}\n  ${r.description}`
         );
-        summaryText = `Recommended skill(s):\n${lines.join("\n")}\n\nTo use a skill, invoke /skill:<name> or use the read tool to open its SKILL.md file.`;
+        summaryText = `Recommended skill(s):\n${lines.join("\n")}\n\nTo use a skill, load skill://<name> or use the read tool to open its SKILL.md file.`;
       } else if (result.candidates.length > 0) {
         summaryText = `No skills met the confidence threshold among candidates: ${result.candidates.join(", ")}`;
       } else {

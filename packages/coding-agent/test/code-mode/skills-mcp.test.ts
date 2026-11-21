@@ -1,12 +1,6 @@
 /**
  * Code Mode F6: skills, MCP and the extension surface (`pi.isCodeModeActive`,
  * `pi.setActiveTools`) stay usable while only the top-level tools reach the wire.
- *
- * Code Mode is `[planned]` (`src/code-mode/`, `createAgentSession({ codeMode })`,
- * `AgentSession.isCodeModeActive/getBridgeOnlyToolNames`). Every case is an
- * `it.todo` with a real body: `bun test --todo` runs the bodies so an
- * implementation that satisfies them turns "todo that passes" into the signal
- * to drop `.todo`.
  */
 import { afterEach, describe, expect, it } from "bun:test";
 import * as fs from "node:fs";
@@ -80,7 +74,7 @@ afterEach(() => {
 });
 
 describe("Code Mode skills and MCP (F6)", () => {
-	it.todo("CM-C1 code mode keeps the skills block and points it at eval's read()", async () => {
+	it("CM-C1 code mode keeps the skills block and points it at eval's read()", async () => {
 		using dir = TempDir.createSync("@omp-cm-skills-");
 		const skill = writeSkill(dir.path());
 		setActiveSkills([skill]);
@@ -103,13 +97,15 @@ describe("Code Mode skills and MCP (F6)", () => {
 		}
 	});
 
-	it.todo("CM-C2 skill:// is readable through the bridged read tool", async () => {
+	it("CM-C2 skill:// is readable through the bridged read tool", async () => {
 		using dir = TempDir.createSync("@omp-cm-skill-read-");
 		const skill = writeSkill(dir.path());
 		setActiveSkills([skill]);
+		// The session installs its own skill list, so the skill must be passed in (the helper defaults to none).
 		const { session } = await makeCodeModeSession({
 			cwd: dir.path(),
 			codeMode: true,
+			skills: [skill],
 			settings: Settings.isolated(BASE_SETTINGS),
 		});
 		try {
@@ -125,7 +121,7 @@ describe("Code Mode skills and MCP (F6)", () => {
 		}
 	});
 
-	it.todo("CM-C3 code mode replaces the MCP Tool Routes block with the bridge catalog", async () => {
+	it("CM-C3 code mode replaces the MCP Tool Routes block with the bridge catalog", async () => {
 		using dir = TempDir.createSync("@omp-cm-mcp-");
 		const { session } = await makeCodeModeSession({
 			cwd: dir.path(),
@@ -152,7 +148,7 @@ describe("Code Mode skills and MCP (F6)", () => {
 		}
 	});
 
-	it.todo("CM-C4 pi.setActiveTools dropping an MCP tool leaves it bridge-reachable", async () => {
+	it("CM-C4 pi.setActiveTools dropping an MCP tool leaves it bridge-reachable", async () => {
 		using dir = TempDir.createSync("@omp-cm-setactive-remove-");
 		const auth = createInMemoryAuthStorage();
 		auth.keys.setRuntime("mock", "test-key");
@@ -191,7 +187,7 @@ describe("Code Mode skills and MCP (F6)", () => {
 		}
 	});
 
-	it.todo("CM-C5 pi.setActiveTools additions stay bridge-only and leave the prompt intact", async () => {
+	it("CM-C5 pi.setActiveTools additions stay bridge-only and leave the prompt intact", async () => {
 		using dir = TempDir.createSync("@omp-cm-setactive-add-");
 		const auth = createInMemoryAuthStorage();
 		auth.keys.setRuntime("mock", "test-key");
@@ -239,7 +235,7 @@ describe("Code Mode skills and MCP (F6)", () => {
 		}
 	});
 
-	it.todo("CM-C6 pi.isCodeModeActive() matches the session state", async () => {
+	it("CM-C6 pi.isCodeModeActive() matches the session state", async () => {
 		using dir = TempDir.createSync("@omp-cm-extension-state-");
 		const extension = captureExtension();
 		const { session } = await makeCodeModeSession({

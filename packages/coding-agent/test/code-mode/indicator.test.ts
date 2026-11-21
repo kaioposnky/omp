@@ -1,9 +1,6 @@
 /**
- * Code Mode F3: status-line icon, muted rule/state divergence, startup snapshot
- * round-trip, and the theme symbol in both unicode and nerd presets.
- *
- * Code Mode is `[planned]`; the planned session/status-line surface is named in
- * each test and the assertions read only consumer-visible output.
+ * Code Mode F3: status-line icon rendering, muted rule/state divergence,
+ * startup snapshot round-trips, and theme symbols in unicode and nerd presets.
  */
 import { beforeAll, describe, expect, it } from "bun:test";
 import { readStatusLineStartupData } from "@oh-my-pi/pi-tui/status-line/startup";
@@ -72,7 +69,7 @@ function createContext(options: { codeModeActive: boolean; decision?: CodeModeDe
 }
 
 describe("Code Mode status-line indicator (F3)", () => {
-	it.todo("CM-I1 the model segment renders icon.codeMode only while Code Mode is active", () => {
+	it("CM-I1 the model segment renders icon.codeMode only while Code Mode is active", () => {
 		// `[planned]` theme symbol key: `icon.codeMode`.
 		const icon = (theme.icon as unknown as Record<string, string | undefined>).codeMode;
 		expect(icon).toBeTruthy();
@@ -82,7 +79,7 @@ describe("Code Mode status-line indicator (F3)", () => {
 		expect(inactive.content).not.toContain(icon!);
 	});
 
-	it.todo("CM-I2 a rule/state divergence renders the icon muted", () => {
+	it("CM-I2 a rule/state divergence renders the icon muted", () => {
 		const icon = (theme.icon as unknown as Record<string, string | undefined>).codeMode;
 		expect(icon).toBeTruthy();
 		const active = renderSegment("model", createContext({ codeModeActive: true }));
@@ -99,7 +96,7 @@ describe("Code Mode status-line indicator (F3)", () => {
 		expect(diverged.content).toContain(theme.fg("dim", icon!));
 	});
 
-	it.todo("CM-I3 the startup snapshot accepts and round-trips a codeMode boolean", () => {
+	it("CM-I3 the startup snapshot accepts and round-trips a codeMode boolean", () => {
 		const base = {
 			settings: {},
 			gitEnabled: false,
@@ -128,7 +125,7 @@ describe("Code Mode status-line indicator (F3)", () => {
 		expect(off?.codeMode).toBe(false);
 	});
 
-	it.todo("CM-I4 icon.codeMode exists in the unicode and nerd symbol sets", () => {
+	it("CM-I4 icon.codeMode exists in the unicode and nerd symbol sets", () => {
 		const unicode = (SYMBOL_PRESETS.unicode as unknown as Record<string, string | undefined>)["icon.codeMode"];
 		const nerd = (SYMBOL_PRESETS.nerd as unknown as Record<string, string | undefined>)["icon.codeMode"];
 		expect(unicode).toBeTruthy();

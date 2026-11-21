@@ -18,9 +18,9 @@ Parent: [micro/core-partition.md](../micro/core-partition.md)
   `setSessionActiveToolNames`.
 - `packages/coding-agent/src/tools/xdev.ts#XDEV_KEEP_TOP_LEVEL` — precedente de "topo fixo" que o
   Code Mode estende.
-- `[planned] packages/coding-agent/src/code-mode/partition.ts#CODE_MODE_TOP_LEVEL`
-- `[planned] packages/coding-agent/src/code-mode/partition.ts#applyCodeModePartition`
-- `[planned] packages/coding-agent/src/session/session-tools.ts#SessionTools.setBridgeOnlyToolNames`
+- `packages/coding-agent/src/code-mode/partition.ts#CODE_MODE_TOP_LEVEL`
+- `packages/coding-agent/src/code-mode/partition.ts#applyCodeModePartition`
+- `packages/coding-agent/src/session/session-tools.ts#SessionTools.setBridgeOnlyToolNames`
 
 ## How it works
 

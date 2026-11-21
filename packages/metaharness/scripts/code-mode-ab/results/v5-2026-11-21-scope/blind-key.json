@@ -1,0 +1,338 @@
+{
+ "s001": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "cli",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s002": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "cli",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s003": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "parser",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s004": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "parser",
+  "rep": 2,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s005": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "pricing",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s006": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "pricing",
+  "rep": 2,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s007": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "refactor",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s008": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "refactor",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s009": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "cli",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s010": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "cli",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s011": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "parser",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s012": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "parser",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s013": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "pricing",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s014": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "pricing",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s015": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "refactor",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s016": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "refactor",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s017": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "cli",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s018": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "cli",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s019": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "parser",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s020": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "parser",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s021": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "pricing",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s022": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "pricing",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s023": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "refactor",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s024": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "refactor",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s025": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "cli",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s026": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "cli",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s027": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "parser",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s028": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "parser",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s029": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "pricing",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s030": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "pricing",
+  "rep": 2,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s031": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "refactor",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s032": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "refactor",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s033": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "cli",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s034": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "cli",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s035": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "parser",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s036": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "parser",
+  "rep": 2,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s037": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "pricing",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s038": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "pricing",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s039": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "refactor",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s040": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "refactor",
+  "rep": 2,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s041": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "cli",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s042": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "cli",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s043": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "parser",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s044": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "parser",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s045": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "pricing",
+  "rep": 1,
+  "A": "scope",
+  "B": "normal"
+ },
+ "s046": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "pricing",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s047": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "refactor",
+  "rep": 1,
+  "A": "normal",
+  "B": "scope"
+ },
+ "s048": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "refactor",
+  "rep": 2,
+  "A": "normal",
+  "B": "scope"
+ }
+}

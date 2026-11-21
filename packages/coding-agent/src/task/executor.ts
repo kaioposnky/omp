@@ -493,6 +493,8 @@ export interface ExecutorOptions {
 	 */
 	detached?: boolean;
 	modelOverride?: string | string[];
+	/** Per-spawn Code Mode request; resolved by the child session from its own agent/model/role. */
+	codeMode?: boolean;
 	/** Explicit pre-expansion model role alias selected for this run. */
 	modelRole?: string;
 	/** Extension routing note for the chosen model; surfaced as `resolvedModelRoute`. */
@@ -5238,6 +5240,9 @@ async function runSubprocessOnThisThread(options: ExecutorOptions): Promise<Sing
 					oauthAccountPools: options.oauthAccountPools,
 					inheritedSessionAgents: options.inheritedSessionAgents,
 					model,
+					codeModeSpawnOverride: options.codeMode,
+					codeModeAgent: { name: agent.name, codeMode: agent.codeMode, tools: agent.tools },
+					codeModeRole: modelRole ?? resolveExplicitModelRole(modelOverride ?? agent.model, subagentSettings),
 					modelPattern: model || modelOverride === undefined ? undefined : modelPatterns,
 					modelPatternParentFallback:
 						model || modelOverride === undefined ? undefined : options.parentActiveModelPattern,

@@ -1,0 +1,394 @@
+{
+ "p001": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "cli",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p002": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "cli",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p003": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "parser",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p004": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "parser",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p005": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "pricing",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p006": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "pricing",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p007": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "refactor",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p008": {
+  "model": "9router/cc/claude-haiku-5-5",
+  "task": "refactor",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p009": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "cli",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p010": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "cli",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p011": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "parser",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p012": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "parser",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p013": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "pricing",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p014": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "pricing",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p015": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "refactor",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p016": {
+  "model": "9router/cc/claude-opus-5-5",
+  "task": "refactor",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p017": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "cli",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p018": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "cli",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p019": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "parser",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p020": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "parser",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p021": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "pricing",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p022": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "pricing",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p023": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "refactor",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p024": {
+  "model": "9router/cc/claude-sonnet-5-5",
+  "task": "refactor",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p025": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "cli",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p026": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "cli",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p027": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "parser",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p028": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "parser",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p029": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "pricing",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p030": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "pricing",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p031": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "refactor",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p032": {
+  "model": "9router/cmc/deepseek/deepseek-v4.1-flash",
+  "task": "refactor",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p033": {
+  "model": "9router/cmc/z-ai/glm-5.3-flash",
+  "task": "cli",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p034": {
+  "model": "9router/cmc/z-ai/glm-5.3-flash",
+  "task": "cli",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p035": {
+  "model": "9router/cmc/z-ai/glm-5.3-flash",
+  "task": "parser",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p036": {
+  "model": "9router/cmc/z-ai/glm-5.3-flash",
+  "task": "parser",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p037": {
+  "model": "9router/cmc/z-ai/glm-5.3-flash",
+  "task": "pricing",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p038": {
+  "model": "9router/cmc/z-ai/glm-5.3-flash",
+  "task": "pricing",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p039": {
+  "model": "9router/cmc/z-ai/glm-5.3-flash",
+  "task": "refactor",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p040": {
+  "model": "9router/cmc/z-ai/glm-5.3-flash",
+  "task": "refactor",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p041": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "cli",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p042": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "cli",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p043": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "parser",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p044": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "parser",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p045": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "pricing",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p046": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "pricing",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p047": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "refactor",
+  "rep": 1,
+  "A": "code",
+  "B": "normal"
+ },
+ "p048": {
+  "model": "9router/cx/gpt-6.1-terra",
+  "task": "refactor",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p049": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "cli",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p050": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "cli",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p051": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "parser",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p052": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "parser",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ },
+ "p053": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "pricing",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p054": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "pricing",
+  "rep": 2,
+  "A": "code",
+  "B": "normal"
+ },
+ "p055": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "refactor",
+  "rep": 1,
+  "A": "normal",
+  "B": "code"
+ },
+ "p056": {
+  "model": "9router/cx/gpt-6.2-sol",
+  "task": "refactor",
+  "rep": 2,
+  "A": "normal",
+  "B": "code"
+ }
+}

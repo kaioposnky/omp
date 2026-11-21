@@ -1215,7 +1215,6 @@ async function reportedVersionAtPath(binaryPath: string): Promise<string | undef
 	}
 }
 
-
 /**
  * Run a specific binary and check if it reports the expected version.
  */

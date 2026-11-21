@@ -12,6 +12,7 @@ export const CODE_MODE_TOP_LEVEL: readonly string[] = Object.freeze([
 	"todo",
 	"checkpoint",
 	"rewind",
+	"elide",
 ]);
 
 const TOP_LEVEL_SET: ReadonlySet<string> = new Set(CODE_MODE_TOP_LEVEL);
@@ -27,7 +28,10 @@ export interface CodeModePartition {
 }
 
 /** Splits `names` into wire and bridge-only sets; order and first occurrence are preserved. */
-export function applyCodeModePartition(names: Iterable<string>, opts: CodeModePartitionOptions = {}): CodeModePartition {
+export function applyCodeModePartition(
+	names: Iterable<string>,
+	opts: CodeModePartitionOptions = {},
+): CodeModePartition {
 	const pinned = new Set(opts.pinned ?? []);
 	const seen = new Set<string>();
 	const topLevel: string[] = [];
@@ -40,4 +44,3 @@ export function applyCodeModePartition(names: Iterable<string>, opts: CodeModePa
 	}
 	return { topLevel, bridgeOnly };
 }
-

@@ -2192,8 +2192,16 @@ export interface ExtensionAPI {
 	/** Get all configured tools (built-in + extension tools) with schema and source metadata. */
 	getAllTools(): ToolInfo[];
 
-	/** Set the active tools by name. */
+	/**
+	 * Set the active tools by name. In Code Mode the wire is frozen: names this
+	 * call adds become reachable through the eval bridge only, removing a
+	 * bridge-only or top-level name is a no-op, and the system prompt does not
+	 * change. Use {@link isCodeModeActive} to branch before calling.
+	 */
 	setActiveTools(toolNames: string[]): Promise<void>;
+
+	/** Whether this session froze Code Mode on at creation. */
+	isCodeModeActive(): boolean;
 
 	/** Get available slash commands in the current session. */
 	getCommands(): SlashCommandInfo[];
@@ -2450,6 +2458,8 @@ export type GetCommandsHandler = () => SlashCommandInfo[];
 
 export type SetActiveToolsHandler = (toolNames: string[]) => Promise<void>;
 
+export type IsCodeModeActiveHandler = () => boolean;
+
 export type SetModelHandler = (model: Model) => Promise<boolean>;
 
 export type GetThinkingLevelHandler = () => ThinkingLevel | undefined;
@@ -2482,6 +2492,12 @@ export interface ExtensionActions {
 	getActiveTools: GetActiveToolsHandler;
 	getAllTools: GetAllToolsHandler;
 	setActiveTools: SetActiveToolsHandler;
+	/**
+	 * Session Code Mode state for {@link ExtensionAPI.isCodeModeActive}. Optional
+	 * so a host that predates the accessor still initializes; the runner then
+	 * reports `false`.
+	 */
+	isCodeModeActive?: IsCodeModeActiveHandler;
 	getCommands: GetCommandsHandler;
 	setModel: SetModelHandler;
 	getThinkingLevel: GetThinkingLevelHandler;

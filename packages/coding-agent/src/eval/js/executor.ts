@@ -1,9 +1,4 @@
-import {
-	type ArtifactAllocator,
-	DEFAULT_MAX_BYTES,
-	type OutputArtifactError,
-	OutputSink,
-} from "@oh-my-pi/pi-tui/tools/streaming-output";
+import { type ArtifactAllocator, type OutputArtifactError, OutputSink } from "@oh-my-pi/pi-tui/tools/streaming-output";
 import type { ToolSession } from "../../tools";
 import {
 	resolveOutputMaxColumns,
@@ -11,7 +6,12 @@ import {
 	resolveOutputSinkHeadBytes,
 } from "../../tools/output-meta";
 import { isEvalTimeoutControlEvent, withBridgeTimeoutPause } from "../bridge-timeout";
-import { DisplayOutputCollector } from "../executor-base";
+import {
+	appendEvalArtifactFooter,
+	DisplayOutputCollector,
+	resolveEvalInlineBudget,
+	resolveEvalArtifactAllocator,
+} from "../executor-base";
 import type { EvalDisplayOutput } from "../types";
 import { executeInVmContext, hasLiveVmContext } from "./context-manager";
 import { formatCellError } from "./error-text";
@@ -109,9 +109,10 @@ function formatPackageInstallTimeoutAnnotation(installDeadlineReached: boolean):
 export async function executeJs(code: string, options: JsExecutorOptions): Promise<JsResult> {
 	const display = new DisplayOutputCollector();
 	const displayOutputs = display.outputs;
+	const budget = resolveEvalInlineBudget(options.session);
 	const outputSink = new OutputSink({
-		allocateArtifact: options.allocateArtifact,
-		spillThreshold: DEFAULT_MAX_BYTES,
+		allocateArtifact: resolveEvalArtifactAllocator(options.session, options.allocateArtifact),
+		spillThreshold: budget.spillThreshold,
 		headBytes: resolveOutputSinkHeadBytes(options.session.settings),
 		artifactMaxBytes: resolveOutputSinkArtifactMaxBytes(options.session.settings),
 		maxColumns: resolveOutputMaxColumns(options.session.settings),
@@ -201,7 +202,7 @@ export async function executeJs(code: string, options: JsExecutorOptions): Promi
 		});
 		const summary = await outputSink.dump();
 		return {
-			output: summary.output,
+			output: appendEvalArtifactFooter(summary.output, summary, budget.codeMode),
 			exitCode: 0,
 			cancelled: false,
 			truncated: summary.truncated,
@@ -233,7 +234,7 @@ export async function executeJs(code: string, options: JsExecutorOptions): Promi
 			}
 			const summary = await outputSink.dump();
 			return {
-				output: summary.output,
+				output: appendEvalArtifactFooter(summary.output, summary, budget.codeMode),
 				exitCode: undefined,
 				cancelled: true,
 				truncated: summary.truncated,
@@ -258,7 +259,7 @@ export async function executeJs(code: string, options: JsExecutorOptions): Promi
 		outputSink.push(message);
 		const summary = await outputSink.dump();
 		return {
-			output: summary.output,
+			output: appendEvalArtifactFooter(summary.output, summary, budget.codeMode),
 			exitCode: 1,
 			cancelled: false,
 			truncated: summary.truncated,

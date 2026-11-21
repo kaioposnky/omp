@@ -38,7 +38,7 @@ continua executável por `getToolForEvalBridge` e descobrível de dentro do kern
   reconhece como `toolResult` direto.
 - Tools pedidas explicitamente pelo usuário continuam top-level, como no `xd://`.
 - O `systemPrompt` não pode ser reescrito pela partição; só o conjunto anunciado muda.
-- `tool.describe`/`tool.search` derivam do mesmo catálogo do bridge (`renderBridgeCatalog` `[planned]`)
+- `tool.describe`/`tool.search` derivam do mesmo catálogo do bridge (`renderBridgeCatalog`)
   e do registro de tools: não podem manter uma lista paralela que divirja de
   `getEnabledToolNames()`.
 - `tool.describe` de nome desconhecido lança erro; `tool.search` devolve lista vazia. O kernel nunca

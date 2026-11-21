@@ -70,6 +70,7 @@ export const taskItemSchema = type({
 	"outputSchema?": outputSchemaInputSchema,
 	"schemaMode?": '"permissive" | "strict"',
 	"tools?": "string[]",
+	"codeMode?": "boolean",
 	"+": "delete",
 });
 const taskItemSchemaIsolated = type({
@@ -81,6 +82,7 @@ const taskItemSchemaIsolated = type({
 	"schemaMode?": '"permissive" | "strict"',
 	"tools?": "string[]",
 	"isolated?": "boolean",
+	"codeMode?": "boolean",
 	"+": "delete",
 });
 
@@ -93,6 +95,7 @@ export const taskSchema = type({
 	"schemaMode?": '"permissive" | "strict"',
 	"tools?": "string[]",
 	"isolated?": "boolean",
+	"codeMode?": "boolean",
 	"+": "delete",
 });
 const taskSchemaNoIsolation = type({
@@ -103,6 +106,7 @@ const taskSchemaNoIsolation = type({
 	"outputSchema?": outputSchemaInputSchema,
 	"schemaMode?": '"permissive" | "strict"',
 	"tools?": "string[]",
+	"codeMode?": "boolean",
 	"+": "delete",
 });
 function guardBatchAgent(schema: BaseType): BaseType {
@@ -171,6 +175,7 @@ function createTaskSchema(options: {
 	// undeclared `model` still reaches preflight (root keys survive lenient
 	// validation; batch items keep it via keepItemModelKey) and is refused there.
 	const gatedFields = options.perCallModel ? { "model?": "string" } : {};
+	const codeModeField = { "codeMode?": "boolean" };
 	if (options.batchEnabled) {
 		if (options.isolationEnabled) {
 			const item = type.raw({
@@ -182,6 +187,7 @@ function createTaskSchema(options: {
 				...schemaFields,
 				...toolsField,
 				...gatedFields,
+				...codeModeField,
 				"isolated?": "boolean",
 				"+": "delete",
 			});
@@ -202,6 +208,7 @@ function createTaskSchema(options: {
 			...schemaFields,
 			...toolsField,
 			...gatedFields,
+			...codeModeField,
 			"+": "delete",
 		});
 		return guardBatchAgent(
@@ -222,6 +229,7 @@ function createTaskSchema(options: {
 			...schemaFields,
 			...toolsField,
 			...gatedFields,
+			...codeModeField,
 			"isolated?": "boolean",
 			"+": "delete",
 		});
@@ -235,6 +243,7 @@ function createTaskSchema(options: {
 		...schemaFields,
 		...toolsField,
 		...gatedFields,
+		...codeModeField,
 		"+": "delete",
 	});
 }
@@ -309,6 +318,8 @@ export interface AgentDefinition {
 	prewalk?: boolean | string;
 	/** Advisor for spawned sessions of this agent: `true` = advise with the default advisor-role model, string = advise with that model pattern (optional `:level` suffix). Absent/`false` = no advisor. */
 	advisor?: boolean | string;
+	/** Frontmatter Code Mode preference for spawns of this agent; absent falls through to scope/default. */
+	codeMode?: boolean;
 	source: AgentSource;
 	filePath?: string;
 }

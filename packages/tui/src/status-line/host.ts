@@ -109,6 +109,10 @@ export interface StatusLineSession {
 	getContextUsage(): { tokens: number; contextWindow: number; percent: number | null } | undefined;
 	autoResolvedThinkingLevel(): string | undefined;
 	isFastModeActive(): boolean;
+	/** Whether the session froze Code Mode on at creation; optional for lightweight doubles. */
+	isCodeModeActive?(): boolean;
+	/** The scope decision the frozen state came from; `enabled` can differ after e.g. a model switch. */
+	getCodeModeDecision?(): { enabled: boolean } | undefined;
 	/** Anthropic usage-limit label (`limit reached · wrapping up · resets 14:30`, `low priority until 14:30 · 62% left`). */
 	getAnthropicSlowModeLabel?(): string | undefined;
 	getPrewalkState?(): unknown;

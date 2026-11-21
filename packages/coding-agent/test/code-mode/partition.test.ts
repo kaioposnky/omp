@@ -1,10 +1,6 @@
 /**
  * Code Mode F1: core partition, bridge reachability, approval gate, late MCP
  * reconciliation, `setActiveToolsByName` reconcile, and the no-eval fallback.
- *
- * Code Mode itself is not implemented: every test is `it.todo` with the real
- * assertions that flip it once `src/code-mode/` and the planned session methods
- * land. Planned APIs are named in comments; load them through `loadPlanned`.
  */
 import { describe, expect, it } from "bun:test";
 import { type } from "@oh-my-pi/omptype";
@@ -44,7 +40,7 @@ function makeBridge(outcome: ClientBridgePermissionOutcome, calls: ClientBridgeP
 }
 
 describe("Code Mode partition (F1)", () => {
-	it.todo("CM-P1 code mode advertises only the top-level set", async () => {
+	it("CM-P1 code mode advertises only the top-level set", async () => {
 		const { CODE_MODE_TOP_LEVEL } = await loadPlanned<{ CODE_MODE_TOP_LEVEL: string[] }>("code-mode/partition");
 		using dir = TempDir.createSync("@omp-cm-p1-");
 		const cwd = dir.path();
@@ -82,7 +78,7 @@ describe("Code Mode partition (F1)", () => {
 		}
 	});
 
-	it.todo("CM-P2 bridge-only tools stay reachable through the eval bridge", async () => {
+	it("CM-P2 bridge-only tools stay reachable through the eval bridge", async () => {
 		using dir = TempDir.createSync("@omp-cm-p2-");
 		const { session } = await makeCodeModeSession({
 			cwd: dir.path(),
@@ -105,26 +101,22 @@ describe("Code Mode partition (F1)", () => {
 		}
 	});
 
-	it.todo("CM-P3 checkpoint, rewind, yield, ask and todo stay top-level when registered", async () => {
+	it("CM-P3 checkpoint, rewind, yield, ask and todo stay top-level when registered", async () => {
 		using dir = TempDir.createSync("@omp-cm-p3-");
 		const cwd = dir.path();
-		const settings = Settings.isolated({
-			"marketplace.autoUpdate": "off",
-			"checkpoint.enabled": true,
-		});
+		// Default tool registration: an explicit `toolNames` list would pin every listed tool to the
+		// wire (CM-P1), so these sessions let the partition decide what stays top-level.
 		const { session } = await makeCodeModeSession({
 			cwd,
 			hasUI: true,
 			codeMode: true,
-			settings,
-			toolNames: ["eval", "read", "bash", "checkpoint", "rewind", "ask", "todo"],
+			settings: Settings.isolated({ "marketplace.autoUpdate": "off", "checkpoint.enabled": true }),
 		});
 		const { session: yieldSession } = await makeCodeModeSession({
 			cwd,
 			codeMode: true,
 			requireYieldTool: true,
 			settings: Settings.isolated({ "marketplace.autoUpdate": "off" }),
-			toolNames: ["eval", "read", "yield"],
 			sessionManager: SessionManager.inMemory(cwd),
 		});
 		try {
@@ -132,6 +124,7 @@ describe("Code Mode partition (F1)", () => {
 			for (const name of ["checkpoint", "rewind", "ask", "todo"]) expect(wire).toContain(name);
 			expect(wire).not.toContain("read");
 			expect(wire).not.toContain("bash");
+			expect(session.getBridgeOnlyToolNames()).toEqual(expect.arrayContaining(["read", "bash"]));
 			expect(wireToolNames(yieldSession)).toContain("yield");
 			expect(wireToolNames(yieldSession)).not.toContain("read");
 		} finally {
@@ -140,7 +133,7 @@ describe("Code Mode partition (F1)", () => {
 		}
 	});
 
-	it.todo("CM-P4 MCP tools registered after startup land in the bridge-only layer", async () => {
+	it("CM-P4 MCP tools registered after startup land in the bridge-only layer", async () => {
 		using dir = TempDir.createSync("@omp-cm-p4-");
 		const { session } = await makeCodeModeSession({
 			cwd: dir.path(),
@@ -159,7 +152,7 @@ describe("Code Mode partition (F1)", () => {
 		}
 	});
 
-	it.todo("CM-P5 setActiveToolsByName reconcile keeps the bridge-only layer", async () => {
+	it("CM-P5 setActiveToolsByName reconcile keeps the bridge-only layer", async () => {
 		using dir = TempDir.createSync("@omp-cm-p5-");
 		const { session } = await makeCodeModeSession({
 			cwd: dir.path(),
@@ -180,7 +173,7 @@ describe("Code Mode partition (F1)", () => {
 		}
 	});
 
-	it.todo("CM-P6 eval backend unavailable falls back to normal mode", async () => {
+	it("CM-P6 eval backend unavailable falls back to normal mode", async () => {
 		using dir = TempDir.createSync("@omp-cm-p6-");
 		const cwd = dir.path();
 		const settings = Settings.isolated({
@@ -210,7 +203,7 @@ describe("Code Mode partition (F1)", () => {
 		}
 	});
 
-	it.todo("CM-P7 a bridged edit call goes through the same approval gate as direct dispatch", async () => {
+	it("CM-P7 a bridged edit call goes through the same approval gate as direct dispatch", async () => {
 		using dir = TempDir.createSync("@omp-cm-p7-");
 		const cwd = dir.path();
 		const settings = Settings.isolated({
@@ -228,6 +221,7 @@ describe("Code Mode partition (F1)", () => {
 		const { session: normal } = await makeCodeModeSession({
 			cwd,
 			hasUI: true,
+			codeMode: false,
 			settings,
 			sessionManager: SessionManager.inMemory(cwd),
 		});

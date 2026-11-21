@@ -68,6 +68,9 @@ import {
 } from "./capability/rule";
 import { bucketRules } from "./capability/rule-buckets";
 import type { EffectiveExtensionRoots } from "./capability/types";
+import { applyCodeModePartition, type CodeModePartition } from "./code-mode/partition";
+import { type CodeModeDecision, resolveCodeMode } from "./code-mode/scope";
+import { cfgCodeModeDefault, cfgCodeModeScope, type CodeModeScope } from "./code-mode/settings";
 import { type OAuthAccountPools, SessionAccountPoolScope } from "./config/account-pools";
 import { shouldEnableAppendOnlyContext } from "./config/append-only-context-mode";
 import { shouldInlineToolDescriptors } from "./config/inline-tool-descriptors-mode";
@@ -259,7 +262,7 @@ import { describeUsageFallback } from "./session/retry-fallback-reason";
 import { kUsageLimitRequestProvider } from "./session/turn-recovery";
 import { getReadableCompactionEntry, getRestorableSessionModels } from "./session/session-context";
 import { completionRecord } from "./session/model-usage-journal";
-import { SessionManager } from "./session/session-manager";
+import { CODE_MODE_ENTRY_TYPE, readRecordedCodeMode, SessionManager } from "./session/session-manager";
 import { cfgOffline } from "./config/auxiliary-model-policy";
 import { SHAPE_RULE } from "./spotlight/shape";
 import { buildCallContext } from "./spotlight/context";
@@ -365,6 +368,7 @@ import {
 import { createBrowserPrelude } from "./tools/browser";
 import { isMCPToolName, normalizeToolNames } from "./tools/builtin-names";
 import { createComputerPrelude } from "./tools/computer";
+import { resolveEvalBackends } from "./tools/eval-backends";
 import { createRatchetPrelude } from "./ratchet/prelude-definition";
 import { createArchivePrelude } from "./archive/prelude-definition";
 import { ToolContextStore } from "./tools/context";
@@ -434,6 +438,7 @@ import {
 	cfgTierOpenai,
 	systemPromptTemplatePatterns,
 } from "./session/settings";
+import { initializeExtensions } from "./modes/runtime-init";
 import { cfgInterruptMode } from "./modes/settings";
 import { cfgFollowUpMode } from "./modes/settings";
 import { cfgSteeringMode } from "./modes/settings";
@@ -928,6 +933,24 @@ export interface CreateAgentSessionOptions {
 	skipPythonPreflight?: boolean;
 	/** Tool names explicitly requested (enables disabled-by-default tools) */
 	toolNames?: string[];
+	/**
+	 * Request Code Mode for this session: the wire advertises only the top-level
+	 * control set (plus explicitly pinned `toolNames`); every other enabled tool
+	 * stays reachable through the eval bridge. Falls back to normal tools when no
+	 * eval backend is available.
+	 */
+	codeMode?: boolean;
+	/**
+	 * Per-spawn Code Mode request from a subagent spawn (`agent({ codeMode })`,
+	 * task item `codeMode`). Honored only for subagent sessions and resolved
+	 * with this child's own frontmatter/model/role — never from the parent's
+	 * mutable session mode.
+	 */
+	codeModeSpawnOverride?: boolean;
+	/** Agent definition context for a subagent's Code Mode decision (frontmatter + eval hard gate). */
+	codeModeAgent?: { name: string; codeMode?: boolean; tools?: string[] };
+	/** Model role chosen for the subagent, matched against `codeMode.scope.roles`. */
+	codeModeRole?: string;
 	/** Names from `toolNames` that a fork inherits as `xd://` devices rather than explicit top-level tools. */
 	mountedToolNames?: string[];
 	/** Limit the session to explicitly supplied tool names, without discovered extras. */
@@ -2323,6 +2346,9 @@ async function createAgentSessionScoped(options: CreateAgentSessionOptions): Pro
 		deobfuscateSessionContext(sessionManager.buildSessionContext(), obfuscator),
 	);
 	const hasExistingSession = existingBranch.length > 0;
+	// A resumed or forked transcript carries the Code Mode decision it was created
+	// with; it outranks `codeMode.default` unless the caller asks explicitly.
+	const recordedCodeMode = readRecordedCodeMode(existingBranch);
 	const hasThinkingEntry = existingBranch.some(entry => entry.type === "thinking_level_change");
 	const hasServiceTierEntry = existingBranch.some(entry => entry.type === "service_tier_change");
 
@@ -2778,6 +2804,8 @@ async function createAgentSessionScoped(options: CreateAgentSessionOptions): Pro
 			getToolByName: name => session?.getToolByName(name),
 			getToolForEvalBridge: name => session?.getToolForEvalBridge(name),
 			getAdvertisedEvalToolNames: () => session?.getAdvertisedEvalToolNames() ?? [],
+			getEvalBridgeToolNames: () => session?.getEvalBridgeToolNames() ?? [],
+			isCodeModeActive: () => session?.isCodeModeActive() === true,
 			agentRegistry,
 			// The global lifecycle releases through AgentRegistry.global(); wiring it
 			// onto a caller-supplied registry would report a cancel while releasing an
@@ -4660,6 +4688,8 @@ async function createAgentSessionScoped(options: CreateAgentSessionOptions): Pro
 			);
 			const defaultPrompt = await buildSystemPromptInternal({
 				cwd: promptCwd,
+				// Live state: an in-place `/code-mode on|off` rebuilds the prompt for the new wire.
+				codeMode: session ? session.isCodeModeActive() : codeModeDecision.enabled,
 				additionalWorkspaceRoots: sessionManager.getAdditionalDirectories(),
 				noContextFiles: options.noContextFiles,
 				excludeAgentsMd,
@@ -4854,13 +4884,50 @@ async function createAgentSessionScoped(options: CreateAgentSessionOptions): Pro
 			const evalBound = new Set(initialEvalBoundToolNames);
 			initialToolNames = initialToolNames.filter(name => !evalBound.has(name));
 		}
+		// Freeze the Code Mode decision before the initial slate is seeded: the
+		// partition below replaces the xd:// presentation when the mode is on, and
+		// a request without an eval backend falls back to the normal tool set.
+		const evalBackends = resolveEvalBackends(toolSession);
+		const codeModeDecision: CodeModeDecision = resolveCodeMode({
+			isMain: agentKind === "main",
+			// A transcript with history but no record predates Code Mode: it resumes in
+			// normal mode, matching `switchSession`, instead of adopting the current default.
+			sessionOverride:
+				options.codeMode ??
+				recordedCodeMode?.enabled ??
+				(existingBranch.some(entry => entry.type === "message") ? false : undefined),
+			spawnOverride: agentKind === "main" ? undefined : options.codeModeSpawnOverride,
+			agent: agentKind === "main" ? undefined : options.codeModeAgent,
+			role: agentKind === "main" ? undefined : options.codeModeRole,
+			settings: {
+				default: cfgCodeModeDefault.get(settings),
+				scope: cfgCodeModeScope.get(settings) as CodeModeScope,
+			},
+			evalAvailable: evalBackends.js || evalBackends.python,
+			restrictedToolNames: restrictToolNames ? explicitlyRequestedToolNames : undefined,
+			modelId: getActiveModelString(),
+		});
+		let codeModePartition: CodeModePartition | undefined;
+
 		// Partition the initial enabled set for the xd:// transport. Tool instances
 		// remain in the canonical map; only presentation names move between layers.
 		// Mounting requires both transport halves in the granted set (`read xd://`
 		// discovers, `write xd://<tool>` executes); explicit-list sessions granted
 		// `read` without `write` can use the device-only transport registered by
 		// createTools without surfacing it when no device needs it.
-		if (toolSession.xdev) {
+		if (codeModeDecision.enabled) {
+			// Code Mode wins over `tools.xdev`: mounted devices become bridge-only
+			// and the transport (read/write) leaves the wire with them.
+			const mountedBefore = [...(toolSession.xdev?.mountedNames ?? [])];
+			toolSession.xdev?.mountedNames.clear();
+			const names = new Set(initialToolNames);
+			for (const name of mountedBefore) names.add(name);
+			// `eval` is the only route to every other tool; keep it on the wire even
+			// when an explicit list omitted it.
+			if (toolRegistry.has("eval")) names.add("eval");
+			codeModePartition = applyCodeModePartition(names, { pinned: presentationPinnedToolNames });
+			initialToolNames = codeModePartition.topLevel;
+		} else if (toolSession.xdev) {
 			const topLevelToolNames: string[] = [];
 			const mountedNames: string[] = [];
 			for (const name of initialToolNames) {
@@ -5648,6 +5715,28 @@ async function createAgentSessionScoped(options: CreateAgentSessionOptions): Pro
 			autoTitle: options.autoTitle === true && !isSubagentSession,
 		});
 		hasSession = true;
+		// Freeze the decision on the session and hand the bridge-only layer to
+		// SessionTools before any later MCP/extension reconcile can run.
+		session.installCodeMode(codeModeDecision, codeModePartition ?? { topLevel: [], bridgeOnly: [] });
+		// Persist the frozen decision so resume and fork replay it instead of
+		// re-deriving it from `codeMode.default`. A default-off session that never
+		// opted in records nothing: the absent record already means "off".
+		if (
+			(codeModeDecision.enabled && recordedCodeMode === undefined) ||
+			(options.codeMode !== undefined && options.codeMode !== recordedCodeMode?.enabled)
+		) {
+			sessionManager.appendCustomEntry(CODE_MODE_ENTRY_TYPE, {
+				enabled: codeModeDecision.enabled,
+				source: codeModeDecision.source,
+				...(codeModeDecision.detail !== undefined ? { detail: codeModeDecision.detail } : {}),
+				...(codeModeDecision.denied !== undefined ? { denied: codeModeDecision.denied } : {}),
+			});
+			// An enabled session must stay resumable even before its first assistant
+			// message: materialize the file instead of leaving it as an allocation.
+			// A refused write is already latched and reported by the store (retried,
+			// surfaced as a persistence notice); it must not abort session startup.
+			if (codeModeDecision.enabled) await sessionManager.ensureOnDisk().catch(() => undefined);
+		}
 		// The session now owns its cost gate; the interactive TUI starts compression after its first frame.
 		if (options.deferHintCompression !== true) session.startHintCompression();
 		credentialNoticeSession = session;
@@ -5780,6 +5869,19 @@ async function createAgentSessionScoped(options: CreateAgentSessionOptions): Pro
 				session.setToolBuiltIn(name, false);
 				session.setExtensionMCPTool(name, liveTool);
 				try {
+					if (session.isCodeModeActive()) {
+						// Code Mode: the wire (and its xd:// mount path, which needs the
+						// read/write transport) is frozen, so a late registration joins the
+						// bridge-only layer instead and stays reachable as `tool.<name>()`.
+						// Hidden tools stay hidden and lazy ones stay inactive unless the
+						// caller explicitly asked for them, exactly as above.
+						if (registered.definition.hidden) return;
+						if (registered.definition.defaultInactive && !explicitlyRequested) return;
+						if (!alreadyEnabled) {
+							session.setBridgeOnlyToolNames([...session.getBridgeOnlyToolNames(), name]);
+						}
+						return;
+					}
 					if ((registered.definition.defaultInactive || registered.definition.hidden) && !explicitlyRequested) {
 						if (!alreadyEnabled) return;
 						await session.setActiveToolPresentation(
@@ -6518,6 +6620,18 @@ async function createAgentSessionScoped(options: CreateAgentSessionOptions): Pro
 				for (const prepared of deferredPrepared) forwardablePreparedExtensions.set(prepared.resolvedPath, prepared);
 				forwardableExtensionPaths.push(...deferredPaths);
 				await extensionRunner.addExtensions(loaded.extensions);
+			});
+		}
+		if (extensionRunner && (extensionsResult.extensions.length > 0 || deferredExtensionPaths.length > 0)) {
+			// An extension's `pi.*` surface must work in a bare SDK session too: there is
+			// no host yet to initialize the runner (print/RPC/TUI/ACP and the subagent
+			// executor all do it later with their own UI context and error reporter), so
+			// install the shared action set now without emitting `session_start`. The
+			// host's later call re-initializes the same runtime and emits the event once.
+			await initializeExtensions(session, {
+				reportSendError: (action, error) =>
+					logger.warn("Extension send failed before host initialization", { action, error: error.message }),
+				emitSessionStart: false,
 			});
 		}
 		startDeferredMCPDiscovery?.(session);

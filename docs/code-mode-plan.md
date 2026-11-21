@@ -19,7 +19,7 @@ Ganho esperado (não medido no omp): menos tokens de schema por request, menos r
 | Subagentes programáticos | `agent()`/`workpool()`: `eval/agent-bridge.ts`, `eval/workpool-bridge.ts` |
 | Background/poll | auto-background do eval, `wait`, `proc://` |
 | Tools fora do schema, sob demanda | `xd://` (`tools/xdev.ts`, setting `tools.xdev`) |
-| Fork de sessão | `SessionManager.forkFrom` (`session/session-manager.ts:4054`), `task/seance.ts` |
+| Fork de sessão | `SessionManager.forkFrom` (`session/session-manager.ts:4054`) |
 | Blanking de tool results | `blankToolResult`, `pruneToolOutputs`, `pruneSupersededToolResults` (`packages/agent/src/compaction/pruning.ts`) |
 | Paste grande para arquivo | `#attachPasteAsFile` (`modes/controllers/input-controller.ts:2574`) |
 | A/B de harness | `packages/metaharness` (`launch-args.ts` aceita `extraArgs`) |
@@ -31,7 +31,6 @@ Ganho esperado (não medido no omp): menos tokens de schema por request, menos r
 3. **`checkpoint` e `rewind` não funcionam via bridge.** Eles são bloqueados em `eval/js/tool-bridge.ts:269` porque a sessão só os reconhece como `toolResult` direto, então precisam continuar top-level.
 4. **`yield` (subagentes), `ask` e `todo`** têm semântica de sessão ou UI e ficam top-level. Já estão em `XDEV_KEEP_TOP_LEVEL` (`tools/xdev.ts:58`), com exceção de `grep` e `web_search`, que no Code Mode devem ir para o bridge.
 5. **O xdev já tem a camada certa.** Tools montadas saem do schema e continuam em `getEnabledToolNames()`, portanto continuam alcançáveis pelo bridge. Code Mode é, essencialmente, uma nova política de partição sobre essa mesma infraestrutura.
-6. **Seance recusa `eval`.** `prepareSeance` lança erro se `invocationKind !== "task"` (`task/seance.ts:232`) e também recusa isolation e custom tools.
 
 ## 4. Fase 1: perfil Code Mode (núcleo)
 
@@ -92,14 +91,7 @@ O modo de aprovação (`docs/approval-mode.md`) já se aplica ao bridge porque `
 
 ## 5. Fase 2: fork da conversa a partir do eval
 
-Objetivo: permitir o padrão "fork N vezes, explorar abordagens, devolver as melhores".
-
-- `eval/agent-bridge.ts`: adicionar `"fork?": "boolean"` a `agentArgsSchema` e a `EvalAgentArgs`, e repassar a `runStructuredSubagent`.
-- `task/structured-subagent.ts:~382`: quando `fork === true`, montar o `PreparedSeanceSession` com a sessão **atual** como `sourceSession` (`request.session.getSessionFile()`).
-- `task/seance.ts:232`: aceitar `invocationKind === "eval"` quando a origem é a própria sessão. A recusa de isolation continua. A recusa de custom tools pode ser relaxada só se `createEvalCustomTools` funcionar na sessão forkada, o que precisa ser testado.
-- Pré-requisito: a sessão precisa estar persistida. `task/executor.ts:4512` já falha com "requires a persisted child session file". Propagar essa mensagem ao modelo.
-- Custo: cada fork re-lê o histórico inteiro, com cache frio no primeiro request. Documentar no `prompts/tools/eval-agents.md` que fork é caro e deve ser usado com N pequeno.
-- Prompt: em `eval-agents.md`, adicionar `fork?=False` à assinatura de `agent(...)`.
+Removida. O `agent({ fork })` reaproveitava a infraestrutura de fork do agente `seance`, que o upstream apagou; por isso o eval não oferece mais fork da conversa. `/fork` e resume continuam herdando o estado gravado do Code Mode via `SessionManager.forkFrom`.
 
 ## 6. Fase 3: RLM e contexto como dado
 
@@ -138,14 +130,13 @@ Testes novos que pegam bugs visíveis ao usuário:
 | MCP descoberta depois do startup vira bridge-only | idem | reconcile |
 | `setActiveToolsByName` (ex.: entrar em goal mode) não perde a camada bridge-only | idem | regressão do comentário em `getEnabledToolNames` |
 | Code Mode sem backend de eval cai no modo normal | idem | sessão não fica sem tools |
-| `agent(..., fork=True)` filho enxerga mensagens anteriores do pai | `test/eval/agent-fork.test.ts` | fase 2 |
 | `elide` não toca entradas antes de `keepBoundaryId` nem `skill://` | `test/session/elide.test.ts` | fase 3 |
 
 Testes existentes que podem quebrar: os de `tan-tool-presentation.test.ts` e `test/tools/index.test.ts` que enumeram a lista de tools ativas. Atualizar apenas se o contrato mudar, o que só acontece com o setting ligado.
 
 ## 9. Documentação a atualizar
 
-- `docs/tools/eval.md`: seção "Code Mode" (camada bridge-only, `tool.describe`, `fork`).
+- `docs/tools/eval.md`: seção "Code Mode" (camada bridge-only, `tool.describe`).
 - `docs/settings.md`: `tools.codeMode`, `input.largeInputAsHandle`.
 - `docs/cli-reference.md`: `--code-mode`.
 - `docs/tools/elide.md`: nova página, no formato de `docs/tools/new-context.md`.
@@ -158,11 +149,10 @@ Testes existentes que podem quebrar: os de `tan-tool-presentation.test.ts` e `te
 3. `setActiveTools` estável em Code Mode (§12.2, RF6.3) e `pi.isCodeModeActive()`.
 4. Canal de sugestões no sufixo (§12.4) e ajustes no pi-jev (RF6.5).
 5. Rodada de A/B no metaharness com os braços de §12.6, com a decisão registrada neste doc.
-6. `agent(fork=True)`.
-7. Input grande como handle.
-8. `elide`.
+6. Input grande como handle.
+7. `elide`.
 
-Os itens 1–5 entregam o Code Mode do vídeo com custo de cache controlado. Os itens 6–8 são a parte "RLM", independentes entre si.
+Os itens 1–5 entregam o Code Mode do vídeo com custo de cache controlado. Os itens 6–7 são a parte "RLM", independentes entre si.
 
 ## 11. Riscos
 

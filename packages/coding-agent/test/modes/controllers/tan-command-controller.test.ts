@@ -122,6 +122,8 @@ function createContext(overrides?: {
 	extensionPaths?: unknown;
 	messages?: AgentMessage[];
 	generateTitle?: (context: string) => Promise<string | null>;
+	codeMode?: boolean;
+	bridgeOnlyToolNames?: string[];
 }) {
 	const tempDir = TempDir.createSync("@omp-tan-controller-");
 	harnessTempDirs.push(tempDir);
@@ -150,6 +152,8 @@ function createContext(overrides?: {
 		getActiveToolNames: vi.fn(() => overrides?.activeToolNames ?? ["read", "bash"]),
 		getEnabledToolNames: vi.fn(() => overrides?.enabledToolNames ?? overrides?.activeToolNames ?? ["read", "bash"]),
 		getMountedXdevToolNames: vi.fn(() => []),
+		isCodeModeActive: vi.fn(() => overrides?.codeMode ?? false),
+		getBridgeOnlyToolNames: vi.fn(() => overrides?.bridgeOnlyToolNames ?? []),
 		modelRegistry: { authStorage: { marker: "auth" } },
 		preparedExtensions: overrides?.preparedExtensions,
 		effectiveExtensionRoots: overrides?.effectiveExtensionRoots,
@@ -712,6 +716,31 @@ describe("TanCommandController", () => {
 		expect(appendSessionInit).toHaveBeenCalledWith(
 			expect.objectContaining({ tools: enabledToolNames, mountedTools: ["ast_grep"] }),
 		);
+	});
+
+	it("clones a Code Mode parent in Code Mode, keeping bridge-only tools off the clone's wire", async () => {
+		const enabledToolNames = ["eval", "todo", "read", "bash"];
+		const harness = createContext({
+			activeToolNames: ["eval", "todo"],
+			enabledToolNames,
+			codeMode: true,
+			bridgeOnlyToolNames: ["read", "bash"],
+		});
+		vi.spyOn(SessionManager, "forkFrom").mockResolvedValue(harness.cloneManager);
+		const { clone } = createCloneStub({ activeToolNames: ["eval", "todo"], enabledToolNames });
+		const createAgentSessionSpy = vi.spyOn(sdkModule, "createAgentSession").mockResolvedValue({
+			session: clone,
+		} as unknown as CreateAgentSessionResult);
+		const controller = new TanCommandController(harness.ctx);
+
+		await controller.start("stay in code mode");
+		const run = harness.capturedRun;
+		if (!run) throw new Error("run function was not captured");
+		await run({ jobId: "job-123", signal: new AbortController().signal, reportProgress: async () => {} });
+
+		const options = createAgentSessionSpy.mock.calls[0]?.[0];
+		expect(options?.codeModeSpawnOverride).toBe(true);
+		expect(options?.mountedToolNames).toEqual(["read", "bash"]);
 	});
 
 	it("restores the request when compaction summarizes an already-dispatched turn", async () => {

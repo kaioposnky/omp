@@ -19,8 +19,12 @@ export type ExtensionSendAction = "extension_send" | "extension_send_user";
 export interface InitializeExtensionsOptions {
 	/** Reports an error thrown by an extension-initiated send. */
 	reportSendError: (action: ExtensionSendAction, error: Error) => void;
-	/** Reports a runtime error surfaced through {@link ExtensionRunner.onError}. */
-	reportRuntimeError: (error: ExtensionError) => void;
+	/**
+	 * Reports a runtime error surfaced through {@link ExtensionRunner.onError}.
+	 * Omitted by an early (pre-host) initialization that runs before the host
+	 * attaches its own reporter, so the host stays the only listener.
+	 */
+	reportRuntimeError?: (error: ExtensionError) => void;
 	/** Optional shutdown hook (rpc mode signals its loop; print mode is a no-op). */
 	onShutdown?: () => void;
 	/** Pi-compatible mode exposed to extension contexts. Defaults to `"print"`. */
@@ -46,6 +50,13 @@ export interface InitializeExtensionsOptions {
 		change: () => Promise<T>,
 		options: { detachesRun: boolean },
 	) => Promise<T>;
+	/**
+	 * Whether to emit `session_start`. The SDK initializes the action set at
+	 * session creation so `pi.*` calls work before a host takes over; that early
+	 * pass skips the event because the host emits it exactly once when it
+	 * re-initializes with its own UI context and error reporter. Defaults to true.
+	 */
+	emitSessionStart?: boolean;
 }
 
 /**
@@ -69,6 +80,7 @@ export async function initializeExtensions(session: AgentSession, options: Initi
 		trackExtensionSend,
 		filterActiveTools,
 		wrapSessionChange = change => change(),
+		emitSessionStart = true,
 	} = options;
 	const shutdown = onShutdown ?? (() => {});
 
@@ -127,7 +139,10 @@ export async function initializeExtensions(session: AgentSession, options: Initi
 			getActiveTools: () => session.getEnabledToolNames(),
 			getAllTools: () => session.getAllToolInfos(),
 			setActiveTools: (toolNames: string[]) =>
-				session.setActiveToolsByName(filterActiveTools ? filterActiveTools(toolNames) : toolNames),
+				session.setActiveToolsByName(filterActiveTools ? filterActiveTools(toolNames) : toolNames, {
+					origin: "extension",
+				}),
+			isCodeModeActive: () => session.isCodeModeActive(),
 			getCommands: () => getSessionSlashCommands(session),
 			setModel: model => runExtensionSetModel(session, model),
 			getThinkingLevel: () => session.thinkingLevel,
@@ -210,6 +225,6 @@ export async function initializeExtensions(session: AgentSession, options: Initi
 		mode,
 	);
 
-	runner.onError(reportRuntimeError);
-	await runner.emit({ type: "session_start" });
+	if (reportRuntimeError) runner.onError(reportRuntimeError);
+	if (emitSessionStart) await runner.emit({ type: "session_start" });
 }

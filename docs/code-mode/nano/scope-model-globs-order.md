@@ -4,10 +4,10 @@ Parent: [micro/scope-model-globs.md](../micro/scope-model-globs.md)
 
 ## Code locators
 
-- `[planned] packages/coding-agent/src/code-mode/settings.ts#cfgCodeModeScope` — registro do setting
+- `packages/coding-agent/src/code-mode/settings.ts#cfgCodeModeScope` — registro do setting
   com `validate` e o array `models` ordenado.
-- `[planned] packages/coding-agent/src/code-mode/scope.ts#resolveCodeMode` — degrau `scope.models`.
-- `[planned] packages/coding-agent/src/code-mode/scope.ts#matchModelGlob` — casamento de um padrão
+- `packages/coding-agent/src/code-mode/scope.ts#resolveCodeMode` — degrau `scope.models`.
+- `packages/coding-agent/src/code-mode/scope.ts#matchModelGlob` — casamento de um padrão
   contra `provider/id`.
 - `packages/coding-agent/src/config/registry.ts#register` — padrão de registro/validação de setting
   (referência: `packages/coding-agent/src/tools/settings.ts#cfgToolsXdev`).

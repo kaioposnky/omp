@@ -355,7 +355,7 @@ async function callCodexSearch(
 		systemPrompt?: string;
 		searchContextSize?: "low" | "medium" | "high";
 		/** Wire `reasoning.effort`; omitted when undefined so the server default applies. */
-		reasoningEffort?: string;
+		reasoningEffort?: string | number;
 		modelId: string;
 		fetch?: FetchImpl;
 		transport: CodexSearchTransport;

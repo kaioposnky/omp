@@ -18,9 +18,9 @@ Parent: [micro/indicator-status-icon.md](../micro/indicator-status-icon.md)
   inicial.
 - `packages/tui/src/status-line/startup.ts#createStartupStatusLine` — primeira renderização.
 - `packages/tui/src/theme/symbols.ts` — mapa de símbolos (unicode, nerd e fallback).
-- `[planned] packages/tui/src/theme/symbols.ts#icon.codeMode`
-- `[planned] packages/tui/src/status-line/host.ts#StatusLineHost.isCodeModeActive`
-- `[planned] packages/tui/src/status-line/host.ts#StatusLineHost.isCodeModeDivergent`
+- `packages/tui/src/theme/symbols.ts#icon.codeMode`
+- `packages/tui/src/status-line/host.ts#StatusLineHost.isCodeModeActive`, `packages/tui/src/status-line/host.ts#StatusLineHost.getCodeModeDecision`
+- `packages/tui/src/status-line/component.ts#readStatusLineExternalInputs` — deriva `codeModeDiverged` (sessão ativa cuja decisão atual não está `enabled`).
 
 ## How it works
 

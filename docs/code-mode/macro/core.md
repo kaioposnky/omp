@@ -20,12 +20,12 @@ pelo modo de aprovação.
 | Input | Decisão `enabled`/`source` do escopo e do toggle | [macro/scope.md](scope.md), [macro/toggle.md](toggle.md) |
 | Input | Disponibilidade do backend de `eval` | `packages/coding-agent/src/tools/eval-backends.ts` |
 | Output | Wire do modelo com só `eval`, `wait`, `yield`, `ask`, `todo`, `checkpoint`, `rewind` (+ tools fixadas explicitamente) | `session.agent.state.tools` |
-| Output | Camada bridge-only consultável | `session.getToolForEvalBridge(name)`, `session.getBridgeOnlyToolNames()` `[planned]` |
-| Output | Sessão normal quando o modo não pode ser aplicado | `session.isCodeModeActive() === false` `[planned]` |
+| Output | Camada bridge-only consultável | `session.getToolForEvalBridge(name)`, `session.getBridgeOnlyToolNames()` |
+| Output | Sessão normal quando o modo não pode ser aplicado | `session.isCodeModeActive() === false` |
 
 ## Entry points
 
-- `createAgentSession({ codeMode: ... })` `[planned]` → partição em `sdk.ts` antes de
+- `createAgentSession({ codeMode: ... })` → partição em `sdk.ts` antes de
   `setSessionActiveToolNames`.
 - `SessionTools#getToolForEvalBridge(name)` (`packages/coding-agent/src/session/session-tools.ts#getToolForEvalBridge`)
   → resolução do `tool.<name>` no kernel; é o único caminho de execução das tools fora do schema.

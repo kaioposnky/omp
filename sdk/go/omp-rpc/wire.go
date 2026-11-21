@@ -2550,6 +2550,8 @@ type SessionState struct {
 	AutoCompactionEnabled bool                      `json:"autoCompactionEnabled"`
 	FastModeEnabled       bool                      `json:"fastModeEnabled"`
 	FastModeActive        bool                      `json:"fastModeActive"`
+	// Session runs in Code Mode (frozen at creation): only eval and control tools on the wire.
+	CodeModeEnabled bool `json:"codeModeEnabled"`
 	// `/slow` applies to the active model.
 	SlowModeSupported bool `json:"slowModeSupported"`
 	// `/slow` is on for the active model; always `false` when `slowModeSupported` is `false`.
@@ -2597,6 +2599,7 @@ func (v *SessionState) decodeFrom(raw map[string]json.RawMessage) error {
 	d.defaulted("autoCompactionEnabled", &out.AutoCompactionEnabled, `false`)
 	d.defaulted("fastModeEnabled", &out.FastModeEnabled, `false`)
 	d.defaulted("fastModeActive", &out.FastModeActive, `false`)
+	d.defaulted("codeModeEnabled", &out.CodeModeEnabled, `false`)
 	d.defaulted("slowModeSupported", &out.SlowModeSupported, `false`)
 	d.defaulted("slowModeEnabled", &out.SlowModeEnabled, `false`)
 	d.optional("slowModeScope", &out.SlowModeScope)

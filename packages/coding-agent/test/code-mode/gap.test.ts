@@ -1,11 +1,6 @@
 /**
- * Code Mode coverage gaps: the eval-prelude tool discovery surface, plan-mode
- * bridge narrowing, the `tool_call` hook identity for bridged calls, and the
- * `codeMode.scope` settings round-trip.
- *
- * Code Mode is `[planned]` (`src/code-mode/`, `createAgentSession({ codeMode })`).
- * Every case is an `it.todo` with a real body so `bun test --todo` turns the
- * suite into the implementation checklist.
+ * Code Mode coverage gaps: eval-prelude tool discovery, plan-mode bridge
+ * narrowing, bridge hook identity, and `codeMode.scope` settings round-trips.
  */
 import { describe, expect, it } from "bun:test";
 import * as fs from "node:fs";
@@ -125,7 +120,7 @@ function assertSearchEntries(value: unknown): ToolSearchEntry[] {
 }
 
 describe("Code Mode coverage gaps", () => {
-	it.todo("CM-G1 tool.describe returns the read signature and throws on an unknown name", async () => {
+	it("CM-G1 tool.describe returns the read signature and throws on an unknown name", async () => {
 		using dir = TempDir.createSync("@omp-cm-g1-");
 		const { session } = await makeCodeModeSession({
 			cwd: dir.path(),
@@ -161,7 +156,7 @@ console.log(JSON.stringify({ signature, unknown }));
 		}
 	});
 
-	it.todo("CM-G2 tool.search ranks read for file contents and finds bridge-only MCP tools", async () => {
+	it("CM-G2 tool.search ranks read for file contents and finds bridge-only MCP tools", async () => {
 		using dir = TempDir.createSync("@omp-cm-g2-");
 		const { session } = await makeCodeModeSession({
 			cwd: dir.path(),
@@ -193,7 +188,7 @@ console.log(JSON.stringify({ entries, bridge }));
 });
 
 describe.skipIf(!HAS_PYTHON_EVAL)("Code Mode coverage gaps (real Python kernel)", () => {
-	it.todo("CM-G3 the Python prelude exposes the same tool discovery surface", async () => {
+	it("CM-G3 the Python prelude exposes the same tool discovery surface", async () => {
 		using dir = TempDir.createSync("@omp-cm-g3-");
 		const { session } = await makeCodeModeSession({
 			cwd: dir.path(),
@@ -236,7 +231,7 @@ print(json.dumps({"signature": signature, "entries": entries, "bridge": bridge})
 });
 
 describe("Code Mode coverage gaps (hooks and settings)", () => {
-	it.todo("CM-G4 plan mode narrows the eval bridge to the tools plan mode allows", async () => {
+	it("CM-G4 plan mode narrows the eval bridge to the tools plan mode allows", async () => {
 		using dir = TempDir.createSync("@omp-cm-g4-");
 		const target = path.join(dir.path(), "gap-plan-read.txt");
 		fs.writeFileSync(target, "GAP_PLAN_READ\n");
@@ -264,7 +259,7 @@ describe("Code Mode coverage gaps (hooks and settings)", () => {
 		}
 	});
 
-	it.todo("CM-G5 a bridged tool.read fires tool_call once with the inner tool name", async () => {
+	it("CM-G5 a bridged tool.read fires tool_call once with the inner tool name", async () => {
 		using dir = TempDir.createSync("@omp-cm-g5-");
 		const target = path.join(dir.path(), "gap-hook.txt");
 		fs.writeFileSync(target, "GAP_HOOK_BODY\n");
@@ -303,7 +298,7 @@ console.log(JSON.stringify({ ok: true, length: String(read).length }));
 		}
 	});
 
-	it.todo("CM-G6 codeMode.scope round-trips through Settings and drives resolveCodeMode", async () => {
+	it("CM-G6 codeMode.scope round-trips through Settings and drives resolveCodeMode", async () => {
 		using dir = TempDir.createSync("@omp-cm-g6-");
 		const agentDir = path.join(dir.path(), "agent");
 		fs.mkdirSync(agentDir, { recursive: true });

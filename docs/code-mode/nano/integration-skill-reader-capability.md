@@ -2,7 +2,7 @@
 
 Parent: [micro/integration-skills-catalog.md](../micro/integration-skills-catalog.md)
 
-Code: `packages/coding-agent/src/system-prompt.ts#toolReadsSkillUris`, `packages/coding-agent/src/system-prompt.ts#buildSystemPrompt`, `packages/coding-agent/src/system-prompt.ts#buildSystemPromptToolMetadata`, `packages/coding-agent/src/eval/js/shared/prelude.txt#read`, `[planned] packages/coding-agent/src/code-mode/partition.ts#CODE_MODE_TOP_LEVEL`
+Code: `packages/coding-agent/src/system-prompt.ts#toolReadsSkillUris`, `packages/coding-agent/src/system-prompt.ts#buildSystemPrompt`, `packages/coding-agent/src/system-prompt.ts#buildSystemPromptToolMetadata`, `packages/coding-agent/src/eval/js/shared/prelude.txt#read`, `packages/coding-agent/src/code-mode/partition.ts#CODE_MODE_TOP_LEVEL`
 
 ## How it works
 

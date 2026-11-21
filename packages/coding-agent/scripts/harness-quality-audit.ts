@@ -1200,7 +1200,7 @@ export async function trial(host: Host, options: TrialOptions): Promise<TrialRec
 			enableLsp: false,
 			enableIrc: false,
 			bindProcessState: false,
-			cacheWarming: false,
+			cacheWarming: "off",
 			requireYieldTool: false,
 			taskDepth: 1,
 			skipPythonPreflight: true,

@@ -2,6 +2,9 @@ import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-a
 import type { JevClient } from "./jev.js";
 import { isJevTool } from "./types.js";
 
+/** Code Mode's bridge tool; its typed program is not a tool call to judge. */
+const EVAL_TOOL_NAME = "eval";
+
 export interface ToolCallCheckResult {
   valid: boolean;
   blocked?: boolean;
@@ -64,7 +67,14 @@ export class ToolGuard {
     signal?: AbortSignal
   ): Promise<ToolCallCheckResult> {
     const startTime = Date.now();
-    if (!this.enabled || !this.jevClient.isConfigured() || isJevTool(toolName)) {
+    // Code Mode: the eval cell is typed program, not a tool call to judge. Nested
+    // tool.* calls reach the hook as their own tool_call events.
+    if (
+      toolName === EVAL_TOOL_NAME ||
+      !this.enabled ||
+      !this.jevClient.isConfigured() ||
+      isJevTool(toolName)
+    ) {
       return { valid: true, elapsedMs: 0 };
     }
 
@@ -110,6 +120,7 @@ export class ToolGuard {
     _ctx?: ExtensionContext,
     signal?: AbortSignal
   ): Promise<string | null> {
+    if (toolName === EVAL_TOOL_NAME) return null;
     if (!this.enabled || !this.jevClient.isConfigured()) return null;
 
     try {

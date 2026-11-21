@@ -125,6 +125,7 @@ export type SymbolKey =
 	| "icon.minimize"
 	| "icon.auto"
 	| "icon.fast"
+	| "icon.codeMode"
 	| "icon.extensionSkill"
 	| "icon.extensionTool"
 	| "icon.extensionSlashCommand"
@@ -518,6 +519,7 @@ const UNICODE_SYMBOLS: SymbolMap = {
 	"icon.minimize": "⇲",
 	"icon.auto": "⟲",
 	"icon.fast": "⚡",
+	"icon.codeMode": "λ",
 	"icon.extensionSkill": "✦",
 	"icon.extensionTool": "🛠",
 	"icon.extensionSlashCommand": "⌘",
@@ -929,6 +931,8 @@ const NERD_SYMBOLS: SymbolMap = {
 	// pick: 󰁨 | alt:   
 	"icon.auto": "\u{f0068}",
 	"icon.fast": "\uf0e7",
+	// nf-md-code_braces
+	"icon.codeMode": "\u{f0169}",
 	"icon.extensionSkill": "\uf0eb",
 	// pick:  | alt:  
 	"icon.extensionTool": "\uf0ad",
@@ -1327,6 +1331,7 @@ const ASCII_SYMBOLS: SymbolMap = {
 	"icon.minimize": "min",
 	"icon.auto": "[A]",
 	"icon.fast": ">>",
+	"icon.codeMode": "{}",
 	"icon.extensionSkill": "SK",
 	"icon.extensionTool": "TL",
 	"icon.extensionSlashCommand": "/",

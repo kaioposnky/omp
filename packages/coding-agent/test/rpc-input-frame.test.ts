@@ -301,6 +301,7 @@ describe("RpcInputDispatcher", () => {
 						autoCompactionEnabled: false,
 						fastModeEnabled: false,
 						fastModeActive: false,
+						codeModeEnabled: false,
 						slowModeSupported: false,
 						slowModeEnabled: false,
 						tokensPerSecond: null,

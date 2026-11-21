@@ -713,6 +713,7 @@ export class Theme {
 			warning: this.#symbols["icon.warning"],
 			rewind: this.#symbols["icon.rewind"],
 			minimize: this.#symbols["icon.minimize"],
+			codeMode: this.#symbols["icon.codeMode"],
 			auto: this.#symbols["icon.auto"],
 			fast: this.#symbols["icon.fast"],
 			extensionSkill: this.#symbols["icon.extensionSkill"],

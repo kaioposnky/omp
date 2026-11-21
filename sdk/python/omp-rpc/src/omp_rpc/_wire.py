@@ -665,6 +665,8 @@ class SessionState:
     auto_compaction_enabled: bool = False
     fast_mode_enabled: bool = False
     fast_mode_active: bool = False
+    code_mode_enabled: bool = False
+    """Session runs in Code Mode (frozen at creation): only eval and control tools on the wire."""
     slow_mode_supported: bool = False
     """`/slow` applies to the active model."""
     slow_mode_enabled: bool = False
@@ -2137,6 +2139,7 @@ def parse_session_state(value: object, path: str = "SessionState") -> SessionSta
         auto_compaction_enabled=defaulted(payload, "autoCompactionEnabled", decode_bool, path, False),
         fast_mode_enabled=defaulted(payload, "fastModeEnabled", decode_bool, path, False),
         fast_mode_active=defaulted(payload, "fastModeActive", decode_bool, path, False),
+        code_mode_enabled=defaulted(payload, "codeModeEnabled", decode_bool, path, False),
         slow_mode_supported=defaulted(payload, "slowModeSupported", decode_bool, path, False),
         slow_mode_enabled=defaulted(payload, "slowModeEnabled", decode_bool, path, False),
         slow_mode_scope=optional(payload, "slowModeScope", _decode_slow_mode_scope, path),

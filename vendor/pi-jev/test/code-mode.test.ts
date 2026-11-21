@@ -109,7 +109,7 @@ interface PlannedAutoRouteResult {
   hintedTools?: string[];
 }
 
-test("JEV-CM1 McpGate makes no setActiveTools call when isCodeModeActive()", { todo: "code-mode" }, async () => {
+test("JEV-CM1 McpGate makes no setActiveTools call when isCodeModeActive()", async () => {
   const { client } = mockClient({ "mcp:github": { value: 0.9 } });
   const { pi, setActiveCalls } = mockPi({ tools: [...GITHUB], active: ["read"], codeMode: "active" });
 
@@ -119,7 +119,7 @@ test("JEV-CM1 McpGate makes no setActiveTools call when isCodeModeActive()", { t
   assert.deepEqual(setActiveCalls, []);
 });
 
-test("JEV-CM2 auto routing skips activation in code mode and returns hint names", { todo: "code-mode" }, async () => {
+test("JEV-CM2 auto routing skips activation in code mode and returns hint names", async () => {
   const { client } = mockClient({ "tool:postgres_query": { value: 0.9 } });
   const { pi, setActiveCalls } = mockPi({ tools: [...PG], active: ["read"], codeMode: "active" });
   const router = new ToolRouter(pi, client as unknown as JevClient);
@@ -136,7 +136,7 @@ test("JEV-CM2 auto routing skips activation in code mode and returns hint names"
   );
 });
 
-test("JEV-CM3 jev_find_tools suggests tool.<name> in code mode without activating", { todo: "code-mode" }, async () => {
+test("JEV-CM3 jev_find_tools suggests tool.<name> in code mode without activating", async () => {
   const { client } = mockClient({ postgres_query: { value: 0.9 } });
   const { pi, setActiveCalls, registered } = mockPi({
     tools: [...PG],
@@ -155,7 +155,7 @@ test("JEV-CM3 jev_find_tools suggests tool.<name> in code mode without activatin
   assert.deepEqual(setActiveCalls, []);
 });
 
-test("JEV-CM4 ToolGuard ignores the eval tool name", { todo: "code-mode" }, async () => {
+test("JEV-CM4 ToolGuard ignores the eval tool name", async () => {
   const { client, seen } = mockClient({ is_hallucinated: { value: 0.99 } });
   const guard = new ToolGuard({} as unknown as ExtensionAPI, client as unknown as JevClient, true);
 
@@ -168,7 +168,7 @@ test("JEV-CM4 ToolGuard ignores the eval tool name", { todo: "code-mode" }, asyn
   assert.ok(!result.blocked);
 });
 
-test("JEV-CM5 skill hint uses the skill:// form", { todo: "code-mode" }, async () => {
+test("JEV-CM5 skill hint uses the skill:// form", async () => {
   // Dynamic import because skillHintMessage does not exist yet and the file must
   // typecheck today; static import cannot reference a planned export.
   const autoModule = (await import("../src/auto.js")) as unknown as {

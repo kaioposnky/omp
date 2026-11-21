@@ -14,7 +14,7 @@ Module names, API shapes, test file paths and test IDs below are fixed: tests an
   - `CodeModeDecision = { enabled: boolean; source: "hard-gate:no-eval" | "hard-gate:agent-tools" | "hard-gate:restricted" | "session" | "spawn" | "frontmatter" | "scope.agents" | "scope.models" | "scope.roles" | "scope.main" | "default"; detail?: string; denied?: { requested: boolean; reason: string } }`
   - Precedence: hard gates > session (main only) > spawn > frontmatter > scope.agents > scope.models (first match, glob) > scope.roles > scope.main (main) / default.
   - Hard gates: `!evalAvailable` → off; agent `tools` list present and lacking `eval` → off; `restrictedToolNames` present and lacking `eval` → off. A denied spawn request sets `denied.reason` (e.g. `"agent has no eval"`).
-- `partition.ts`: `CODE_MODE_TOP_LEVEL = ["eval","wait","yield","ask","todo","checkpoint","rewind"]`; `applyCodeModePartition(names, opts) → { topLevel: string[]; bridgeOnly: string[] }`.
+- `partition.ts`: `CODE_MODE_TOP_LEVEL = ["eval","wait","yield","ask","todo","checkpoint","rewind","elide"]`; `applyCodeModePartition(names, opts) → { topLevel: string[]; bridgeOnly: string[] }`.
 - `catalog.ts`: `renderBridgeCatalog(tools) → string` (stable sorted, one line `name: summary` ≤12 words; MCP servers with >20 tools collapse to `mcp__<server>__* (N tools)`).
 - `hints.ts`: router-hint message contract `customType: "router-hints"`, budget ≤ 600 tokens, appended AFTER the user message.
 
@@ -24,7 +24,7 @@ Session/API surface (to be added):
 - ExtensionAPI: `pi.isCodeModeActive(): boolean`.
 - Extension `setActiveTools` in Code Mode: additions → bridge-only; removals of bridge-only → no-op; top-level set immutable; wire tools (`session.agent.state.tools`) and `session.systemPrompt` unchanged.
 - Eval prelude: `tool.describe(name)` → TS signature string; `tool.search(query, k=5)` → `{ name, summary, signature }[]`.
-- `agent()` / `workpool()` / task item: `codeMode?: boolean`, `agent()` also `fork?: boolean`.
+- `agent()` / `workpool()` / task item: `codeMode?: boolean`.
 - CLI: `--code-mode`, `--no-code-mode` → `Args.codeMode: boolean | undefined`.
 - Slash: `/code-mode [on|off|status|default on|default off]` in `BUILTIN_MODE_SLASH_COMMANDS` (`src/slash-commands/builtin-modes.ts`).
 - Status line: host `isCodeModeActive()`, theme symbol `icon.codeMode`, startup snapshot field `codeMode`.
@@ -41,7 +41,7 @@ All under `packages/coding-agent/test/code-mode/` (bun:test) unless noted:
 | `scope.test.ts` | F4 resolveCodeMode precedence, hard gates, globs, validation, factory defaults | CM-S1..CM-S10 |
 | `skills-mcp.test.ts` | F6 skills block, skill:// via bridge, extension setActiveTools, pi.isCodeModeActive | CM-C1..CM-C6 |
 | `token-economy.test.ts` | §12 prefix stability, prompt+schema tokens, catalog collapse, hints placement/budget, eval output cap | CM-E1..CM-E6 |
-| `spawn.test.ts` | spawn `codeMode` param, denial reason, `agent(fork)` | CM-A1..CM-A5 |
+| `spawn.test.ts` | spawn `codeMode` param, denial reason | CM-A1..CM-A3 |
 | `rlm.test.ts` | large input handle, `elide` | CM-R1..CM-R5 |
 | `vendor/pi-jev/test/code-mode.test.ts` (node:test) | RF6.5 pi-jev adjustments | JEV-CM1..JEV-CM6 |
 | `harnesses-improver/needle-spike/` | F5 Needle 3 measurement harness | NDL-1..NDL-3 |
@@ -104,8 +104,6 @@ spawn.test.ts
 - CM-A1 `agent({ prompt, codeMode: true })` args schema accepts `codeMode` (runEvalAgent no longer rejects it).
 - CM-A2 spawn decision for agent without eval returns result text containing `codeMode ignored: agent has no eval`.
 - CM-A3 task item schema accepts `codeMode`.
-- CM-A4 `agent({ fork: true })` accepted; child session file forked from parent (contains parent messages).
-- CM-A5 `fork: true` without a persisted parent session fails with a clear message.
 rlm.test.ts
 - CM-R1 paste over `input.largeInputAsHandle` threshold is stored as `local://paste-N.md` and the prompt carries only handle + size.
 - CM-R2 eval prelude exposes `inputs["paste-N"]` lazily.
@@ -134,10 +132,10 @@ gap.test.ts (added later; `packages/coding-agent/test/code-mode/gap.test.ts`)
 ## Doc tree (EXACT layout, `oh-my-pi/docs/code-mode/`, follows skill://architecture-doc-tree templates)
 Language: Portuguese (pt-BR) prose; code identifiers in English. Evidence rule: existing code cited as `packages/...#symbol` (must resolve); planned code marked `[planned]`; unmeasured claims `[unverified]`.
 - `architecture/index.md` (root; owner DocsCore) - Functionalities lists ALL macros below; Structure lists the detail files.
-- `architecture/orchestration.md` (detail; owner DocsCore) - implementation waves for subagent orchestration: wave → tasks → owned files → test IDs that must flip from todo to pass → gate command. Waves: W0 contract modules (`code-mode/` scope/partition/catalog/settings) · W1 core partition+settings+CLI · W2 toggle/slash/RPC + indicator · W3 scope + spawn param · W4 skills/MCP/extension API + pi-jev · W5 token economy (catalog, hints, output cap) + A/B · W6 RLM (fork, large input, elide) · Needle spike parallel anytime.
+- `architecture/orchestration.md` (detail; owner DocsCore) - implementation waves for subagent orchestration: wave → tasks → owned files → test IDs that must flip from todo to pass → gate command. Waves: W0 contract modules (`code-mode/` scope/partition/catalog/settings) · W1 core partition+settings+CLI · W2 toggle/slash/RPC + indicator · W3 scope + spawn param · W4 skills/MCP/extension API + pi-jev · W5 token economy (catalog, hints, output cap) + A/B · W6 RLM (large input, elide) · Needle spike parallel anytime.
 - `architecture/testing.md` (detail; owner DocsCore) - test map: every test file, ID range, how to run (`bun test --todo <file>`), the todo→pass flip protocol, typecheck command.
 - macros (slug → owner):
   - `macro/core.md` (DocsCore), `macro/toggle.md` (DocsCore), `macro/indicator.md` (DocsCore), `macro/scope.md` (DocsCore)
-  - `macro/integration.md` (DocsExt: skills, MCP, ExtensionAPI, pi-jev), `macro/token-economy.md` (DocsExt), `macro/spawn.md` (DocsExt: spawn codeMode + fork), `macro/rlm.md` (DocsExt: large-input handle + elide), `macro/needle.md` (DocsExt)
+  - `macro/integration.md` (DocsExt: skills, MCP, ExtensionAPI, pi-jev), `macro/token-economy.md` (DocsExt), `macro/spawn.md` (DocsExt: spawn codeMode), `macro/rlm.md` (DocsExt: large-input handle + elide), `macro/needle.md` (DocsExt)
 - micro: `micro/<feature>-<requirement>.md`, one per externally observable requirement, each with acceptance criteria that cite the exact test IDs + file path covering them.
-- nano: only non-obvious parts (e.g. `nano/core-partition-bridge-layer.md`, `nano/scope-resolution-precedence.md`, `nano/integration-set-active-tools-guard.md`, `nano/token-economy-prefix-freeze.md`, `nano/indicator-status-line-invalidation.md`, `nano/spawn-fork-seance-reuse.md`, `nano/rlm-elide-cache-deferral.md`). Each nano: Code locator(s), How it works, Invariants, Gotchas, and a "Tarefa de implementação" block: owned files, steps, test IDs, done-when.
+- nano: only non-obvious parts (e.g. `nano/core-partition-bridge-layer.md`, `nano/scope-resolution-precedence.md`, `nano/integration-set-active-tools-guard.md`, `nano/token-economy-prefix-freeze.md`, `nano/indicator-status-line-invalidation.md`, `nano/rlm-elide-cache-deferral.md`). Each nano: Code locator(s), How it works, Invariants, Gotchas, and a "Tarefa de implementação" block: owned files, steps, test IDs, done-when.

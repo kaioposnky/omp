@@ -41,6 +41,7 @@ describe("settings-gated tools in a live session", () => {
 
 	async function startSession(settings: Settings, toolNames?: string[]): Promise<AgentSession> {
 		const { session } = await createAgentSession({
+			codeMode: false,
 			cwd: registryDir,
 			agentDir: registryDir,
 			modelRegistry,

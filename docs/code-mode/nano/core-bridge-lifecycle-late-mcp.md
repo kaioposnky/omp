@@ -14,8 +14,8 @@ Parent: [micro/core-bridge-lifecycle.md](../micro/core-bridge-lifecycle.md)
 - `packages/coding-agent/src/session/session-tools.ts#getToolForEvalBridge` — resolução já embrulhada
   pelo gate ACP.
 - `packages/coding-agent/src/tools/eval-backends.ts` — disponibilidade do backend de `eval`.
-- `[planned] packages/coding-agent/src/session/session-tools.ts#SessionTools.setBridgeOnlyToolNames`
-- `[planned] packages/coding-agent/src/sdk.ts` — checagem de `isCodeModeActive()` no reconcile.
+- `packages/coding-agent/src/session/session-tools.ts#SessionTools.setBridgeOnlyToolNames`
+- `packages/coding-agent/src/sdk.ts` — checagem de `isCodeModeActive()` no reconcile.
 
 ## How it works
 

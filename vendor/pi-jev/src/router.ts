@@ -14,9 +14,24 @@ export interface RouterResult {
   query: string;
   candidates: string[];
   activated: string[];
+  /** Code Mode: names that would have been activated; the host hints them instead. */
+  hintedTools?: string[];
   probabilities: Record<string, number>;
   fallbackUsed: boolean;
   elapsedMs: number;
+}
+
+/** Capability detection: hosts without `isCodeModeActive()` keep legacy activation. */
+export function codeModeActive(
+  host: ExtensionAPI & { isCodeModeActive?: () => boolean }
+): boolean {
+  if (typeof host.isCodeModeActive !== "function") return false;
+  try {
+    return host.isCodeModeActive() === true;
+  } catch {
+    // A broken capability probe must not break a routing pass.
+    return false;
+  }
 }
 
 export class ToolRouter {
@@ -61,6 +76,11 @@ export class ToolRouter {
 
     scored.sort((a, b) => b.score - a.score);
     return scored.slice(0, limit).map((s) => s.tool);
+  }
+
+  /** True when the host runs Code Mode; the router then suggests instead of activating. */
+  public isCodeModeActive(): boolean {
+    return codeModeActive(this.pi);
   }
 
   public activateTools(tools: string[]): void {
@@ -133,15 +153,18 @@ export class ToolRouter {
       }
     }
 
-    this.activateTools(activated);
+    const codeMode = this.isCodeModeActive();
+    if (!codeMode) this.activateTools(activated);
 
-    return {
+    const result: RouterResult = {
       query,
       candidates: candidateNames,
-      activated,
+      activated: codeMode ? [] : activated,
       probabilities,
       fallbackUsed,
       elapsedMs: Date.now() - startTime,
     };
+    if (codeMode) result.hintedTools = [...activated];
+    return result;
   }
 }

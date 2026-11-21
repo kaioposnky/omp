@@ -1,5 +1,7 @@
+import * as fs from "node:fs";
 import * as path from "node:path";
 import { ThinkingLevel } from "@oh-my-pi/pi-agent-core";
+import * as natives from "@oh-my-pi/pi-natives";
 import type { ImageContent } from "@oh-my-pi/pi-ai";
 import {
 	type AutocompleteProvider,
@@ -94,6 +96,7 @@ import {
 	cfgPasteLargeMenuThreshold,
 	cfgTuiMouse,
 } from "../settings";
+import { cfgInputLargeInputAsHandle } from "../../code-mode/settings";
 import { cfgHideThinkingBlock } from "../../session/settings";
 
 /** Bare words that quit (as `/<word>`) when typed alone into a session with no messages. */
@@ -2988,8 +2991,16 @@ export class InputController {
 	 * behavior. The async menu is fired and forgotten — the editor only needs the synchronous verdict.
 	 * A paste whose input burst already carries the submit key skips the menu: nobody can answer it
 	 * before the submit lands, so the paste is staged the way cancelling the menu would.
+	 *
+	 * With `input.largeInputAsHandle` set, a paste at or above that token count bypasses the menu
+	 * entirely: only `local://paste-N.md` is inserted and the eval prelude reads the body lazily.
 	 */
 	handleLargePaste(text: string, lineCount: number, options: PasteOptions = {}): boolean {
+		const handleThreshold = cfgInputLargeInputAsHandle.get(this.ctx.settings);
+		if (handleThreshold > 0 && natives.countTokens(text, natives.Encoding.ClaudeV5) >= handleThreshold) {
+			this.#attachPasteAsFile(text, lineCount);
+			return true;
+		}
 		const threshold = cfgPasteLargeMenuThreshold.get(this.ctx.settings);
 		if (!(threshold > 0) || lineCount < threshold || options.submitAfterPaste) {
 			// Below the menu threshold: stage the paste as a text-attachment chip
@@ -3033,7 +3044,7 @@ export class InputController {
 				this.ctx.editor.insertTextAttachment(text, wrapPasteInAttachmentBlock(text));
 				break;
 			case LOCAL_FILE:
-				await this.#attachPasteAsFile(text, lineCount);
+				this.#attachPasteAsFile(text, lineCount);
 				break;
 			case INLINE:
 				this.ctx.editor.insertTextAttachment(text);
@@ -3049,10 +3060,11 @@ export class InputController {
 	/**
 	 * Save a large paste to the session's `local://` store and insert a clean `local://paste-N.md`
 	 * reference into the editor so the agent can `read` it on demand — instead of inlining the text or
-	 * leaking a raw temp path. Falls back to an inline paste marker when the write fails, so the
-	 * content is never lost.
+	 * leaking a raw temp path. Synchronous on purpose: the editor's paste hook needs the file and the
+	 * inserted handle in place before it returns, and the eval prelude resolves `inputs[...]` from it.
+	 * Falls back to an inline paste marker when the write fails, so the content is never lost.
 	 */
-	async #attachPasteAsFile(text: string, lineCount: number): Promise<void> {
+	#attachPasteAsFile(text: string, lineCount: number): void {
 		try {
 			// Mirror the exact mapping the read tool's local:// resolver uses so a later
 			// `read local://paste-N.md` lands on the file written here.
@@ -3060,16 +3072,19 @@ export class InputController {
 				getArtifactsDir: () => this.ctx.sessionManager.getArtifactsDir(),
 				getSessionId: () => this.ctx.sessionManager.getSessionId(),
 			});
+			fs.mkdirSync(localRoot, { recursive: true });
 			let name: string;
 			let filePath: string;
 			do {
 				this.#pasteCounter++;
 				name = `paste-${this.#pasteCounter}.md`;
 				filePath = path.join(localRoot, name);
-			} while (await Bun.file(filePath).exists());
-			await Bun.write(filePath, text);
+			} while (fs.existsSync(filePath));
+			fs.writeFileSync(filePath, text);
 			this.ctx.editor.insertText(`local://${name} `);
-			this.ctx.showStatus(`Saved ${lineCount} pasted lines to local://${name}`);
+			this.ctx.showStatus(
+				`Saved ${lineCount} pasted lines (${Buffer.byteLength(text, "utf8")} bytes) to local://${name}`,
+			);
 		} catch (error) {
 			logger.warn("failed to save large paste to file", {
 				error: error instanceof Error ? error.message : String(error),

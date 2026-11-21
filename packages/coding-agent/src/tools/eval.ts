@@ -17,6 +17,8 @@ import {
 import { parseConfiguredThinkingLevel } from "@oh-my-pi/pi-tui/thinking";
 import { isRecord, prompt, sanitizeText } from "@oh-my-pi/pi-utils";
 import { raceJobSettlement, resolveAutoBackgroundWaitMs } from "../async";
+import { type CatalogTool, renderBridgeCatalog } from "../code-mode/catalog";
+import { codeModeGuidance } from "../code-mode/workflow";
 import { jsBackend, pythonBackend } from "../eval";
 import type { ExecutorBackend, ExecutorBackendResult } from "../eval/backend";
 import { EVAL_TIMEOUT_PAUSE_OP, EVAL_TIMEOUT_RESUME_OP } from "../eval/bridge-timeout";
@@ -205,7 +207,32 @@ export function getEvalToolDescription(options: EvalToolDescriptionOptions = {})
 		toolNames: options.toolNames,
 		inlinePreludes,
 		inlineTopics: options.inlineTopics ? Object.values(getEvalDocTopics(options)).join("\n\n") : undefined,
+		bridgeCatalog: options.bridgeCatalog || undefined,
 	});
+}
+
+/**
+ * Bridge-only tools as catalog entries: enabled names absent from the wire.
+ * Plan mode narrows the bridge, so a denied tool drops out here too.
+ */
+function bridgeOnlyCatalogTools(session: ToolSession): CatalogTool[] {
+	const tools: CatalogTool[] = [];
+	for (const name of session.getEvalBridgeToolNames?.() ?? []) {
+		if (session.isToolActive?.(name) !== false) continue;
+		const tool = session.getToolForEvalBridge?.(name) ?? session.getToolByName?.(name);
+		if (!tool) continue;
+		const entry: CatalogTool = {
+			name: tool.name,
+			description: tool.description,
+			summary: tool.summary,
+			label: tool.label,
+		};
+		if ("mcpServerName" in tool && typeof tool.mcpServerName === "string") {
+			entry.mcpServerName = tool.mcpServerName;
+		}
+		tools.push(entry);
+	}
+	return tools;
 }
 
 export interface EvalToolOptions {
@@ -333,6 +360,7 @@ export class EvalTool implements AgentTool<typeof evalSchema> {
 			(perCallModel
 				? getPerCallModelAdvertisement(session.settings, session.getActiveModel?.(), session.modelRegistry)
 				: undefined);
+		const codeMode = session.isCodeModeActive?.() === true;
 		return {
 			py: backends.python,
 			js: backends.js,
@@ -342,12 +370,17 @@ export class EvalTool implements AgentTool<typeof evalSchema> {
 			eagerDelegation: sessionDelegationBias(session) === "eager",
 			waitTool: hasWaitTool(session),
 			preludes: this.#advertisedPreludes(session),
-			inlineTopics: !docTopicsReadable(session),
+			// Code Mode reaches docs as `tool.read({ path })`, so inlining every
+			// topic would only duplicate the bridge surface.
+			inlineTopics: !codeMode && !docTopicsReadable(session),
 			firstCallGuides: session.noteEvalPreludeCall !== undefined,
 			autoProvision: cfgEvalAutoProvision.get(session.settings),
 			perCallModel,
 			perCallModelAdvertisement,
 			toolNames: session.getAdvertisedEvalToolNames?.(),
+			codeMode,
+			bridgeCatalog: codeMode ? renderBridgeCatalog(bridgeOnlyCatalogTools(session)) : undefined,
+			guidance: codeMode ? codeModeGuidance(session.getActiveModelString?.()) : undefined,
 		};
 	}
 

@@ -3130,6 +3130,9 @@ pub struct SessionState {
 	pub fast_mode_enabled: bool,
 	#[serde(rename = "fastModeActive", default = "default_session_state_fast_mode_active")]
 	pub fast_mode_active: bool,
+	/// Session runs in Code Mode (frozen at creation): only eval and control tools on the wire.
+	#[serde(rename = "codeModeEnabled", default = "default_session_state_code_mode_enabled")]
+	pub code_mode_enabled: bool,
 	/// `/slow` applies to the active model.
 	#[serde(rename = "slowModeSupported", default = "default_session_state_slow_mode_supported")]
 	pub slow_mode_supported: bool,
@@ -6257,6 +6260,10 @@ fn default_session_state_fast_mode_enabled() -> bool {
 }
 
 fn default_session_state_fast_mode_active() -> bool {
+	serde_json::from_str("false").expect("valid wire default")
+}
+
+fn default_session_state_code_mode_enabled() -> bool {
 	serde_json::from_str("false").expect("valid wire default")
 }
 

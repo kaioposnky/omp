@@ -1,10 +1,6 @@
 /**
- * Code Mode F4: pure `resolveCodeMode` precedence, hard gates, globs, factory
- * defaults and settings validation.
- *
- * `src/code-mode/scope.ts` and `src/code-mode/settings.ts` are `[planned]`, so
- * they load through `loadPlanned` and every test stays `it.todo` until they
- * exist.
+ * Code Mode F4: `resolveCodeMode` precedence, hard gates, model globs, factory
+ * defaults, and settings validation.
  */
 import { describe, expect, it } from "bun:test";
 import { Settings } from "@oh-my-pi/pi-coding-agent/config/settings";

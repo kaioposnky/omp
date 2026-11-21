@@ -2276,6 +2276,8 @@ export interface TaskItem {
 	schemaMode?: "permissive" | "strict";
 	/** Eval-defined tool names exposed to this child. */
 	tools?: string[];
+	/** Request Code Mode for this child (`agent()`/task per-spawn flag). */
+	codeMode?: boolean;
 	/** Run this spawn in an isolated worktree (batch form; flat form carries it top-level). */
 	isolated?: boolean;
 }
@@ -2307,6 +2309,8 @@ export interface TaskParams {
 	schemaMode?: "permissive" | "strict";
 	/** Eval-defined tool names exposed to the flat-form child. */
 	tools?: string[];
+	/** Request Code Mode for the flat-form child (per-spawn; never inherited from the parent). */
+	codeMode?: boolean;
 	/** Batch form (`task.batch`): one subagent per item. */
 	tasks?: TaskItem[];
 	/** Batch form: shared background prepended to every assignment; required by the batch schema. */

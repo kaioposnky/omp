@@ -26,6 +26,8 @@ import { type ServiceTierInheritSettingValue, validateAgentServiceTierOverrides 
 import type { Settings } from "../config/settings";
 import { isProviderEnabled, isUserSourceEnabled } from "../capability";
 import type { EffectiveExtensionRoots } from "../capability/types";
+import { resolveCodeMode } from "../code-mode/scope";
+import { cfgCodeModeDefault, cfgCodeModeScope, type CodeModeScope } from "../code-mode/settings";
 import type { CustomTool } from "../extensibility/custom-tools/types";
 import { sessionLocalProtocolOptions } from "../internal-urls/context";
 import { registerArtifactsDir } from "../internal-urls/registry-helpers";
@@ -39,6 +41,7 @@ import { AgentRegistry, MAIN_AGENT_ID } from "../registry/agent-registry";
 import { journalCompletion } from "../session/model-usage-journal";
 import { AUTO_THINKING, type TaskEffort } from "@oh-my-pi/pi-tui/thinking";
 import type { ToolSession } from "../tools";
+import { resolveEvalBackends } from "../tools/eval-backends";
 import { isIrcEnabled } from "../irc/messaging";
 import { buildOutputValidator } from "../tools/output-schema-validator";
 import { trackLateCleanup } from "../utils/late-cleanup";
@@ -146,6 +149,12 @@ export interface StructuredSubagentRequest {
 	 * operator-approved models.
 	 */
 	perCallModel?: string;
+	/**
+	 * Per-spawn Code Mode request (`agent({ codeMode })`, task item `codeMode`).
+	 * The child resolves it with its own frontmatter/model/role; the parent
+	 * session's mutable mode is never inherited.
+	 */
+	codeMode?: boolean;
 
 	/** Presence, rather than truthiness, makes this the highest-priority schema. */
 	outputSchema?: unknown;
@@ -221,6 +230,12 @@ export interface EffectiveSubagentPolicy {
 	structured: boolean;
 	/** Present for a per-call `model`: every model the child sends to must stay approved by these grants. */
 	perCallModelGrants?: PerCallModelGrants;
+	/**
+	 * Reason an explicit Code Mode request cannot be honored (for example an
+	 * agent whose tool list has no eval). The spawn still runs in normal mode;
+	 * frontends surface `codeMode ignored: <reason>` in the result.
+	 */
+	codeModeDenialReason?: string;
 	schema: StructuredSubagentSchemaResolution;
 	planMode: boolean;
 	isIsolated: boolean;
@@ -605,6 +620,28 @@ export async function resolveEffectiveSubagentPolicy(
 	const { patterns: modelOverride, role: modelRole } = perCallModelGrants
 		? { patterns: [(perCallSelector as string).trim()], role: undefined }
 		: resolveAgentModelSelection(modelResolution);
+	// An explicit request the child cannot honor is reported while the run
+	// continues in normal mode. Only the hard-gate denial is settled here: it
+	// is model-independent, so it does not need the child's resolved provider/id
+	// (the child session freezes the enabled decision once its model is known).
+	let codeModeDenialReason: string | undefined;
+	if (request.codeMode === true) {
+		const evalBackends = resolveEvalBackends(request.session);
+		codeModeDenialReason = resolveCodeMode({
+			isMain: false,
+			spawnOverride: true,
+			agent: {
+				name: effectiveAgent.name,
+				...(effectiveAgent.codeMode !== undefined ? { codeMode: effectiveAgent.codeMode } : {}),
+				...(effectiveAgent.tools !== undefined ? { tools: effectiveAgent.tools } : {}),
+			},
+			settings: {
+				default: cfgCodeModeDefault.get(request.session.settings),
+				scope: cfgCodeModeScope.get(request.session.settings) as CodeModeScope,
+			},
+			evalAvailable: evalBackends.js || evalBackends.python,
+		}).denied?.reason;
+	}
 	const isolationEnabled = cfgTaskIsolationEnabled.get(request.session.settings);
 	const isIsolated = request.isolation?.requested === true;
 	if (isIsolated && !isolationEnabled) {
@@ -626,6 +663,7 @@ export async function resolveEffectiveSubagentPolicy(
 		parentActiveModelPattern,
 		perCallModelGrants,
 		structured,
+		...(codeModeDenialReason !== undefined ? { codeModeDenialReason } : {}),
 		schema,
 		planMode,
 		isIsolated,
@@ -763,6 +801,7 @@ function buildExecutorOptions(
 		assignment: request.assignment.trim(),
 		context: request.context?.trim() || undefined,
 		planReference: undefined,
+		codeMode: request.codeMode,
 		// Task `name` is the spawn handle (id allocation). Eval `label` is a
 		// real UI description. Copy it only for eval so generateTaskLabel can run.
 		description: request.invocationKind === "eval" ? trimToUndefined(request.identity?.label) : undefined,

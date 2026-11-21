@@ -2720,6 +2720,11 @@
 					"type": "boolean",
 					"default": false
 				},
+				"codeModeEnabled": {
+					"type": "boolean",
+					"description": "Session runs in Code Mode (frozen at creation): only eval and control tools on the wire.",
+					"default": false
+				},
 				"slowModeSupported": {
 					"type": "boolean",
 					"description": "`/slow` applies to the active model.",

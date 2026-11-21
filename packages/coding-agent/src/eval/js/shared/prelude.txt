@@ -133,6 +133,17 @@ if (!globalThis.__omp_js_prelude_loaded__) {
 		get(_target, prop) {
 			if (prop === "defined") return () => [...__tools.keys()];
 			if (prop === "undefine") return name => __tools.delete(name);
+			if (prop === "describe" || prop === "search") {
+				// A real bridge tool with this exact name wins over the discovery helpers.
+				return async (...args) => {
+					if (await globalThis.__omp_call_tool__("__has_tool__", { name: prop })) {
+						return globalThis.__omp_call_tool__(prop, args[0] ?? {});
+					}
+					return prop === "describe"
+						? globalThis.__omp_call_tool__("__describe__", { name: args[0] })
+						: globalThis.__omp_call_tool__("__search__", { query: args[0], limit: args[1] });
+				};
+			}
 			if (typeof prop !== "string") return undefined;
 			return async args => globalThis.__omp_call_tool__(prop, args ?? {});
 		},
@@ -807,4 +818,13 @@ if (!globalThis.__omp_js_prelude_loaded__) {
 	globalThis.write = write;
 	globalThis.env = env;
 	globalThis.sh = sh;
+	// Large pastes saved as `local://paste-N.md` handles: `await inputs["paste-N"]` reads one on demand;
+	// nothing is loaded when the kernel starts.
+	globalThis.inputs = new Proxy(
+		{},
+		{
+			// `then` stays undefined so `inputs` itself is not mistaken for a thenable.
+			get: (_target, key) => (typeof key === "string" && key !== "then" ? read(`local://${key}.md`) : undefined),
+		},
+	);
 }

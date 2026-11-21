@@ -46,9 +46,12 @@ export function validateModelGlob(pattern: string): void {
 	}
 }
 
+/** `undefined` = not configured (the registry validates unset settings too). */
 function validateScope(raw: unknown): void {
+	if (raw === undefined) return;
 	if (!isPlainObject(raw)) throw new Error("codeMode.scope must be an object");
-	if (raw.main !== undefined && typeof raw.main !== "boolean") throw new Error("codeMode.scope.main must be a boolean");
+	if (raw.main !== undefined && typeof raw.main !== "boolean")
+		throw new Error("codeMode.scope.main must be a boolean");
 	validateBooleanMap(raw.agents, "agents");
 	validateBooleanMap(raw.roles, "roles");
 	if (raw.models === undefined) return;
@@ -64,13 +67,36 @@ function validateScope(raw: unknown): void {
 export const cfgCodeModeDefault = register({
 	id: "codeMode.default",
 	type: "boolean",
-	default: false,
+	default: true,
 	ui: {
 		tab: "tools",
 		group: "Discovery & MCP",
 		label: "Code Mode by default",
 		description:
 			"Start new sessions in Code Mode: the model sees only eval and a few control tools; every other tool is reached through the eval bridge.",
+	},
+});
+
+/**
+ * Token threshold above which a paste becomes a `local://paste-N.md` handle instead of inline
+ * text. The eval prelude exposes each saved paste lazily as `inputs["paste-N"]`. `0` disables it.
+ */
+export const cfgInputLargeInputAsHandle = register({
+	id: "input.largeInputAsHandle",
+	type: "number",
+	default: 0,
+	ui: {
+		tab: "interaction",
+		group: "Input",
+		label: "Large Paste Handles",
+		description:
+			'Pastes above this many tokens are saved to local://paste-N.md and only the handle is inserted; eval reads the content on demand as inputs["paste-N"]. 0 disables it.',
+		options: [
+			{ value: "0", label: "Off" },
+			{ value: "2000", label: "2k tokens" },
+			{ value: "10000", label: "10k tokens" },
+			{ value: "50000", label: "50k tokens" },
+		],
 	},
 });
 

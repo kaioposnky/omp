@@ -385,6 +385,7 @@ function spawnParamsFor(params: TaskParams, item: TaskItem, defaultAgent: string
 	if ("outputSchema" in item) spawn.outputSchema = item.outputSchema;
 	if ("schemaMode" in item) spawn.schemaMode = item.schemaMode;
 	if ("tools" in item) spawn.tools = item.tools;
+	if ("codeMode" in item) spawn.codeMode = item.codeMode;
 	if ("effort" in item) spawn.effort = item.effort;
 	if ("model" in item) spawn.model = item.model;
 	if (item.isolated !== undefined) {
@@ -1875,6 +1876,7 @@ export class TaskTool implements AgentTool<TaskToolSchemaInstance, TaskToolDetai
 				steps: params.steps,
 				agent: params.agent,
 				...spawnModelFields(params),
+				...(params.codeMode !== undefined ? { codeMode: params.codeMode } : {}),
 				...this.#resultParams(params),
 				...this.#effortParams(params),
 				solutionSpace: params.solutionSpace,
@@ -1926,6 +1928,7 @@ export class TaskTool implements AgentTool<TaskToolSchemaInstance, TaskToolDetai
 				execution.policy.discovery.projectAgentsDir,
 				Date.now() - startTime,
 				execution.mergeSummary,
+				execution.policy.codeModeDenialReason,
 			);
 		} catch (error) {
 			const message = error instanceof StructuredSubagentError ? error.message : String(error);
@@ -1961,10 +1964,12 @@ export class TaskTool implements AgentTool<TaskToolSchemaInstance, TaskToolDetai
 		projectAgentsDir: string | null,
 		totalDurationMs: number,
 		mergeSummary: string,
+		codeModeDenialReason?: string,
 	): AgentToolResult<TaskToolDetails> {
 		const summary = formatTaskResultSummary(result, { totalDurationMs, mergeSummary });
+		const text = codeModeDenialReason ? `${summary}\n\ncodeMode ignored: ${codeModeDenialReason}` : summary;
 		return {
-			content: [{ type: "text", text: summary }],
+			content: [{ type: "text", text }],
 			details: {
 				projectAgentsDir,
 				results: [result],

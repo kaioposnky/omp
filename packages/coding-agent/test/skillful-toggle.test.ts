@@ -74,6 +74,7 @@ describe("skillful setting and /skillful session toggle", () => {
 
 	async function createSession(overrides: Record<string, unknown> = {}, skills?: Skill[]): Promise<AgentSession> {
 		const created = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir,
 			agentDir: tempDir,
 			sessionManager: SessionManager.inMemory(tempDir),

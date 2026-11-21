@@ -25,7 +25,7 @@ Quando a regra de escopo atual aponta para um estado diferente do estado congela
 
 | Caso | Comportamento esperado |
 | --- | --- |
-| Sessão inativa com regra favorável | Ícone esmaecido (divergência), não ativo |
+| Sessão inativa com regra favorável | Sem ícone (estado "sem ícone" é reservado para sessão inativa); `/code-mode status` mostra a regra |
 | Sessão ativa com regra contrária | Ícone esmaecido, não ausente |
 | Regra e estado iguais | Ícone ativo, sem estilo de divergência |
 | `source` desconhecido | Trata como divergente apenas se `enabled` diferir |

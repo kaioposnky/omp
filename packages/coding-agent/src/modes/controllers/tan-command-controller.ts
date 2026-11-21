@@ -145,7 +145,14 @@ export class TanCommandController {
 		const parentMnemopiSessionState = session.getMnemopiSessionState?.();
 		const toolNames = session.getEnabledToolNames();
 		const activeToolNames = session.getActiveToolNames();
-		const mountedToolNames = session.getMountedXdevToolNames();
+		// The clone must present the parent's exact request tools; `codeMode.default`
+		// could otherwise flip it into the other tool surface and miss the parent's cache.
+		const codeMode = session.isCodeModeActive();
+		// Names kept off the wire (xd:// mounts, Code Mode bridge-only tools) must not be
+		// pinned by the clone's explicit tool list, or they would land on its wire.
+		const mountedToolNames = codeMode
+			? [...session.getMountedXdevToolNames(), ...session.getBridgeOnlyToolNames()]
+			: session.getMountedXdevToolNames();
 		const modelRegistry = session.modelRegistry;
 		// Snapshot the parent's rebindable extensions and root policy at dispatch.
 		// The child rebinds these (skipping discovery) so it re-registers the
@@ -239,6 +246,7 @@ export class TanCommandController {
 								toolNames,
 								mountedToolNames,
 								advertiseHeadlessAsk: activeToolNames.includes("ask"),
+								codeModeSpawnOverride: codeMode,
 								providerSessionId: `${parentSessionId}:tan:${Snowflake.next()}`,
 								providerPromptCacheKey: parentPromptCacheKey,
 								taskPromptCacheKey,

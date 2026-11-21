@@ -2,7 +2,7 @@
 
 Parent: [micro/spawn-agent-code-mode-param.md](../micro/spawn-agent-code-mode-param.md)
 
-Code: `packages/coding-agent/src/eval/agent-bridge.ts#agentArgsSchema`, `packages/coding-agent/src/eval/agent-bridge.ts#EvalAgentArgs`, `packages/coding-agent/src/eval/agent-bridge.ts#runEvalAgent`, `packages/coding-agent/src/task/structured-subagent.ts#StructuredSubagentRequest`, `[planned] packages/coding-agent/src/code-mode/scope.ts#resolveCodeMode`
+Code: `packages/coding-agent/src/eval/agent-bridge.ts#agentArgsSchema`, `packages/coding-agent/src/eval/agent-bridge.ts#EvalAgentArgs`, `packages/coding-agent/src/eval/agent-bridge.ts#runEvalAgent`, `packages/coding-agent/src/task/structured-subagent.ts#StructuredSubagentRequest`, `packages/coding-agent/src/code-mode/scope.ts#resolveCodeMode`
 
 ## How it works
 

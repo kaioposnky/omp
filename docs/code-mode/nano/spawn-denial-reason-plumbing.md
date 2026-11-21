@@ -2,7 +2,7 @@
 
 Parent: [micro/spawn-code-mode-denial.md](../micro/spawn-code-mode-denial.md)
 
-Code: `[planned] packages/coding-agent/src/code-mode/scope.ts#resolveCodeMode`, `packages/coding-agent/src/eval/agent-bridge.ts#runEvalAgent`, `packages/coding-agent/src/task/structured-subagent.ts#StructuredSubagentRequest`, `packages/coding-agent/src/task/eval-tools.ts#describeEvalTools`
+Code: `packages/coding-agent/src/code-mode/scope.ts#resolveCodeMode`, `packages/coding-agent/src/eval/agent-bridge.ts#runEvalAgent`, `packages/coding-agent/src/task/structured-subagent.ts#StructuredSubagentRequest`, `packages/coding-agent/src/task/eval-tools.ts#describeEvalTools`
 
 ## How it works
 

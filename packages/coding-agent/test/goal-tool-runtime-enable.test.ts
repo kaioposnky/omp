@@ -38,6 +38,7 @@ describe("goal tool registration when goal mode is enabled at runtime", () => {
 		cfgToolsXdev.set(settings, true);
 		cfgGoalEnabled.set(settings, goalEnabledAtStartup);
 		const { session: created } = await createAgentSession({
+			codeMode: false,
 			cwd: tempDir.path(),
 			agentDir: tempDir.path(),
 			sessionManager,

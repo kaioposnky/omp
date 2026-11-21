@@ -1,6 +1,7 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import type { JevClient } from "./jev.js";
 import { JEV_THRESHOLD } from "./skills.js";
+import { codeModeActive } from "./router.js";
 import type { QuestionConfig } from "./types.js";
 
 /** Retract needs a stronger "no" than inject needs a "yes": pulling tools the
@@ -98,6 +99,8 @@ export class McpGate {
     const text = prompt.trim();
     if (!text || text.startsWith("/")) return;
     if (!this.jevClient.isConfigured()) return;
+    // Code Mode owns tool selection: hints, not setActiveTools, so no plan is computed or applied.
+    if (codeModeActive(pi)) return;
 
     try {
       const mcpTools = pi

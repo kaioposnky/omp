@@ -4,10 +4,10 @@ Parent: [micro/scope-precedence.md](../micro/scope-precedence.md)
 
 ## Code locators
 
-- `[planned] packages/coding-agent/src/code-mode/scope.ts#resolveCodeMode`
-- `[planned] packages/coding-agent/src/code-mode/scope.ts#CodeModeResolveInput`
-- `[planned] packages/coding-agent/src/code-mode/scope.ts#CodeModeDecision`
-- `[planned] packages/coding-agent/src/code-mode/settings.ts#CodeModeScope`
+- `packages/coding-agent/src/code-mode/scope.ts#resolveCodeMode`
+- `packages/coding-agent/src/code-mode/scope.ts#CodeModeResolveInput`
+- `packages/coding-agent/src/code-mode/scope.ts#CodeModeDecision`
+- `packages/coding-agent/src/code-mode/settings.ts#CodeModeScope`
 - `packages/coding-agent/src/config/model-resolver.ts` — resolução de role/modelo que fornece `role`
   e `provider/id` antes da chamada.
 - `packages/coding-agent/src/task/structured-subagent.ts` — caminho de spawn onde a decisão do filho

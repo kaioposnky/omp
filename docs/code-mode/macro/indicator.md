@@ -18,9 +18,9 @@ coisa e a sessão está em outra".
 | Input | `session.isCodeModeActive()` — estado congelado | [macro/toggle.md](toggle.md) |
 | Input | `session.getCodeModeDecision()` — `source` e `detail` da regra atual | [macro/scope.md](scope.md) |
 | Input | Snapshot de startup (`codeMode: boolean`) | processo que cria a TUI |
-| Input | Símbolo do tema | `[planned] packages/tui/src/theme/symbols.ts#icon.codeMode` |
-| Output | Ícone ativo/esmaecido no segmento de modelo (`renderSegment` existente, ramo `[planned]`) | `packages/tui/src/status-line/segments.ts#renderSegment` |
-| Output | Campo `codeMode` aceito e devolvido pelo validador de startup (campo `[planned]`) | `packages/tui/src/status-line/startup.ts#readStatusLineStartupData` |
+| Input | Símbolo do tema | `packages/tui/src/theme/symbols.ts#icon.codeMode` |
+| Output | Ícone ativo/esmaecido no segmento de modelo (`renderSegment` existente) | `packages/tui/src/status-line/segments.ts#renderSegment` |
+| Output | Campo `codeMode` aceito e devolvido pelo validador de startup | `packages/tui/src/status-line/startup.ts#readStatusLineStartupData` |
 
 ## Entry points
 

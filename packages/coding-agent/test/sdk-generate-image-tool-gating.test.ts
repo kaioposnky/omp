@@ -64,6 +64,7 @@ describe("generate_image tool gating", () => {
 
 	async function activeToolNames(settings: Settings, toolNames?: string[]): Promise<string[]> {
 		const { session } = await createAgentSession({
+			codeMode: false,
 			...startupShortcuts(),
 			cwd: registryDir,
 			agentDir: registryDir,
@@ -99,6 +100,7 @@ describe("generate_image tool gating", () => {
 
 	async function sessionWithCustomTools(toolNames: string[], customTools: CustomTool[]): Promise<AgentSession> {
 		const { session } = await createAgentSession({
+			codeMode: false,
 			...startupShortcuts(),
 			cwd: registryDir,
 			agentDir: registryDir,
@@ -147,6 +149,7 @@ describe("generate_image tool gating", () => {
 		// discoverable custom tool, so it mounts as an xd:// device instead of
 		// shipping its schema top-level.
 		const { session } = await createAgentSession({
+			codeMode: false,
 			...startupShortcuts(),
 			cwd: registryDir,
 			agentDir: registryDir,
@@ -216,6 +219,7 @@ describe("generate_image tool gating", () => {
 			},
 		} as CustomTool;
 		const { session } = await createAgentSession({
+			codeMode: false,
 			...startupShortcuts(),
 			cwd: registryDir,
 			agentDir: registryDir,
@@ -366,6 +370,7 @@ describe("generate_image tool gating", () => {
 	});
 	it("mounts newly discovered RPC tools under xd:// when write was omitted", async () => {
 		const { session } = await createAgentSession({
+			codeMode: false,
 			...startupShortcuts(),
 			cwd: registryDir,
 			agentDir: registryDir,

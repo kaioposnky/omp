@@ -1,4 +1,7 @@
 {
 	"extends": "../../tsconfig.workspace.json",
-	"include": ["."]
+	"include": ["."],
+	// A/B task fixtures are intentionally buggy inputs for measured runs, and the checkers
+	// import workspace modules by runtime path; neither is repo source to typecheck.
+	"exclude": ["code-mode-ab/tasks", "code-mode-ab/checks"]
 }

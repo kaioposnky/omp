@@ -1057,6 +1057,62 @@ describe("loop guard assistant prose/text loops", () => {
 	});
 });
 
+describe("loop guard tool-call argument runaways", () => {
+	const model = {
+		api: "openai-completions",
+		provider: "9router",
+		id: "cx/gpt-6.1-terra",
+		identity: classifyModel("openai", "gpt-6.1-terra"),
+	} as unknown as Model<Api>;
+
+	async function streamToolCallArgs(chunks: string[]): Promise<AssistantMessage> {
+		const partial = { role: "assistant", content: [], stopReason: "toolUse" } as unknown as AssistantMessage;
+		const guarded = withThinkingLoopGuard(model, {}, () => {
+			const inner = new AssistantMessageEventStream();
+			inner.push({ type: "start", partial });
+			inner.push({ type: "toolcall_start", contentIndex: 0, partial });
+			for (const delta of chunks) inner.push({ type: "toolcall_delta", contentIndex: 0, delta, partial });
+			inner.push({ type: "done", reason: "toolUse", message: partial });
+			inner.end({ ...partial, stopReason: "toolUse" });
+			return inner;
+		});
+		return guarded.result();
+	}
+
+	// Captured from a gpt-6.1-terra stream that never finished: a valid eval call,
+	// then the argument string degenerates into an endless " ." / " " alternation.
+	test("trips on a punctuation cycle streamed into tool-call arguments", async () => {
+		const head = ['{"language":"js","code":"const r = await tool.grep({ pattern: \\"x\\" }); print(r)"', ',"title":"Inspect'];
+		// The captured stall streamed ~2 MB; 6000 deltas (~9 KB) clears the tool-args floor.
+		const result = await streamToolCallArgs([...head, ...Array.from({ length: 6000 }, (_, i) => (i % 2 ? " " : " ."))]);
+		expect(result.stopReason).toBe("error");
+		expect(result.content).toEqual([]);
+		expect(AIError.is(result.errorId, AIError.Flag.ThinkingLoop)).toBe(true);
+	});
+
+	// Same model, normal mode: a `todo` call whose JSON ends in an endless
+	// whitespace run (tabs/spaces/newlines) inside the arguments.
+	test("trips on an endless whitespace run inside tool-call arguments", async () => {
+		const head = ['{"op":"init","list":[{"phase":"Implement","items":["Inspect callers"]}] '];
+		// The captured stall streamed ~1 MB; 24 KB is well past the runaway limit.
+		const result = await streamToolCallArgs([...head, ...Array.from({ length: 8000 }, (_, i) => (i % 3 ? "\t\t" : "  \n"))]);
+		expect(result.stopReason).toBe("error");
+		expect(AIError.is(result.errorId, AIError.Flag.ThinkingLoop)).toBe(true);
+	});
+
+	test("does not trip on a large but varied tool-call payload", async () => {
+		const body = Array.from({ length: 400 }, (_, i) => `export const value${i} = compute(${i}, "item-${i}");\\n`);
+		const result = await streamToolCallArgs(['{"path":"src/generated.ts","content":"', ...body, '"}']);
+		expect(result.stopReason).toBe("toolUse");
+	});
+
+	test("does not trip on long indentation padding inside a payload", async () => {
+		const lines = Array.from({ length: 200 }, (_, i) => `${"\\t".repeat(6)}row_${i}: ${i},\\n`);
+		const result = await streamToolCallArgs(['{"path":"a.ts","content":"', ...lines, '"}']);
+		expect(result.stopReason).toBe("toolUse");
+	});
+});
+
 /** Stream `text` through a fresh header detector in small chunks; returns true if
  *  the consecutive-header run tripped the runaway threshold. */
 function feedHeaders(text: string, step = 13): boolean {
