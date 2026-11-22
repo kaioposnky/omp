@@ -4,7 +4,7 @@ Parent: [macro/token-economy.md](../macro/token-economy.md)
 
 ## Requirement statement
 
-Em Code Mode, o output inline de cada cell de `eval` tem um limite menor que no modo normal e o excedente vai para um artifact `artifact://N`, de modo que resultados intermediários não entrem no histórico.
+Em Code Mode, o output inline de cada cell de `eval` tem um limite menor que no modo normal e o excedente vai para um artifact `local://N.log`, de modo que resultados intermediários não entrem no histórico.
 
 ## Acceptance criteria
 
@@ -13,7 +13,7 @@ Em Code Mode, o output inline de cada cell de `eval` tem um limite menor que no 
 ## Constraints
 
 - Exemplo de limite em Code Mode: 4 KB inline (`docs/code-mode-plan.md` §12.5); o valor exato entra por setting/constante e o teste compara os dois modos, não um número fixo.
-- O caminho de artifact já existe: `packages/tui/src/tools/streaming-output.ts#OutputSink` grava o overflow e `read("artifact://N")` o recupera (`packages/coding-agent/src/eval/backend.ts`).
+- O caminho de artifact já existe: `packages/tui/src/tools/streaming-output.ts#OutputSink` grava o overflow e `read("local://N.log")` o recupera (`packages/coding-agent/src/eval/backend.ts`).
 - Resultados de `tool.*` nunca são impressos por padrão; só aparece o que o código imprime (§12.5).
 - O prompt instrui "atribua à variável, imprima resumo/contagem/amostra" — a instrução faz parte da funcionalidade, não é decoração.
 

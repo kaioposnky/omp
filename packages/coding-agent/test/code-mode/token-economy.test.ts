@@ -211,25 +211,32 @@ describe("Code Mode token economy (§12)", () => {
 		}
 	});
 
-	it("CM-E6 code-mode eval caps inline output below normal and spills the rest to an artifact", async () => {
+	it("CM-E6 code-mode eval caps inline output below normal and spills the rest to a readable local:// file", async () => {
 		using dir = TempDir.createSync("@omp-cm-eval-cap-");
 		const settings = Settings.isolated(BASE_SETTINGS);
 		const normal = await makeCodeModeSession({ cwd: dir.path(), codeMode: false, settings });
 		const code = await makeCodeModeSession({ cwd: dir.path(), codeMode: true, settings });
-		const cell = "for (let i = 0; i < 400; i++) console.log('y'.repeat(200));";
+		const cell = "for (let i = 0; i < 400; i++) console.log(`line-${i} ` + 'y'.repeat(200));";
 		try {
-			const run = async (session: AgentSession) => {
+			const run = async (session: AgentSession, source: string) => {
 				const evalTool = session.agent.state.tools.find(tool => tool.name === "eval");
 				expect(evalTool).toBeDefined();
-				const result = await evalTool!.execute("call-eval", { language: "js", code: cell });
+				const result = await evalTool!.execute("call-eval", { language: "js", code: source });
 				return resultText(result as { content: Array<{ type: string; text?: string }> });
 			};
-			const normalText = await run(normal.session);
-			const codeText = await run(code.session);
+			const normalText = await run(normal.session, cell);
+			const codeText = await run(code.session, cell);
 			expect(normalText.length).toBeGreaterThan(10_000);
-			expect(normalText).not.toContain("artifact://");
+			expect(normalText).not.toContain("[raw output:");
 			expect(codeText.length).toBeLessThan(normalText.length);
-			expect(codeText).toContain("artifact://");
+			const url = codeText.match(/\[raw output: (local:\/\/\d+\.log)\]/)?.[1];
+			expect(url).toBeDefined();
+			// The footer must name a link the cell can follow, with the elided middle intact.
+			const readBack = await run(
+				code.session,
+				`const t = await read(${JSON.stringify(url)}); console.log(t.includes("line-200 "), t.includes("line-399 "));`,
+			);
+			expect(readBack).toContain("true true");
 		} finally {
 			await normal.session.dispose();
 			await code.session.dispose();

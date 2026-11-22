@@ -17,7 +17,7 @@ Fazer o Code Mode pagar o próprio custo. O perfil troca N chamadas de tool por 
 | Output | System prompt + wire de tools byte-estáveis durante a sessão | `packages/coding-agent/src/system-prompt.ts#buildSystemPrompt` |
 | Output | Catálogo bridge-only ordenado (`name: summary`) | `packages/coding-agent/src/code-mode/catalog.ts#renderBridgeCatalog` |
 | Output | Mensagem `customType: "router-hints"` após a mensagem do usuário, ≤ 600 tokens | `packages/coding-agent/src/code-mode/hints.ts` |
-| Output | Overflow de output em artifact `artifact://N` | `packages/tui/src/tools/streaming-output.ts#OutputSink`, `packages/coding-agent/src/tools/output-meta.ts#resolveOutputSinkHeadBytes` |
+| Output | Overflow de output em artifact `local://N.log` | `packages/tui/src/tools/streaming-output.ts#OutputSink`, `packages/coding-agent/src/tools/output-meta.ts#resolveOutputSinkHeadBytes` |
 
 ## Modelo de custo
 
@@ -41,7 +41,7 @@ Fonte da fórmula e da leitura: `docs/code-mode-plan.md` §12.1.
 1. **Prefixo congelado.** Top-level, system prompt, catálogo de tools e bloco de skills são definidos na criação da sessão e não mudam. `setActiveTools` de extensão só mexe na camada bridge-only, que não aparece no wire.
 2. **Catálogos mínimos e busca sob demanda.** No wire ficam apenas `eval`/`wait`/`yield`/`ask`/`todo`/`checkpoint`/`rewind` (mais tools fixadas explicitamente). O resto vive num catálogo de uma linha por tool; `tool.describe(name)` devolve a assinatura e `tool.search(query, k)` devolve top-k.
 3. **Router injeta no sufixo, nunca no prefixo.** As dicas do roteador viram uma mensagem `customType: "router-hints"` anexada **depois** da mensagem do usuário: top-k skills (`skill://<nome>`, k ≤ 3) e top-k tools bridge-only com assinatura TS inline (k ≤ 5), orçamento fixo de 600 tokens. Confiança abaixo do limiar não anexa nada.
-4. **Disciplina de output no REPL.** Em Code Mode o limite inline por cell cai (ex.: 4 KB) e o resto vai para `artifact://N`. Resultados de `tool.*` nunca são impressos por padrão; só aparece o que o código imprime. O prompt instrui "atribua à variável, imprima resumo/contagem/amostra".
+4. **Disciplina de output no REPL.** Em Code Mode o limite inline por cell cai (ex.: 4 KB) e o resto vai para `local://N.log`. Resultados de `tool.*` nunca são impressos por padrão; só aparece o que o código imprime. O prompt instrui "atribua à variável, imprima resumo/contagem/amostra".
 
 ## Medição (A/B) antes de virar default
 

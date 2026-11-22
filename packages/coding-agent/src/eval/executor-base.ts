@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { logger, Snowflake, toError } from "@oh-my-pi/pi-utils";
+import { logger, Snowflake, spillUrl, toError } from "@oh-my-pi/pi-utils";
 import { Settings } from "../config/settings";
 import {
 	type ArtifactAllocator,
@@ -28,8 +28,8 @@ import type { EvalDisplayOutput } from "./types";
 
 /**
  * Inline body budget (bytes) for one `eval` cell under Code Mode
- * (`docs/code-mode-plan.md` §12.5 uses 4 KB). Results spill the remainder to an
- * `artifact://N` file instead of entering the transcript.
+ * (`docs/code-mode-plan.md` §12.5 uses 4 KB). Results spill the remainder to a
+ * `local://N.log` file instead of entering the transcript.
  */
 export const CODE_MODE_EVAL_INLINE_BYTES = 4 * 1024;
 
@@ -49,7 +49,7 @@ export function resolveEvalInlineBudget(session: ToolSession | undefined): EvalI
 /**
  * Embedded (non-persistent) sessions have no artifacts directory, so
  * `allocateOutputArtifact` yields nothing there. Lease one temporary directory
- * per session and register it so `artifact://N` resolution still finds the
+ * per session and register it so `local://N.log` resolution still finds the
  * spill; the session's dispose unregisters and removes it.
  */
 const embeddedArtifactManagers = new WeakMap<ToolSession, ArtifactManager>();
@@ -88,14 +88,14 @@ export function resolveEvalArtifactAllocator(
 	};
 }
 
-/** Append the `[raw output: artifact://N]` recovery link the Code Mode cap promises. */
+/** Append the `[raw output: local://N.log]` recovery link the Code Mode cap promises. */
 export function appendEvalArtifactFooter(
 	output: string,
 	summary: Pick<OutputSummary, "truncated" | "artifactId">,
 	codeMode: boolean,
 ): string {
 	if (!codeMode || !summary.truncated || summary.artifactId === undefined) return output;
-	const footer = `[raw output: artifact://${summary.artifactId}]`;
+	const footer = `[raw output: ${spillUrl(summary.artifactId)}]`;
 	return output.length > 0 ? `${output}\n${footer}` : footer;
 }
 

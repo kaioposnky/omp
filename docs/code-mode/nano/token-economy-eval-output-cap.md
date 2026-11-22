@@ -6,7 +6,7 @@ Code: `packages/coding-agent/src/eval/js/executor.ts#executeJs`, `packages/tui/s
 
 ## How it works
 
-`executeJs` monta um `OutputSink` com `spillThreshold` e `headBytes`. Hoje o threshold é a constante `DEFAULT_MAX_BYTES` (50 KB) e o head vem das settings (`tools.artifactSpillThreshold`, `tools.artifactHeadBytes`, em KB). O sink mantém até o threshold inline e grava o excedente em artifact, com rodapé `[raw output: artifact://N]`; o prelude `read` reconhece `artifact://N`.
+`executeJs` monta um `OutputSink` com `spillThreshold` e `headBytes`. Hoje o threshold é a constante `DEFAULT_MAX_BYTES` (50 KB) e o head vem das settings (`tools.artifactSpillThreshold`, `tools.artifactHeadBytes`, em KB). O sink mantém até o threshold inline e grava o excedente em artifact, com rodapé `[raw output: artifact://N]`; o prelude `read` reconhece `local://N.log`.
 
 Em Code Mode, o executor recebe um override de orçamento (ex.: 4 KB de corpo inline) e repassa ao sink; o artifact continua com o teto atual (`ARTIFACT_DEFAULT_MAX_BYTES`, 16 MiB). O kernel Python usa a mesma política via o executor equivalente — a regra é do perfil, não da linguagem.
 
@@ -14,7 +14,7 @@ Em Code Mode, o executor recebe um override de orçamento (ex.: 4 KB de corpo in
 
 - `eval` em Code Mode nunca devolve mais bytes inline que o limite do perfil.
 - O artifact contém o output completo (até o teto do artifact).
-- `read("artifact://N")` recupera o conteúdo gravado.
+- `read("local://N.log")` recupera o conteúdo gravado.
 - Resultados de `tool.*` não são impressos por padrão; o limite se aplica apenas ao que o código imprime/retorna.
 - O modo normal mantém o limite atual (50 KB de threshold; head conforme settings).
 
@@ -32,7 +32,7 @@ Em Code Mode, o executor recebe um override de orçamento (ex.: 4 KB de corpo in
 - **Passos**:
   1. Propagar um `inlineOutputBytes`/`spillThreshold` do perfil Code Mode para o executor.
   2. Aplicar no `OutputSink` (threshold **e** head) sem afetar o modo normal.
-  3. Garantir que o rodapé `artifact://N` é emitido e legível pelo prelude.
+  3. Garantir que o rodapé `[raw output: local://N.log]` é emitido e legível pelo prelude.
   4. Instruir no prompt do eval: atribuir à variável e imprimir resumo/contagem/amostra.
 - **Test IDs**: `CM-E6` em `packages/coding-agent/test/code-mode/token-economy.test.ts`.
 - **Done when**: o teste passa comparando os dois modos no mesmo fixture, com artifact verificado.
