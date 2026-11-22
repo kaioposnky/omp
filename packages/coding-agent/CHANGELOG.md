@@ -15,6 +15,7 @@
 
 - A tool card left unfinished by a stream that never completed no longer keeps the rest of the transcript out of scrollback and squeezed to one-line rows; it is closed when the next reply starts
 - In Code Mode, an `eval` cell whose output overflows the inline cap now links the saved output as `local://N.log`, which `read` opens; the link was `artifact://N`, a scheme that no longer exists, so the rest of a long output could not be read back
+- `read()` in `eval` cells now shows images to the model and renders other non-text files (PDFs, archives) through the read tool; Python raised a UTF-8 decode error and JavaScript returned garbled text
 
 ### Breaking Changes
 

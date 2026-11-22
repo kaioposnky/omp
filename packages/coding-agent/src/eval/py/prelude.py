@@ -113,7 +113,13 @@ if "__omp_prelude_loaded__" not in globals():
             if p.is_dir():
                 # The read tool renders the listing.
                 return _read_through_tool(str(p), offset, limit)
-        data = p.read_text(encoding="utf-8")
+        try:
+            data = p.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            # Images, PDFs, archives: the read tool shows images to the model and renders
+            # the rest as text. No `:raw` here, which would skip the image routing.
+            value = _surface_bridged_tool_images(_bridge_call("read", {"path": str(p)}))
+            return value.get("text", "") if isinstance(value, dict) else str(value)
         lines = data.splitlines(keepends=True)
         if offset > 1 or limit is not None:
             start = max(0, offset - 1)

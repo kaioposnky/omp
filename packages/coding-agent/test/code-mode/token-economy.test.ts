@@ -2,6 +2,7 @@
  * Code Mode token economy: prompt-prefix stability, wire-token reduction,
  * bridge catalog output, suffix router hints, and eval output limits.
  */
+import * as path from "node:path";
 import { describe, expect, it } from "bun:test";
 import { type } from "@oh-my-pi/omptype";
 import { createMockModel } from "@oh-my-pi/pi-ai/providers/mock";
@@ -240,6 +241,38 @@ describe("Code Mode token economy (§12)", () => {
 		} finally {
 			await normal.session.dispose();
 			await code.session.dispose();
+		}
+	});
+
+	it("CM-E7 read() of a local image in a cell shows the image to the model in both languages", async () => {
+		using dir = TempDir.createSync("@omp-cm-image-read-");
+		// 1x1 opaque red PNG.
+		const png = Buffer.from(
+			"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC",
+			"base64",
+		);
+		await Bun.write(path.join(dir.path(), "red.png"), png);
+		const { session } = await makeCodeModeSession({
+			cwd: dir.path(),
+			codeMode: true,
+			settings: Settings.isolated(BASE_SETTINGS),
+		});
+		try {
+			const evalTool = session.agent.state.tools.find(tool => tool.name === "eval");
+			expect(evalTool).toBeDefined();
+			const cells = [
+				{ language: "js", code: "print(await read('red.png'))" },
+				...(Bun.env.PI_PYTHON_INTEGRATION === "1" ? [{ language: "py", code: "print(read('red.png'))" }] : []),
+			];
+			for (const cell of cells) {
+				const result = (await evalTool!.execute(`call-${cell.language}`, cell)) as {
+					content: Array<{ type: string }>;
+				};
+				// The read tool may re-encode (e.g. to WebP); what matters is one real image block.
+				expect(result.content.filter(block => block.type === "image")).toHaveLength(1);
+			}
+		} finally {
+			await session.dispose();
 		}
 	});
 });

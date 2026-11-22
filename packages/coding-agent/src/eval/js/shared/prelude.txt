@@ -62,7 +62,10 @@ if (!globalThis.__omp_js_prelude_loaded__) {
 		const options = optionsArg("read", opts, rest, ["offset", "limit"], "{ offset, limit }");
 		if (!shouldDelegateRead(path)) {
 			const text = await callHelper("read", path, options);
-			if (text !== undefined) return text;
+			if (typeof text === "string") return text;
+			// Not UTF-8 (images, PDFs, archives): the read tool shows images to the model and renders
+			// the rest as text. No `:raw` here, which would skip the image routing.
+			if (text === null) return readToolText(path);
 		}
 		// Protocol paths and directories (whose listing it renders) go through the read tool.
 		const toolPath = withReadLineSelector(rawReadPath(path), options);

@@ -30,8 +30,11 @@ export interface HelperContext {
  * onto the global scope.
  */
 export interface HelperBundle {
-	/** Resolves to `undefined` for a directory; the prelude then asks the read tool for its listing. */
-	read(rawPath: string, options?: HelperOptions): Promise<string | undefined>;
+	/**
+	 * Resolves to `undefined` for a directory (the prelude asks the read tool for its listing)
+	 * and `null` for a file that is not UTF-8 text (the prelude hands it to the read tool, which shows images).
+	 */
+	read(rawPath: string, options?: HelperOptions): Promise<string | null | undefined>;
 	writeFile(rawPath: string, data: unknown): Promise<string>;
 	env(key?: string, value?: string): string | Record<string, string> | undefined;
 	/** Whether `rawPath` is an internal URL whose scheme has an injected root (served by these helpers, not delegated to the read tool). */
@@ -39,6 +42,7 @@ export interface HelperBundle {
 }
 
 const utf8Encoder = new TextEncoder();
+const strictUtf8Decoder = new TextDecoder("utf-8", { fatal: true });
 
 export function createHelpers(ctx: HelperContext): HelperBundle {
 	return {
@@ -46,7 +50,12 @@ export function createHelpers(ctx: HelperContext): HelperBundle {
 			const resolved = await resolveRegularFile(ctx, rawPath);
 			if (!resolved) return undefined;
 			const { filePath, file, size } = resolved;
-			let text = await file.text();
+			let text: string;
+			try {
+				text = strictUtf8Decoder.decode(await file.bytes());
+			} catch {
+				return null;
+			}
 			const offset = typeof options.offset === "number" ? options.offset : 1;
 			const limit = typeof options.limit === "number" ? options.limit : undefined;
 			if (offset > 1 || limit !== undefined) {
