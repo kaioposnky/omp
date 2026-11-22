@@ -136,9 +136,11 @@ type StatusSummarizer = (
 const summarizeToolResult: StatusSummarizer = (name, args, result, text, hasError) => {
 	const record = isRecord(args) ? args : {};
 	const details = isRecord(result.details) ? result.details : {};
-	const withError = (event: JsStatusEvent): JsStatusEvent =>
-		hasError ? { ...event, hasError: true, error: text.slice(0, 500) } : event;
-
+	// `tool` marks a bridged session-tool call, so activity views can list it under its cell.
+	const withError = (event: JsStatusEvent): JsStatusEvent => {
+		const tagged = { ...event, tool: name };
+		return hasError ? { ...tagged, hasError: true, error: text.slice(0, 500) } : tagged;
+	};
 	switch (name) {
 		case "read":
 			return withError({ op: "read", path: record.path, chars: text.length, preview: text.slice(0, 500) });
@@ -383,10 +385,7 @@ async function runSessionTool(
 			"payload",
 		);
 	} catch (error) {
-		options.emitStatus?.({
-			op: name,
-			error: error instanceof Error ? error.message : String(error),
-		});
+		options.emitStatus?.(failedCallStatus(name, args, error));
 		throw error;
 	}
 	// The transcript draws a direct `write out://` from its args; a bridged one only reaches the user through `onReply`.
@@ -451,12 +450,23 @@ async function runSessionTool(
 		}
 		return { name, args: validatedArgs, result };
 	} catch (error) {
-		options.emitStatus?.({
-			op: name,
-			error: error instanceof Error ? error.message : String(error),
-		});
+		options.emitStatus?.(failedCallStatus(name, validatedArgs, error));
 		throw error;
 	}
+}
+
+/** Status event for a bridged session-tool call that threw; `tool` lists it in activity views like a finished call. */
+function failedCallStatus(name: string, args: unknown, error: unknown): JsStatusEvent {
+	const record = isRecord(args) ? args : {};
+	return {
+		op: name,
+		tool: name,
+		...(typeof record.path === "string" ? { path: record.path } : {}),
+		...(typeof record.pattern === "string" ? { pattern: record.pattern } : {}),
+		...(typeof record.command === "string" ? { cmd: record.command } : {}),
+		hasError: true,
+		error: error instanceof Error ? error.message : String(error),
+	};
 }
 
 /** The schema's single required property when that property is a string; otherwise undefined. */

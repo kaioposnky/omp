@@ -53,6 +53,49 @@ describe("AgentActivityIndex", () => {
 		expect(activity.query({ search: "SRC/A.TS" })).toHaveLength(1);
 	});
 
+	it("lists session tools called from inside an eval cell after the cell", async () => {
+		using tempDir = TempDir.createSync("@activity-index-bridged-");
+		const sessionFile = path.join(tempDir.path(), "worker.jsonl");
+		await Bun.write(
+			sessionFile,
+			`${[
+				messageEntry("cell-call", 1_000, {
+					role: "assistant",
+					content: [
+						{ type: "toolCall", id: "call-1", name: "eval", arguments: { language: "py", code: "…", title: "Scan notes" } },
+					],
+				}),
+				messageEntry("cell-result", 2_000, {
+					role: "toolResult",
+					toolCallId: "call-1",
+					toolName: "eval",
+					content: [{ type: "text", text: "ok" }],
+					details: {
+						cells: [
+							{
+								statusEvents: [
+									{ op: "read", tool: "read", path: "notes.md", chars: 10 },
+									// Kernel-local helper events carry no `tool`: not a session-tool call.
+									{ op: "write", path: "out.txt", chars: 3 },
+									{ op: "run", tool: "bash", cmd: "pdftotext a.pdf -", hasError: true },
+								],
+							},
+						],
+					},
+				}),
+			].join("\n")}\n`,
+		);
+		const activity = new AgentActivityIndex();
+		await activity.sync("Worker", sessionFile);
+
+		expect(activity.query().map(row => [row.toolName, row.summary, row.status])).toEqual([
+			["eval", "Scan notes", "success"],
+			["eval › read", "notes.md", "success"],
+			["eval › bash", "pdftotext a.pdf -", "error"],
+		]);
+		expect(activity.query({ search: "notes.md" })).toHaveLength(1);
+	});
+
 	it("tails appended JSONL incrementally and scopes rows by agent subtree", async () => {
 		using tempDir = TempDir.createSync("@activity-index-tail-");
 		const parentFile = path.join(tempDir.path(), "parent.jsonl");

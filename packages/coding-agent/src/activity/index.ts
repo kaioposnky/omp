@@ -137,7 +137,7 @@ function argumentsSummary(toolName: string, args: Record<string, unknown>): stri
 			return [pattern, path].filter(Boolean).join(" · ") || "Search text";
 		}
 		case "glob":
-			return firstString(args, "path") ?? "Map files";
+			return firstString(args, "pattern", "path") ?? "Map files";
 		case "bash":
 			return firstString(args, "command") ?? "Run command";
 		case "write":
@@ -197,6 +197,42 @@ function rowIndex(rows: readonly AgentActivityRow[]): Map<string, number> {
 	const index = new Map<string, number>();
 	for (let position = 0; position < rows.length; position++) index.set(rows[position]!.id, position);
 	return index;
+}
+
+/**
+ * Code Mode runs session tools from inside `eval` cells, so the transcript holds only the
+ * `eval` call. Its cells' status events tagged with `tool` (see `summarizeToolResult`) name
+ * each bridged call; list them as `eval › <tool>` rows right after the cell.
+ */
+function bridgedToolRows(cellRow: AgentActivityRow, details: unknown): AgentActivityRow[] {
+	const cells = recordOf(details)?.cells;
+	if (!Array.isArray(cells)) return [];
+	const rows: AgentActivityRow[] = [];
+	for (const cellValue of cells) {
+		const events = recordOf(cellValue)?.statusEvents;
+		if (!Array.isArray(events)) continue;
+		for (const eventValue of events) {
+			const event = recordOf(eventValue);
+			const tool = event && typeof event.tool === "string" ? event.tool : undefined;
+			if (!event || !tool) continue;
+			rows.push({
+				// Zero-padded: rows tied on timestamp sort by id, and "10" must follow "9".
+				id: `${cellRow.id}:bridged:${String(rows.length).padStart(4, "0")}`,
+				agentId: cellRow.agentId,
+				// Same instant as the cell; the id suffix keeps the calls in order after it.
+				timestamp: cellRow.timestamp,
+				kind: "tool",
+				title: `${cellRow.title} › ${tool}`,
+				// Status events name a bash command `cmd`; the summary reads `command`.
+				summary: argumentsSummary(tool, { command: event.cmd, ...event }),
+				status: event.hasError === true ? "error" : "success",
+				entryId: cellRow.entryId,
+				toolName: `${cellRow.title} › ${tool}`,
+				source: "transcript",
+			});
+		}
+	}
+	return rows;
 }
 
 interface QueryCacheEntry {
@@ -484,6 +520,7 @@ export class AgentActivityIndex {
 				row.timestamp = Math.max(row.timestamp, timestamp);
 				if (!index.has(row.id)) upsertRow(state.rows, index, row);
 				state.toolRows.delete(message.toolCallId);
+				for (const inner of bridgedToolRows(row, message.details)) upsertRow(state.rows, index, inner);
 				changed = true;
 			}
 		}
