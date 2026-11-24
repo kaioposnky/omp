@@ -8,6 +8,7 @@ import {
 	loadSystemPromptFiles,
 	type SystemPromptToolMetadata,
 } from "@oh-my-pi/pi-coding-agent/system-prompt";
+import { buildRuleFromMarkdown, createSourceMeta } from "@oh-my-pi/pi-coding-agent/discovery/helpers";
 import { cleanupTempHome } from "./helpers/temp-home-cleanup";
 
 function escapeRegExp(text: string): string {
@@ -290,5 +291,30 @@ describe("SYSTEM.md prompt assembly", () => {
 		const promptText = systemPrompt.join("\n\n");
 		const matches = promptText.match(new RegExp(escapeRegExp(sharedContent), "g")) ?? [];
 		expect(matches).toHaveLength(1);
+	});
+
+	it("injects a models-scoped always-apply rule only for a matching model", async () => {
+		const rulePath = path.join(tempDir, "terra.md");
+		fs.writeFileSync(rulePath, "---\nalwaysApply: true\nmodels: [gpt-6.1-terra]\n---\nTerra-only guidance\n");
+		const rule = buildRuleFromMarkdown(
+			"terra",
+			fs.readFileSync(rulePath, "utf8"),
+			rulePath,
+			createSourceMeta("native", rulePath, "user"),
+		);
+		const render = async (model: string) =>
+			(
+				await buildSystemPrompt({
+					cwd: tempDir,
+					contextFiles: [],
+					skills: [],
+					rules: [],
+					alwaysApplyRules: [rule],
+					toolNames: [],
+					model,
+				})
+			).systemPrompt.join("\n");
+		expect(await render("9router/cx/gpt-6.1-terra")).toContain("Terra-only guidance");
+		expect(await render("9router/cc/claude-opus-5-5")).not.toContain("Terra-only guidance");
 	});
 });

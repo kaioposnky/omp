@@ -73,6 +73,7 @@ Work in as few `eval` cells as possible; each extra cell resends the whole conve
 2. Edit and verify in ONE cell: do every write/replacement for the task, then in the same cell run the tests, quick edge-case probes, and a grep for leftovers. Make edits throw when the anchor text is missing instead of re-reading to confirm.
 3. Answer as soon as verification passes. No extra re-reads.
 File bodies go through `write`/`tool.edit`, NEVER a shell heredoc or `cat >`: quoting nested inside a cell breaks.
+A cell shows about 4 KB inline; the rest is cut and saved to `local://N.log`. Print what you will act on (`grep -n` hits, a function, a line range), not whole files or full build logs; when output is cut, read the needed range of that log instead of re-running the command.
 Never send `todo` as its own turn: update it inside the working cell with `await tool.todo({...})`, or skip it on small tasks.
 </cell-workflow>
 {{/if}}

@@ -23,6 +23,7 @@ import type {
 import type { postmortem } from "@oh-my-pi/pi-utils";
 import type { AdvisorConfig } from "@oh-my-pi/pi-tui/overlays/advisor-config";
 import type { AsyncJob, AsyncJobDeliveryState, AsyncJobManager, AsyncJobManagerApi } from "../async";
+import type { Rule } from "../capability/rule";
 import type { EffectiveExtensionRoots } from "../capability/types";
 import type { AgentDefinition } from "../task/types";
 import type { AgentRegistryApi } from "../registry/agent-registry";
@@ -367,6 +368,8 @@ export interface AgentSessionConfig {
 	convertToLlm?: (messages: AgentMessage[]) => Message[] | Promise<Message[]>;
 	/** System prompt builder that can consider tool availability. */
 	rebuildSystemPrompt?: SystemPromptRebuilder;
+	/** Live always-apply rules scoped by `models`; a model switch that changes the matching set rebuilds the prompt. */
+	modelScopedRules?: () => readonly Pick<Rule, "name" | "models">[];
 	/** Sources of the initial base prompt, as returned by `buildSystemPrompt`. */
 	systemPromptSources?: SystemPromptSources;
 	/** Tools mounted under `xd://`, for `/tools` display. */

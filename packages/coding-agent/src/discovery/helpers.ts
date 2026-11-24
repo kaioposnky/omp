@@ -22,6 +22,7 @@ import { invalidate as invalidateFsCache, readDirEntries, readFile } from "../ca
 import {
 	MAIN_AGENT_RULE_NAME,
 	parseRuleAgents,
+	parseRuleModels,
 	parseRuleConditionAndScope,
 	type Rule,
 	type RuleFrontmatter,
@@ -253,6 +254,7 @@ function buildRule(
 		question,
 		scope,
 		agents: parseRuleAgents(frontmatter.agents),
+		models: parseRuleModels(frontmatter.models),
 		interruptMode,
 		repeatMode,
 		_source: source,

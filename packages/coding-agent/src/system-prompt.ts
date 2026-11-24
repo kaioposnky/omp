@@ -19,6 +19,7 @@ import {
 	prompt,
 } from "@oh-my-pi/pi-utils";
 import { contextFileCapability } from "./capability/context-file";
+import { ruleAppliesToModel } from "./capability/rule";
 import { systemPromptCapability } from "./capability/system-prompt";
 import { findConfigFile } from "./config";
 import type { SkillsSettings } from "./extensibility/settings";
@@ -159,6 +160,8 @@ interface AlwaysApplyRule {
 	name: string;
 	content: string;
 	path: string;
+	/** Model-id substrings the rule is scoped to; see {@link ruleAppliesToModel}. */
+	models?: string[];
 }
 
 function normalizePromptBlock(content: string): string {
@@ -1115,7 +1118,10 @@ export async function buildSystemPrompt(options: BuildSystemPromptOptions = {}):
 		resolvedAppendPrompt,
 		...contextPromptSources,
 	];
-	const injectedAlwaysApplyRules = dedupeAlwaysApplyRules(alwaysApplyRules, promptSources);
+	const injectedAlwaysApplyRules = dedupeAlwaysApplyRules(
+		alwaysApplyRules?.filter(rule => ruleAppliesToModel(rule, model)),
+		promptSources,
+	);
 
 	// A fence a file leaves open is closed at its end, so it never leaves the rest of the prompt unformatted.
 	const promptContextFiles = contextFiles.map(file => ({ ...file, content: prompt.closeCodeFence(file.content) }));

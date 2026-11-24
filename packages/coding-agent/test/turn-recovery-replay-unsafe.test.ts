@@ -1026,6 +1026,30 @@ describe("TurnRecovery replay-unsafe output classification", () => {
 			expect(recoveryForTransport(message, [syntheticResult("call-1")]).isRetryableError(message)).toBe(false);
 		});
 
+		// The stall path accepts a socket close (what DeepSeek routes report); a Codex body-read error is not a stall there.
+		it.if(_label === "socket close")(
+			"continues a turn with committed text when its tool call provably never executed",
+			() => {
+				const message = transportError([{ type: "text", text: "Writing the backend now." }, toolCall("call-1")]);
+				const appended: AgentMessage[] = [];
+				const scheduled: string[] = [];
+				const host = createHost(model, modelRegistry, {
+					messages: [message as AgentMessage, syntheticResult("call-1")],
+				});
+				host.agent.appendMessage = (entry: AgentMessage) => appended.push(entry);
+				host.scheduleAgentContinue = ({ source }) => scheduled.push(source);
+				expect(new TurnRecovery(host).handleCommittedTextStreamStall(message)).toBe(true);
+				expect(scheduled).toEqual(["stream-stall-continue"]);
+				expect(JSON.stringify(appended)).toContain("never ran");
+			},
+		);
+
+		it("does not continue a turn with committed text when its tool call ran", () => {
+			const message = transportError([{ type: "text", text: "Writing the backend now." }, toolCall("call-1")]);
+			const recovery = recoveryForTransport(message, [realResult("call-1")]);
+			expect(recovery.handleCommittedTextStreamStall(message)).toBe(false);
+		});
+
 		it("does not retry when the tool call has no result at all", () => {
 			const message = transportError([toolCall("call-1")]);
 			expect(recoveryForTransport(message, []).isRetryableError(message)).toBe(false);

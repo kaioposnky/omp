@@ -38,6 +38,8 @@ export interface RuleFrontmatter {
 	scope?: string | string[];
 	/** Agent-name globs this rule applies to; absent = every agent. `main` targets the top-level session. */
 	agents?: string[] | string;
+	/** Model-id substrings (case-insensitive) this rule applies to; absent = every model. */
+	models?: string[] | string;
 	/** Per-rule TTSR interrupt mode override. */
 	interruptMode?: "never" | "prose-only" | "tool-only" | "always";
 	/** Per-rule TTSR repeat override (falls back to global ttsr.repeatMode). */
@@ -75,6 +77,8 @@ export interface Rule {
 	scope?: string[];
 	/** Lowercased agent-name globs this rule applies to (absent = every agent). */
 	agents?: string[];
+	/** Lowercased model-id substrings this rule applies to (absent = every model). */
+	models?: string[];
 	/** Per-rule TTSR interrupt mode override (falls back to global ttsr.interruptMode). */
 	interruptMode?: "never" | "prose-only" | "tool-only" | "always";
 	/** Per-rule TTSR repeat override (falls back to global ttsr.repeatMode); `always` is a one-turn gap, so the retry or continuation its own reminder spawns cannot re-fire it. */
@@ -206,6 +210,25 @@ export function parseRuleAgents(value: unknown): string[] | undefined {
 		return undefined;
 	}
 	return Array.from(new Set(tokens.map(token => token.replace(/\s*,\s*/g, ",").toLowerCase())));
+}
+
+/** Parse the `models` frontmatter field into lowercased model-id substrings. */
+export function parseRuleModels(value: unknown): string[] | undefined {
+	const tokens = normalizeScopeField(value);
+	return tokens ? Array.from(new Set(tokens.map(token => token.toLowerCase()))) : undefined;
+}
+
+/**
+ * Whether a rule's `models` scope admits `model` (a `provider/model-id` string): any listed
+ * substring occurs in it, case-insensitively. A rule without `models` applies to every model;
+ * an unknown model admits only unscoped rules.
+ */
+export function ruleAppliesToModel(rule: Pick<Rule, "models">, model: string | undefined): boolean {
+	const patterns = rule.models;
+	if (!patterns || patterns.length === 0) return true;
+	if (!model) return false;
+	const lower = model.toLowerCase();
+	return patterns.some(pattern => lower.includes(pattern));
 }
 
 /** Agent name used for the top-level (non-sub) session when evaluating `agents`. */

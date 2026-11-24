@@ -4,6 +4,7 @@
 
 ### Added
 
+- Rules accept a `models` frontmatter list (case-insensitive model-id substrings); an always-apply rule with it reaches only matching models' system prompts. Bundled model rules add short guidance for GPT-6.1 Terra, Claude Opus, Claude Sonnet and DeepSeek, from repeated per-model benchmark habits
 - `eval` calls may omit `language`: the cell runs in the previous cell's language instead of failing validation
 - `models.yml` accepts `compat.streamFirstEventTimeoutMs` to shorten the wait for a stalled provider's first stream event
 - Code Mode guidance tells models to write files with `write`/`tool.edit` instead of shell heredocs, and to stop or report a server they started for verification; the skill-search example is now a placeholder; `eval` and `bash` state their timeout default and unit
@@ -16,6 +17,9 @@
 
 ### Fixed
 
+- A provider stream that drops after text was shown, while a tool call was streaming, now continues the turn when that call provably never ran, instead of ending the session
+- `wait` on subagents alone no longer returns after 5 s with a still-running snapshot: subagents run for minutes, and the early return cost a request per wait
+- Code Mode no longer sends the Linux X11 window-focus note when no user browser (relay or CDP) is reachable
 - A tool card left unfinished by a stream that never completed no longer keeps the rest of the transcript out of scrollback and squeezed to one-line rows; it is closed when the next reply starts
 - In Code Mode, an `eval` cell whose output overflows the inline cap now links the saved output as `local://N.log`, which `read` opens; the link was `artifact://N`, a scheme that no longer exists, so the rest of a long output could not be read back
 - `read()` in `eval` cells now shows images to the model and renders other non-text files (PDFs, archives) through the read tool; Python raised a UTF-8 decode error and JavaScript returned garbled text

@@ -5661,6 +5661,7 @@ async function createAgentSessionScoped(options: CreateAgentSessionOptions): Pro
 			advisorStreamFn: settingsAwareStreamFn,
 			convertToLlm: convertToLlmFinal,
 			rebuildSystemPrompt,
+			modelScopedRules: () => alwaysApplyRules.filter(rule => (rule.models?.length ?? 0) > 0),
 			systemPromptSources,
 			getXdevToolEntries: () => (toolSession.xdev ? xdevEntries(toolSession.xdev) : []),
 			xdev: toolSession.xdev,

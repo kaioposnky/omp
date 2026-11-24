@@ -768,6 +768,10 @@ export class TurnRecovery {
 	 * is no executed side effect whose resumption policy it could change. So does a
 	 * Codex native-lane steer rejection: the server dropped the response over our
 	 * own `response.steer`, and the rejected steer drains as ordinary input next.
+	 * Tool calls are allowed only when every one is paired with a synthetic
+	 * `executed: false` result: nothing ran, and the reminder tells the model to
+	 * reissue them. Otherwise the stream dying while a long call streamed after a
+	 * line of text ended the whole run.
 	 */
 	handleCommittedTextStreamStall(message: AssistantMessage): boolean {
 		const id = this.#classifyRetryMessage(message);
@@ -783,11 +787,14 @@ export class TurnRecovery {
 		if (!this.autoRetryEnabled || this.#host.abortInProgress() || this.#host.isDisposed()) return false;
 		if (!this.#host.textOutputCommitted()) return false;
 		let hasText = false;
+		let hasToolCalls = false;
 		for (const block of message.content) {
-			if (block.type === "toolCall" || block.type === "image" || block.type === "anthropicServerTool") return false;
+			if (block.type === "image" || block.type === "anthropicServerTool") return false;
+			if (block.type === "toolCall") hasToolCalls = true;
 			if (block.type === "text" && hasNonWhitespace(block.text)) hasText = true;
 		}
 		if (!hasText) return false;
+		if (hasToolCalls && !this.#everyToolCallProvablyUnexecuted(message)) return false;
 
 		this.#streamStallContinueCount++;
 		if (this.#streamStallContinueCount > STREAM_STALL_CONTINUE_MAX_RETRIES) {
@@ -814,6 +821,7 @@ export class TurnRecovery {
 					text: prompt.render(streamStallContinueTemplate, {
 						retryCount: this.#streamStallContinueCount,
 						maxRetries: STREAM_STALL_CONTINUE_MAX_RETRIES,
+						toolCallsUnexecuted: hasToolCalls,
 					}),
 				},
 			],
@@ -1702,14 +1710,22 @@ export class TurnRecovery {
 	 * or committed non-whitespace text.
 	 */
 	#unexecutedToolCallsReplaySafe(message: AssistantMessage): boolean {
-		const emittedToolCallIds = new Set<string>();
 		for (const block of message.content) {
-			if (block.type === "toolCall") {
-				emittedToolCallIds.add(block.id);
-				continue;
-			}
 			if (block.type === "image" || block.type === "anthropicServerTool") return false;
 			if (block.type === "text" && this.#host.textOutputCommitted() && hasNonWhitespace(block.text)) return false;
+		}
+		return this.#everyToolCallProvablyUnexecuted(message);
+	}
+
+	/**
+	 * True when the message emitted at least one tool call and every one is
+	 * answered, in state after the message, only by synthetic `executed: false`
+	 * results. Says nothing about the message's other content.
+	 */
+	#everyToolCallProvablyUnexecuted(message: AssistantMessage): boolean {
+		const emittedToolCallIds = new Set<string>();
+		for (const block of message.content) {
+			if (block.type === "toolCall") emittedToolCallIds.add(block.id);
 		}
 		if (emittedToolCallIds.size === 0) return false;
 

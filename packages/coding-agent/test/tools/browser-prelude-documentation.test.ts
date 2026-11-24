@@ -34,6 +34,21 @@ describe("browserDocumentation", () => {
 		expect(definition.guidance).toContain(X11_NOTE);
 		expect(definition.guidance).toContain("# Browser user sessions");
 	});
+
+	// The guidance note is about the user's own Chrome window; a session that drives only its own headless browser skips it.
+	it.skipIf(process.platform !== "linux")(
+		"keeps the X11 note out of the guidance until a user browser is reachable",
+		() => {
+			const invoke = async () => ({ content: [] });
+			const settings = Settings.isolated();
+			const headless = createBrowserPreludeDefinition({ settings } as ToolSession, { invoke });
+			expect(headless.guidance ?? "").not.toContain(X11_NOTE);
+			const relay = createBrowserPreludeDefinition({ settings } as ToolSession, { invoke, relay: { mode: "only" } });
+			expect(relay.guidance).toContain(X11_NOTE);
+			cfgBrowserCdpUrl.set(settings, "http://127.0.0.1:9222");
+			expect(headless.guidance).toContain(X11_NOTE);
+		},
+	);
 });
 
 /** Identifiers inside the inline code spans of a Markdown document (`tab.click(selector)` → tab, click, selector). */

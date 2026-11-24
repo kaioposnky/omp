@@ -214,6 +214,19 @@ describe("wait", () => {
 		build.resolve("done");
 	});
 
+	test("a wait on subagents alone skips the 5s floor; one that also watches a bash job keeps it", async () => {
+		vi.useFakeTimers();
+		const manager = new AsyncJobManager({ onJobComplete: () => {} });
+		const child = Promise.withResolvers<string>();
+		manager.register("task", "Child", async () => child.promise, { id: "Child", agentId: "Child", ownerId: "Main" });
+		expect(report(await elapse(new WaitTool(session(manager)), 240_000))).toContain("within 4m");
+		const build = Promise.withResolvers<string>();
+		manager.register("bash", "build", async () => build.promise, { ownerId: "Main" });
+		expect(report(await elapse(new WaitTool(session(manager)), 5_000))).toContain("within 5.0s");
+		child.resolve("done");
+		build.resolve("done");
+	});
+
 	test("labels a job that finished during the wait as delivered by it", async () => {
 		// The job settles mid-wait, so this call is what hands the result over.
 		// The old wording ("not auto-delivered; recovered by this snapshot") read

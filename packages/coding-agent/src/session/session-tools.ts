@@ -4,6 +4,7 @@ import type { Model } from "@oh-my-pi/pi-ai";
 import { resolveDelegationBias } from "@oh-my-pi/pi-catalog/compat/delegation";
 import { isRecord, logger, prompt, stringProperty, structuredCloneJSON, untilAborted } from "@oh-my-pi/pi-utils";
 import { reset as resetCapabilities } from "../capability";
+import { type Rule, ruleAppliesToModel } from "../capability/rule";
 import type { EffectiveExtensionRoots } from "../capability/types";
 import { CODE_MODE_TOP_LEVEL } from "../code-mode/partition";
 import { shouldInlineToolDescriptors } from "../config/inline-tool-descriptors-mode";
@@ -214,6 +215,8 @@ interface SessionToolsOptions {
 	 */
 	reconcileSettingsGatedTools?: (isBuiltIn: (name: string) => boolean) => Promise<SettingsGatedToolDelta>;
 	rebuildSystemPrompt?: SystemPromptRebuilder;
+	/** Live always-apply rules scoped by `models`; the prompt rebuilds when the set the active model matches changes. */
+	modelScopedRules?: () => readonly Pick<Rule, "name" | "models">[];
 	getMcpServerInstructions?: () => Map<string, string> | undefined;
 	/**
 	 * Whether enabled MCP tools present as eval namespaces (`mcp.evalNamespaces`)
@@ -562,6 +565,7 @@ export class SessionTools {
 	/** `systemPromptTemplates` path selected for the model the base prompt was rendered for. */
 	#promptTemplate: string | undefined;
 	#rebuildSystemPrompt: SessionToolsOptions["rebuildSystemPrompt"];
+	#modelScopedRules: SessionToolsOptions["modelScopedRules"];
 	#getMcpServerInstructions: SessionToolsOptions["getMcpServerInstructions"];
 	/**
 	 * Session-lifetime factory shared by every custom-tool wrapper. Defining it
@@ -640,6 +644,7 @@ export class SessionTools {
 		this.#ensureGoalRegistered = options.ensureGoalRegistered;
 		this.#reconcileSettingsGatedTools = options.reconcileSettingsGatedTools;
 		this.#rebuildSystemPrompt = options.rebuildSystemPrompt;
+		this.#modelScopedRules = options.modelScopedRules;
 		this.#getMcpServerInstructions = options.getMcpServerInstructions;
 		this.#bindsMcpToEval = options.bindsMcpToEval;
 		this.#xdev = options.xdev;
@@ -1271,7 +1276,12 @@ export class SessionTools {
 		if (cfgIncludeModelInPrompt.get(this.#host.settings)) return formatModelString(activeModel);
 		// The inline-descriptor decision is per model and selects both the prompt's
 		// tool catalog and provider-side description pruning (see `sdk.ts`).
-		return `delegation-bias:${resolveDelegationBias(activeModel)}|inline-descriptors:${this.#currentInlineDescriptors()}`;
+		const model = formatModelString(activeModel);
+		const scoped = (this.#modelScopedRules?.() ?? [])
+			.filter(rule => ruleAppliesToModel(rule, model))
+			.map(rule => rule.name)
+			.join(",");
+		return `delegation-bias:${resolveDelegationBias(activeModel)}|inline-descriptors:${this.#currentInlineDescriptors()}|rules:${scoped}`;
 	}
 
 	/**

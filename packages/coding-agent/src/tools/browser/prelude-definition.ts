@@ -63,7 +63,12 @@ export function createBrowserPreludeDefinition(
 						cmux: fallback?.kind === "cmux",
 					})
 				: undefined;
-			return prompt.render(userSessionGuidance, { relay, x11: browserX11Guidance(session.settings) }).trim();
+			// The X11 note is about the user's own Chrome window stealing focus: without the relay or a
+			// configured CDP browser the session drives only its own headless browser, so it stays out.
+			const userBrowser = mode !== undefined || Boolean(cfgBrowserCdpUrl.get(session.settings)?.trim());
+			return prompt
+				.render(userSessionGuidance, { relay, x11: userBrowser ? browserX11Guidance(session.settings) : undefined })
+				.trim();
 		},
 		javascript: browserJavascript,
 		python: browserPython,

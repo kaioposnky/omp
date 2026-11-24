@@ -33,7 +33,9 @@ const waitSchema = type({});
  * it takes the top window, and keeps taking it while the waits stay
  * back-to-back. The top-level interactive session skips the floor on job
  * waits: an early return there can only end its turn, one more request
- * than blocking until the result. Every idle return re-reads the whole prompt, and each one is a
+ * than blocking until the result. So does a wait whose jobs are all
+ * subagents: one runs for minutes, so the floor return reported a still-running
+ * snapshot and the caller spent a request waiting again (benchmarks: 4-7 per run). Every idle return re-reads the whole prompt, and each one is a
  * request. A job or service wait keeps this top window, inside the shortest
  * (5-minute) prompt-cache lifetime, since each return also reports the job's
  * progress. A reply or parent wait reports nothing until the answer, so its
@@ -463,7 +465,8 @@ export class WaitTool implements AgentTool<typeof waitSchema, CoordinationDetail
 		const serviceAbort = new AbortController();
 		const serviceLeg = serviceRunning ? waitForOwnedServiceCompletion(this.session, serviceAbort.signal) : undefined;
 		const replyWait = messaging !== undefined && jobs.length === 0 && !serviceRunning;
-		const rung = streak || (this.#endTurn && jobs.length > 0) ? WAIT_TOP_RUNG : 0;
+		const onlySubagents = jobs.length > 0 && jobs.every(job => job.agentId !== undefined);
+		const rung = streak || (jobs.length > 0 && (this.#endTurn || onlySubagents)) ? WAIT_TOP_RUNG : 0;
 		const topMs = replyWait ? agentWaitTopMs(this.session.getPromptCacheEntry?.()) : WAIT_LADDER_MS[WAIT_TOP_RUNG];
 		const span = { ms: rung === WAIT_TOP_RUNG ? topMs : WAIT_LADDER_MS[rung], topMs };
 		const initialReplies = replyWait ? pendingReplies(messaging) : undefined;
