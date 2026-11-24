@@ -1,0 +1,14 @@
+{
+  "slug": "sonnet",
+  "model": "9router/cc/claude-sonnet-5-5",
+  "thinking": "high",
+  "max_minutes": 60,
+  "started": 1795515374.4849558,
+  "omp_bin": "/home/kaio/omp-bench/build/oh-my-pi/packages/coding-agent/dist/omp",
+  "models_patch": true,
+  "exit_code": 143,
+  "finished": 1795515878.6577234,
+  "wall_seconds": 504,
+  "timed_out": false,
+  "killed_by_own_command": "pkill -f start.sh matched omp's argv (task text passed via -p contains 'start.sh'); exit 143, no final answer"
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "sol-v3-r2",
+  "model": "9router/cx/gpt-6.2-sol",
+  "thinking": "high",
+  "max_minutes": 60,
+  "started": 1795530511.1858923,
+  "omp_bin": "/home/kaio/omp-bench/build3/oh-my-pi/packages/coding-agent/dist/omp",
+  "models_patch": true,
+  "extra_args": "",
+  "exit_code": 0,
+  "finished": 1795531028.9059265,
+  "wall_seconds": 518,
+  "timed_out": false
+}

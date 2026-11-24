@@ -1,0 +1,84 @@
+{
+  "label": "terra-new-r1",
+  "wall_seconds": 309,
+  "exit_code": 0,
+  "timed_out": false,
+  "requests": 84,
+  "requests_main": 31,
+  "requests_subagent": 53,
+  "subagents": 4,
+  "input_tokens": 324717,
+  "output_tokens": 17788,
+  "cache_read_tokens": 1070848,
+  "total_tokens": 1413353,
+  "max_context_tokens": 31839,
+  "thinking_chars": 0,
+  "text_chars": 2044,
+  "tool_code_chars": 40122,
+  "tool_result_chars": 142439,
+  "wire_tool_calls": {
+    "eval": 75,
+    "wait": 4
+  },
+  "parallel_call_requests": 0,
+  "cells": 75,
+  "eval_languages": {
+    "js": 75
+  },
+  "bridged_ops": {
+    "read": 32,
+    "task": 3,
+    "bash": 22,
+    "write": 20,
+    "browser": 13,
+    "commit": 13,
+    "run": 21,
+    "edit": 5,
+    "glob": 1
+  },
+  "tool_errors": 9,
+  "validation_errors": 1,
+  "failed_commands": 9,
+  "request_errors": 1,
+  "stop_reasons": {
+    "error": 1,
+    "toolUse": 79,
+    "stop": 4
+  },
+  "todo_calls": 0,
+  "skill_reads": [
+    "skill://?q=frontend:raw",
+    "skill://?q=backend:raw",
+    "skill://?q=backend:raw",
+    "skill://?q=frontend:raw"
+  ],
+  "first_write_request": 5,
+  "model_seconds": 496,
+  "auxiliary_requests": {
+    "task-label": 3,
+    "job-widget": 1
+  },
+  "estimated_cost_usd": 0.47,
+  "estimated_cost_usd_no_cache": 1.48,
+  "cache_read_share": 0.767,
+  "active_seconds": 304,
+  "background_jobs_started": 1,
+  "idle_after_final_answer_seconds": 5,
+  "stopped_by_orchestrator": false,
+  "bridged_op_total": 130,
+  "ops_per_wire_call": 1.65,
+  "tokens_per_request": 16826,
+  "workspace_files": 23,
+  "workspace_loc": {
+    ".sh": 28,
+    ".rs": 775,
+    ".mjs": 16,
+    ".tsx": 723,
+    ".ts": 121,
+    ".astro": 48,
+    ".css": 423
+  },
+  "has_start_sh": true,
+  "has_readme": true,
+  "has_tests": false
+}

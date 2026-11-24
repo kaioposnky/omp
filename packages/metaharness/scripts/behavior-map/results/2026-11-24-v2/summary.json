@@ -1,0 +1,479 @@
+{
+  "deepseek": {
+    "metrics": {
+      "requests": 128,
+      "requests_main": 128,
+      "requests_subagent": 0,
+      "subagents": 0,
+      "input_tokens": 567921,
+      "cache_read_tokens": 22047488,
+      "output_tokens": 244165,
+      "total_tokens": 22859574,
+      "cache_read_share": 0.975,
+      "max_context_tokens": 284702,
+      "active_seconds": 3596,
+      "wall_seconds": 3602,
+      "model_seconds": 2825,
+      "idle_after_final_answer_seconds": 6,
+      "timed_out": true,
+      "stopped_by_orchestrator": false,
+      "estimated_cost_usd": null,
+      "estimated_cost_usd_no_cache": null,
+      "wire_tool_calls": {
+        "eval": 119
+      },
+      "bridged_ops": {
+        "run": 105,
+        "write": 70,
+        "read": 49,
+        "browser": 201
+      },
+      "ops_per_wire_call": 3.57,
+      "tool_errors": 11,
+      "failed_commands": 3,
+      "request_errors": 9,
+      "todo_calls": 0,
+      "background_jobs_started": 0,
+      "thinking_chars": 689326,
+      "tool_code_chars": 307360,
+      "tool_result_chars": 103093,
+      "workspace_loc": {
+        ".sh": 94,
+        ".rs": 1312,
+        ".mjs": 21,
+        ".tsx": 2320,
+        ".astro": 125,
+        ".ts": 416,
+        ".css": 3832
+      },
+      "has_tests": false
+    },
+    "validation": {
+      "site_up": true,
+      "seconds_to_ready": 2,
+      "loopback": {
+        "localhost": 200,
+        "ipv4": 200,
+        "ipv6": null
+      },
+      "webgl_canvas": true,
+      "animated_canvas_contexts": [
+        "webgl2"
+      ],
+      "css_3d_elements": 0,
+      "running_animations": 1,
+      "chart_svg_count": 2,
+      "canvas_2d_count": 0,
+      "bar_like_elements": 194,
+      "truth_scalars_in_api": 9,
+      "truth_scalars_on_page": 9,
+      "per_model_token_totals_in_api": 8,
+      "failed_requests": [],
+      "console_errors": [],
+      "page_errors": []
+    },
+    "behavior": {
+      "cells": 119,
+      "bridge_write_calls": 74,
+      "bridge_edit_calls": 0,
+      "raw_file_writes": 0,
+      "subprocess_calls": 0,
+      "prelude_sh_calls": 78,
+      "failed_requests": 9,
+      "cells_reading_dependency_source": 6,
+      "cell_syntax_errors": 1,
+      "cells_writing_files_by_heredoc": 2,
+      "cells_reading_tool_docs": 1,
+      "cell_timeouts": 1
+    },
+    "skill_queries": [],
+    "first_request_input_tokens": [
+      7178
+    ]
+  },
+  "opus": {
+    "metrics": {
+      "requests": 28,
+      "requests_main": 28,
+      "requests_subagent": 0,
+      "subagents": 0,
+      "input_tokens": 1100784,
+      "cache_read_tokens": 0,
+      "output_tokens": 44703,
+      "total_tokens": 1145487,
+      "cache_read_share": 0.0,
+      "max_context_tokens": 58969,
+      "active_seconds": 1173,
+      "wall_seconds": 1178,
+      "model_seconds": 393,
+      "idle_after_final_answer_seconds": 5,
+      "timed_out": false,
+      "stopped_by_orchestrator": false,
+      "estimated_cost_usd": 5.3,
+      "estimated_cost_usd_no_cache": 5.3,
+      "wire_tool_calls": {
+        "eval": 28,
+        "todo": 4
+      },
+      "bridged_ops": {
+        "run": 22,
+        "write": 16,
+        "bash": 3,
+        "browser": 11
+      },
+      "ops_per_wire_call": 1.62,
+      "tool_errors": 3,
+      "failed_commands": 0,
+      "request_errors": 0,
+      "todo_calls": 4,
+      "background_jobs_started": 1,
+      "thinking_chars": 18221,
+      "tool_code_chars": 60295,
+      "tool_result_chars": 18403,
+      "workspace_loc": {
+        ".sh": 28,
+        ".rs": 457,
+        ".mjs": 16,
+        ".tsx": 605,
+        ".ts": 121,
+        ".astro": 32,
+        ".css": 396
+      },
+      "has_tests": false
+    },
+    "validation": {
+      "site_up": true,
+      "seconds_to_ready": 2,
+      "loopback": {
+        "localhost": 200,
+        "ipv4": 200,
+        "ipv6": null
+      },
+      "webgl_canvas": true,
+      "animated_canvas_contexts": [
+        "webgl2"
+      ],
+      "css_3d_elements": 0,
+      "running_animations": 0,
+      "chart_svg_count": 6,
+      "canvas_2d_count": 0,
+      "bar_like_elements": 168,
+      "truth_scalars_in_api": 9,
+      "truth_scalars_on_page": 9,
+      "per_model_token_totals_in_api": 8,
+      "failed_requests": [],
+      "console_errors": [],
+      "page_errors": []
+    },
+    "behavior": {
+      "cells": 28,
+      "bridge_write_calls": 16,
+      "bridge_edit_calls": 0,
+      "raw_file_writes": 7,
+      "subprocess_calls": 0,
+      "prelude_sh_calls": 22,
+      "cell_timeouts": 1,
+      "cells_reading_dependency_source": 1,
+      "cells_reading_tool_docs": 1,
+      "cell_syntax_errors": 1,
+      "todo_nudges": 0,
+      "todo_only_requests": 1
+    },
+    "skill_queries": [],
+    "first_request_input_tokens": [
+      13886
+    ]
+  },
+  "sol": {
+    "metrics": {
+      "requests": 61,
+      "requests_main": 23,
+      "requests_subagent": 38,
+      "subagents": 3,
+      "input_tokens": 456481,
+      "cache_read_tokens": 695296,
+      "output_tokens": 41929,
+      "total_tokens": 1193706,
+      "cache_read_share": 0.604,
+      "max_context_tokens": 35598,
+      "active_seconds": 470,
+      "wall_seconds": 475,
+      "model_seconds": 978,
+      "idle_after_final_answer_seconds": 5,
+      "timed_out": false,
+      "stopped_by_orchestrator": false,
+      "estimated_cost_usd": 1.4,
+      "estimated_cost_usd_no_cache": 2.72,
+      "wire_tool_calls": {
+        "todo": 4,
+        "eval": 54
+      },
+      "bridged_ops": {
+        "read": 33,
+        "run": 41,
+        "task": 2,
+        "write": 25,
+        "bash": 6,
+        "browser": 23
+      },
+      "ops_per_wire_call": 2.24,
+      "tool_errors": 7,
+      "failed_commands": 4,
+      "request_errors": 0,
+      "todo_calls": 4,
+      "background_jobs_started": 1,
+      "thinking_chars": 2305,
+      "tool_code_chars": 97428,
+      "tool_result_chars": 74376,
+      "workspace_loc": {
+        ".sh": 7,
+        ".rs": 364,
+        ".mjs": 4,
+        ".tsx": 536,
+        ".astro": 21,
+        ".css": 220
+      },
+      "has_tests": false
+    },
+    "validation": {
+      "site_up": true,
+      "seconds_to_ready": 4,
+      "loopback": {
+        "localhost": 200,
+        "ipv4": 200,
+        "ipv6": null
+      },
+      "webgl_canvas": false,
+      "animated_canvas_contexts": [
+        "2d"
+      ],
+      "css_3d_elements": 0,
+      "running_animations": 0,
+      "chart_svg_count": 1,
+      "canvas_2d_count": 1,
+      "bar_like_elements": 5,
+      "truth_scalars_in_api": 7,
+      "truth_scalars_on_page": 7,
+      "per_model_token_totals_in_api": 8,
+      "failed_requests": [],
+      "console_errors": [],
+      "page_errors": []
+    },
+    "behavior": {
+      "todo_only_requests": 4,
+      "cells": 54,
+      "cells_writing_files_by_heredoc": 14,
+      "bridge_write_calls": 19,
+      "bridge_edit_calls": 0,
+      "raw_file_writes": 0,
+      "subprocess_calls": 1,
+      "prelude_sh_calls": 46,
+      "cells_reading_tool_docs": 10,
+      "cells_reading_dependency_source": 5,
+      "todo_nudges": 0
+    },
+    "skill_queries": [
+      "skill://?q=animation",
+      "skill://?q=frontend",
+      "skill://?q=react%20canvas",
+      "skill://?q=rust"
+    ],
+    "first_request_input_tokens": [
+      8650,
+      7964,
+      8606,
+      7294
+    ]
+  },
+  "sonnet": {
+    "metrics": {
+      "requests": 21,
+      "requests_main": 21,
+      "requests_subagent": 0,
+      "subagents": 0,
+      "input_tokens": 759300,
+      "cache_read_tokens": 0,
+      "output_tokens": 62311,
+      "total_tokens": 821611,
+      "cache_read_share": 0.0,
+      "max_context_tokens": 62992,
+      "active_seconds": 498,
+      "wall_seconds": 504,
+      "model_seconds": 407,
+      "idle_after_final_answer_seconds": 6,
+      "timed_out": false,
+      "stopped_by_orchestrator": false,
+      "estimated_cost_usd": 2.14,
+      "estimated_cost_usd_no_cache": 2.14,
+      "wire_tool_calls": {
+        "eval": 20
+      },
+      "bridged_ops": {
+        "run": 24,
+        "write": 19,
+        "browser": 8
+      },
+      "ops_per_wire_call": 2.55,
+      "tool_errors": 4,
+      "failed_commands": 1,
+      "request_errors": 1,
+      "todo_calls": 0,
+      "background_jobs_started": 0,
+      "thinking_chars": 30333,
+      "tool_code_chars": 79651,
+      "tool_result_chars": 15971,
+      "workspace_loc": {
+        ".sh": 51,
+        ".rs": 602,
+        ".mjs": 8,
+        ".ts": 193,
+        ".tsx": 888,
+        ".astro": 21,
+        ".css": 116
+      },
+      "has_tests": false
+    },
+    "validation": {
+      "site_up": true,
+      "seconds_to_ready": 2,
+      "loopback": {
+        "localhost": 200,
+        "ipv4": 200,
+        "ipv6": 200
+      },
+      "webgl_canvas": true,
+      "animated_canvas_contexts": [
+        "webgl2"
+      ],
+      "css_3d_elements": 0,
+      "running_animations": 3,
+      "chart_svg_count": 6,
+      "canvas_2d_count": 0,
+      "bar_like_elements": 8,
+      "truth_scalars_in_api": 9,
+      "truth_scalars_on_page": 7,
+      "per_model_token_totals_in_api": 8,
+      "failed_requests": [],
+      "console_errors": [],
+      "page_errors": []
+    },
+    "behavior": {
+      "cells": 20,
+      "bridge_write_calls": 13,
+      "bridge_edit_calls": 0,
+      "raw_file_writes": 8,
+      "subprocess_calls": 5,
+      "prelude_sh_calls": 13,
+      "cells_writing_files_by_heredoc": 2,
+      "cell_syntax_errors": 1,
+      "failed_requests": 1
+    },
+    "skill_queries": [],
+    "first_request_input_tokens": [
+      13888
+    ]
+  },
+  "terra": {
+    "metrics": {
+      "requests": 29,
+      "requests_main": 15,
+      "requests_subagent": 14,
+      "subagents": 2,
+      "input_tokens": 106662,
+      "cache_read_tokens": 251136,
+      "output_tokens": 13544,
+      "total_tokens": 371342,
+      "cache_read_share": 0.702,
+      "max_context_tokens": 17614,
+      "active_seconds": 195,
+      "wall_seconds": 201,
+      "model_seconds": 278,
+      "idle_after_final_answer_seconds": 6,
+      "timed_out": false,
+      "stopped_by_orchestrator": false,
+      "estimated_cost_usd": 0.19,
+      "estimated_cost_usd_no_cache": 0.43,
+      "wire_tool_calls": {
+        "eval": 22,
+        "wait": 4
+      },
+      "bridged_ops": {
+        "read": 7,
+        "bash": 7,
+        "todo": 4,
+        "task": 1,
+        "write": 12,
+        "browser": 5,
+        "run": 7
+      },
+      "ops_per_wire_call": 1.65,
+      "tool_errors": 2,
+      "failed_commands": 4,
+      "request_errors": 0,
+      "todo_calls": 0,
+      "background_jobs_started": 1,
+      "thinking_chars": 0,
+      "tool_code_chars": 38482,
+      "tool_result_chars": 32001,
+      "workspace_loc": {
+        ".mjs": 14,
+        ".sh": 22,
+        ".rs": 150,
+        ".tsx": 55,
+        ".astro": 18,
+        ".css": 1
+      },
+      "has_tests": false
+    },
+    "validation": {
+      "site_up": true,
+      "seconds_to_ready": 2,
+      "loopback": {
+        "localhost": null,
+        "ipv4": null,
+        "ipv6": 200
+      },
+      "webgl_canvas": false,
+      "animated_canvas_contexts": [],
+      "css_3d_elements": 13,
+      "running_animations": 1,
+      "chart_svg_count": 0,
+      "canvas_2d_count": 0,
+      "bar_like_elements": 84,
+      "truth_scalars_in_api": 8,
+      "truth_scalars_on_page": 8,
+      "per_model_token_totals_in_api": 8,
+      "failed_requests": [
+        {
+          "url": "http://localhost:4321/favicon.ico",
+          "status": 404
+        }
+      ],
+      "console_errors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "page_errors": []
+    },
+    "behavior": {
+      "cells": 22,
+      "bridge_write_calls": 12,
+      "bridge_edit_calls": 0,
+      "raw_file_writes": 0,
+      "subprocess_calls": 1,
+      "prelude_sh_calls": 14,
+      "cells_reading_tool_docs": 4,
+      "wait_only_requests": 4,
+      "todo_nudges": 0,
+      "cell_syntax_errors": 1
+    },
+    "skill_queries": [
+      "skill://?q=frontend",
+      "skill://?q=rust"
+    ],
+    "first_request_input_tokens": [
+      8687,
+      8021,
+      8656
+    ]
+  }
+}

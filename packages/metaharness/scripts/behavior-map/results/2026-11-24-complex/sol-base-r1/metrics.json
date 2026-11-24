@@ -1,0 +1,79 @@
+{
+  "label": "sol-base-r1",
+  "wall_seconds": 463,
+  "exit_code": 0,
+  "timed_out": false,
+  "requests": 43,
+  "requests_main": 31,
+  "requests_subagent": 12,
+  "subagents": 2,
+  "input_tokens": 326332,
+  "output_tokens": 28045,
+  "cache_read_tokens": 806912,
+  "total_tokens": 1161289,
+  "max_context_tokens": 48152,
+  "thinking_chars": 1435,
+  "text_chars": 1607,
+  "tool_code_chars": 62325,
+  "tool_result_chars": 118634,
+  "wire_tool_calls": {
+    "eval": 41
+  },
+  "parallel_call_requests": 0,
+  "cells": 41,
+  "eval_languages": {
+    "js": 41
+  },
+  "bridged_ops": {
+    "todo": 8,
+    "read": 17,
+    "bash": 16,
+    "task": 1,
+    "run": 19,
+    "write": 3,
+    "commit": 8,
+    "browser": 35
+  },
+  "tool_errors": 8,
+  "validation_errors": 0,
+  "failed_commands": 8,
+  "request_errors": 0,
+  "stop_reasons": {
+    "toolUse": 41,
+    "stop": 2
+  },
+  "todo_calls": 0,
+  "skill_reads": [
+    "skill://?q=rust&limit=10:raw",
+    "skill://?q=static%20page"
+  ],
+  "first_write_request": 13,
+  "model_seconds": 676,
+  "auxiliary_requests": {
+    "task-label": 1,
+    "job-widget": 1
+  },
+  "estimated_cost_usd": 1.01,
+  "estimated_cost_usd_no_cache": 2.55,
+  "cache_read_share": 0.712,
+  "active_seconds": 458,
+  "background_jobs_started": 1,
+  "idle_after_final_answer_seconds": 5,
+  "stopped_by_orchestrator": false,
+  "bridged_op_total": 107,
+  "ops_per_wire_call": 2.61,
+  "tokens_per_request": 27007,
+  "workspace_files": 23,
+  "workspace_loc": {
+    ".sh": 28,
+    ".rs": 914,
+    ".mjs": 16,
+    ".tsx": 709,
+    ".ts": 173,
+    ".astro": 48,
+    ".css": 403
+  },
+  "has_start_sh": true,
+  "has_readme": true,
+  "has_tests": false
+}

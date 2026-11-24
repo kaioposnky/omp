@@ -1,0 +1,89 @@
+{
+  "start_sh_present": true,
+  "site_up": true,
+  "seconds_to_ready": 2,
+  "root_status": 200,
+  "loopback": {
+    "localhost": null,
+    "ipv4": null,
+    "ipv6": 200
+  },
+  "pages_visited": [
+    {
+      "url": "http://localhost:4321",
+      "status": 200,
+      "title": "OMP Metrics \u2014 seu trabalho, em perspectiva",
+      "height": 2322
+    }
+  ],
+  "webgl_canvas": false,
+  "webgl_animated": false,
+  "canvas_2d_count": 0,
+  "animated_canvas_contexts": [],
+  "chart_svg_count": 0,
+  "bar_like_elements": 84,
+  "css_3d_elements": 13,
+  "running_animations": 1,
+  "widest_period_control": null,
+  "json_api_calls": [
+    {
+      "url": "http://localhost:4321/api/stats",
+      "status": 200,
+      "bytes": 16114
+    }
+  ],
+  "failed_requests": [
+    {
+      "url": "http://localhost:4321/favicon.ico",
+      "status": 404
+    }
+  ],
+  "console_errors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "page_errors": [],
+  "truth_scalars": {
+    "messages": {
+      "in_api": true,
+      "on_page": true
+    },
+    "sessions": {
+      "in_api": true,
+      "on_page": true
+    },
+    "tool_calls": {
+      "in_api": true,
+      "on_page": true
+    },
+    "total_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "input_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "output_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "cache_read_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "cost_total": {
+      "in_api": true,
+      "on_page": true
+    },
+    "errors": {
+      "in_api": false,
+      "on_page": false
+    }
+  },
+  "truth_scalars_in_api": 8,
+  "truth_scalars_on_page": 8,
+  "per_model_token_totals_in_api": 8,
+  "per_model_token_totals_expected": 8,
+  "page_text_chars": 1782,
+  "start_log_tail": "   Compiling omp-metrics-backend v0.1.0 (/home/kaio/work/omp-metrics/backend)\n\n> omp-metrics@1.0.0 dev\n> astro dev --host 0.0.0.0 --host 127.0.0.1 --port 4321\n\n\u25b6 Astro collects anonymous usage data.\n  This information helps us improve Astro.\n  Run \"astro telemetry disable\" to opt-out.\n  https://astro.build/telemetry\n\n10:19:45 [types] Generated 0ms\n10:19:45 [content] Syncing content\n10:19:45 [content] Synced content\n\n astro  v5.18.2 ready in 61 ms\n\n\u2503 Local    http://localhost:4321/\n\u2503 Network  use --host to expose\n\n10:19:45 watching for file changes...\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.67s\n     Running `backend/target/debug/omp-metrics-backend`\nListening on http://127.0.0.1:3001\n\n update  \u25b6 New version of Astro available: 7.4.13\n  Run npx @astrojs/upgrade to update\n\n10:19:47 [200] / 13ms\n10:19:47 [200] / 3ms\n"
+}

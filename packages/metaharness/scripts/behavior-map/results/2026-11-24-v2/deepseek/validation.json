@@ -1,0 +1,89 @@
+{
+  "start_sh_present": true,
+  "site_up": true,
+  "seconds_to_ready": 2,
+  "root_status": 200,
+  "loopback": {
+    "localhost": 200,
+    "ipv4": 200,
+    "ipv6": null
+  },
+  "pages_visited": [
+    {
+      "url": "http://localhost:4321",
+      "status": 200,
+      "title": "OMP Metrics \u2014 every token, accounted for",
+      "height": 4636
+    }
+  ],
+  "webgl_canvas": true,
+  "webgl_animated": true,
+  "canvas_2d_count": 0,
+  "animated_canvas_contexts": [
+    "webgl2"
+  ],
+  "chart_svg_count": 2,
+  "bar_like_elements": 194,
+  "css_3d_elements": 0,
+  "running_animations": 1,
+  "widest_period_control": "click:ALL",
+  "json_api_calls": [
+    {
+      "url": "http://localhost:4321/api/dashboard?range=30d&tz=0",
+      "status": 200,
+      "bytes": 27707
+    },
+    {
+      "url": "http://localhost:4321/api/dashboard?range=all&tz=0",
+      "status": 200,
+      "bytes": 40554
+    }
+  ],
+  "failed_requests": [],
+  "console_errors": [],
+  "page_errors": [],
+  "truth_scalars": {
+    "messages": {
+      "in_api": true,
+      "on_page": true
+    },
+    "sessions": {
+      "in_api": true,
+      "on_page": true
+    },
+    "tool_calls": {
+      "in_api": true,
+      "on_page": true
+    },
+    "total_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "input_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "output_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "cache_read_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "cost_total": {
+      "in_api": true,
+      "on_page": true
+    },
+    "errors": {
+      "in_api": true,
+      "on_page": true
+    }
+  },
+  "truth_scalars_in_api": 9,
+  "truth_scalars_on_page": 9,
+  "per_model_token_totals_in_api": 8,
+  "per_model_token_totals_expected": 8,
+  "page_text_chars": 12165,
+  "start_log_tail": "\n\u001b[1;32m\u25b8\u001b[0m Installing frontend dependencies\nbun install v1.4.4 (38afee6c8)\n\nChecked 326 installs across 415 packages (no changes) [3.00ms]\n\n\u001b[1;32m\u25b8\u001b[0m Building the Astro dashboard\n$ astro build\n\u25b6 Astro collects anonymous usage data.\n  This information helps us improve Astro.\n  Run \"astro telemetry disable\" to opt-out.\n  https://astro.build/telemetry\n\n11:16:25 [vite] Re-optimizing dependencies because vite config has changed\n11:16:25 [types] Generated 76ms\n11:16:25 [build] output: \"static\"\n11:16:25 [build] mode: \"static\"\n11:16:25 [build] directory: /home/kaio/work/omp-metrics/frontend/dist/\n11:16:25 [build] Collecting build info...\n11:16:25 [build] \u2713 Completed in 96ms.\n11:16:25 [build] Building static entrypoints...\n11:16:26 [vite] \u2713 built in 72ms\n11:16:26 [vite] \u2713 built in 185ms\n11:16:26 [build] Rearranging server assets...\n\n generating static routes \n11:16:26   \u251c\u2500 /index.html (+129ms) \n11:16:26 \u2713 Completed in 142ms.\n\n11:16:26 [build] \u2713 Completed in 416ms.\n11:16:26 [build] 1 page(s) built in 513ms\n11:16:26 [build] Complete!\n\n\u001b[1;32m\u25b8\u001b[0m Building the Rust backend\n    Finished `release` profile [optimized] target(s) in 0.01s\n\n\u001b[1;32m\u25b8\u001b[0m Starting OMP Metrics\nOMP Metrics\n  database  data/stats.db (7.9 MB, 7792 messages)\n  frontend  /home/kaio/work/omp-metrics/frontend/dist\n  listening http://localhost:4321\n  press Ctrl+C to stop\n\n  \u001b[1mOMP Metrics is live at http://localhost:4321\u001b[0m\n  Press Ctrl+C to stop.\n\n"
+}

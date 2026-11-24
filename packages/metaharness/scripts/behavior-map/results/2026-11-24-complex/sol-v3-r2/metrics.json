@@ -1,0 +1,81 @@
+{
+  "label": "sol-v3-r2",
+  "wall_seconds": 518,
+  "exit_code": 0,
+  "timed_out": false,
+  "requests": 65,
+  "requests_main": 33,
+  "requests_subagent": 32,
+  "subagents": 3,
+  "input_tokens": 477748,
+  "output_tokens": 42881,
+  "cache_read_tokens": 1011712,
+  "total_tokens": 1532341,
+  "max_context_tokens": 49866,
+  "thinking_chars": 2889,
+  "text_chars": 2336,
+  "tool_code_chars": 87009,
+  "tool_result_chars": 154348,
+  "wire_tool_calls": {
+    "todo": 6,
+    "eval": 62
+  },
+  "parallel_call_requests": 6,
+  "cells": 62,
+  "eval_languages": {
+    "js": 62
+  },
+  "bridged_ops": {
+    "read": 38,
+    "bash": 28,
+    "write": 38,
+    "browser": 49,
+    "run": 30,
+    "commit": 18,
+    "edit": 1
+  },
+  "tool_errors": 11,
+  "validation_errors": 0,
+  "failed_commands": 7,
+  "request_errors": 0,
+  "stop_reasons": {
+    "toolUse": 62,
+    "stop": 3
+  },
+  "todo_calls": 6,
+  "skill_reads": [
+    "skill://?q=full%20stack",
+    "skill://?q=rust",
+    "skill://?q=rust%20test:raw",
+    "skill://?q=astro%20react:raw"
+  ],
+  "first_write_request": 3,
+  "model_seconds": 1051,
+  "auxiliary_requests": {
+    "title": 2,
+    "job-widget": 1
+  },
+  "estimated_cost_usd": 1.49,
+  "estimated_cost_usd_no_cache": 3.41,
+  "cache_read_share": 0.679,
+  "active_seconds": 515,
+  "background_jobs_started": 2,
+  "idle_after_final_answer_seconds": 3,
+  "stopped_by_orchestrator": false,
+  "bridged_op_total": 202,
+  "ops_per_wire_call": 2.97,
+  "tokens_per_request": 23574,
+  "workspace_files": 23,
+  "workspace_loc": {
+    ".sh": 28,
+    ".rs": 1248,
+    ".mjs": 16,
+    ".tsx": 740,
+    ".ts": 141,
+    ".astro": 48,
+    ".css": 414
+  },
+  "has_start_sh": true,
+  "has_readme": true,
+  "has_tests": false
+}

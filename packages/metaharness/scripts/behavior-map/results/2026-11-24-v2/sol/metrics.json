@@ -1,0 +1,79 @@
+{
+  "label": "sol",
+  "wall_seconds": 475,
+  "exit_code": 0,
+  "timed_out": false,
+  "requests": 61,
+  "requests_main": 23,
+  "requests_subagent": 38,
+  "subagents": 3,
+  "input_tokens": 456481,
+  "output_tokens": 41929,
+  "cache_read_tokens": 695296,
+  "total_tokens": 1193706,
+  "max_context_tokens": 35598,
+  "thinking_chars": 2305,
+  "text_chars": 1871,
+  "tool_code_chars": 97428,
+  "tool_result_chars": 74376,
+  "wire_tool_calls": {
+    "todo": 4,
+    "eval": 54
+  },
+  "parallel_call_requests": 0,
+  "cells": 53,
+  "eval_languages": {
+    "js": 54
+  },
+  "bridged_ops": {
+    "read": 33,
+    "run": 41,
+    "task": 2,
+    "write": 25,
+    "bash": 6,
+    "browser": 23
+  },
+  "tool_errors": 7,
+  "validation_errors": 0,
+  "failed_commands": 4,
+  "request_errors": 0,
+  "stop_reasons": {
+    "toolUse": 58,
+    "stop": 3
+  },
+  "todo_calls": 4,
+  "skill_reads": [
+    "skill://?q=frontend:raw",
+    "skill://?q=rust:raw",
+    "skill://?q=react%20canvas",
+    "skill://?q=animation"
+  ],
+  "first_write_request": 7,
+  "model_seconds": 978,
+  "auxiliary_requests": {
+    "title": 2,
+    "task-label": 2
+  },
+  "estimated_cost_usd": 1.4,
+  "estimated_cost_usd_no_cache": 2.72,
+  "cache_read_share": 0.604,
+  "active_seconds": 470,
+  "background_jobs_started": 1,
+  "idle_after_final_answer_seconds": 5,
+  "stopped_by_orchestrator": false,
+  "bridged_op_total": 130,
+  "ops_per_wire_call": 2.24,
+  "tokens_per_request": 19569,
+  "workspace_files": 17,
+  "workspace_loc": {
+    ".sh": 7,
+    ".rs": 364,
+    ".mjs": 4,
+    ".tsx": 536,
+    ".astro": 21,
+    ".css": 220
+  },
+  "has_start_sh": true,
+  "has_readme": true,
+  "has_tests": false
+}

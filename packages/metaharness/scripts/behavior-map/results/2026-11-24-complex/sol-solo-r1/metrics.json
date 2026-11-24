@@ -1,0 +1,84 @@
+{
+  "label": "sol-solo-r1",
+  "wall_seconds": 575,
+  "exit_code": 0,
+  "timed_out": false,
+  "requests": 44,
+  "requests_main": 33,
+  "requests_subagent": 11,
+  "subagents": 2,
+  "input_tokens": 330004,
+  "output_tokens": 27089,
+  "cache_read_tokens": 1231360,
+  "total_tokens": 1588453,
+  "max_context_tokens": 62569,
+  "thinking_chars": 2332,
+  "text_chars": 1690,
+  "tool_code_chars": 46574,
+  "tool_result_chars": 157904,
+  "wire_tool_calls": {
+    "eval": 38,
+    "read": 13,
+    "bash": 1
+  },
+  "parallel_call_requests": 4,
+  "cells": 38,
+  "eval_languages": {
+    "js": 38
+  },
+  "bridged_ops": {
+    "todo": 6,
+    "read": 57,
+    "run": 29,
+    "lsp": 1,
+    "edit": 4,
+    "write": 10,
+    "commit": 31
+  },
+  "tool_errors": 4,
+  "validation_errors": 0,
+  "failed_commands": 2,
+  "request_errors": 0,
+  "stop_reasons": {
+    "toolUse": 42,
+    "stop": 2
+  },
+  "todo_calls": 0,
+  "skill_reads": [
+    "skill://?q=full%20stack:raw",
+    "skill://?q=rust:raw",
+    "skill://?q=browser:raw",
+    "skill://agent-browser:raw",
+    "skill://agent-browser:92-155:raw",
+    "skill://?q=frontend:raw",
+    "skill://?q=astro:raw"
+  ],
+  "first_write_request": 10,
+  "model_seconds": 722,
+  "auxiliary_requests": {
+    "job-widget": 1
+  },
+  "estimated_cost_usd": 1.05,
+  "estimated_cost_usd_no_cache": 3.39,
+  "cache_read_share": 0.789,
+  "active_seconds": 571,
+  "background_jobs_started": 1,
+  "idle_after_final_answer_seconds": 4,
+  "stopped_by_orchestrator": false,
+  "bridged_op_total": 138,
+  "ops_per_wire_call": 2.65,
+  "tokens_per_request": 36101,
+  "workspace_files": 23,
+  "workspace_loc": {
+    ".sh": 28,
+    ".rs": 950,
+    ".mjs": 16,
+    ".tsx": 738,
+    ".ts": 139,
+    ".astro": 48,
+    ".css": 423
+  },
+  "has_start_sh": true,
+  "has_readme": true,
+  "has_tests": false
+}

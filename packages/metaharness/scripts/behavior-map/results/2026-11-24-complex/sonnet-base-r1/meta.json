@@ -1,0 +1,13 @@
+{
+  "slug": "sonnet-base-r1",
+  "model": "9router/cc/claude-sonnet-5-5",
+  "thinking": "high",
+  "max_minutes": 60,
+  "started": 1795521704.2246485,
+  "omp_bin": "/home/kaio/omp-bench/build-base/oh-my-pi/packages/coding-agent/dist/omp",
+  "models_patch": true,
+  "exit_code": 0,
+  "finished": 1795522041.1102548,
+  "wall_seconds": 337,
+  "timed_out": false
+}

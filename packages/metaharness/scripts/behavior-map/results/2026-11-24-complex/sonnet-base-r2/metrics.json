@@ -1,0 +1,67 @@
+{
+  "label": "sonnet-base-r2",
+  "wall_seconds": 281,
+  "exit_code": 0,
+  "timed_out": false,
+  "requests": 25,
+  "requests_main": 25,
+  "requests_subagent": 0,
+  "subagents": 0,
+  "input_tokens": 1023069,
+  "output_tokens": 31173,
+  "cache_read_tokens": 0,
+  "total_tokens": 1054242,
+  "max_context_tokens": 59882,
+  "thinking_chars": 12725,
+  "text_chars": 2464,
+  "tool_code_chars": 43626,
+  "tool_result_chars": 51109,
+  "wire_tool_calls": {
+    "eval": 26
+  },
+  "parallel_call_requests": 2,
+  "cells": 25,
+  "eval_languages": {
+    "sh": 1,
+    "py": 25
+  },
+  "bridged_ops": {
+    "run": 27
+  },
+  "tool_errors": 5,
+  "validation_errors": 1,
+  "failed_commands": 2,
+  "request_errors": 0,
+  "stop_reasons": {
+    "toolUse": 24,
+    "stop": 1
+  },
+  "todo_calls": 0,
+  "skill_reads": [],
+  "first_write_request": 10,
+  "model_seconds": 207,
+  "auxiliary_requests": {},
+  "estimated_cost_usd": 2.36,
+  "estimated_cost_usd_no_cache": 2.36,
+  "cache_read_share": 0.0,
+  "active_seconds": 278,
+  "background_jobs_started": 0,
+  "idle_after_final_answer_seconds": 3,
+  "stopped_by_orchestrator": false,
+  "bridged_op_total": 27,
+  "ops_per_wire_call": 1.04,
+  "tokens_per_request": 42170,
+  "workspace_files": 21,
+  "workspace_loc": {
+    ".sh": 28,
+    ".rs": 973,
+    ".mjs": 16,
+    ".tsx": 738,
+    ".ts": 139,
+    ".astro": 48,
+    ".css": 444
+  },
+  "has_start_sh": true,
+  "has_readme": true,
+  "has_tests": false
+}

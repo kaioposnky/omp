@@ -1,0 +1,89 @@
+{
+  "start_sh_present": true,
+  "site_up": true,
+  "seconds_to_ready": 2,
+  "root_status": 200,
+  "loopback": {
+    "localhost": 200,
+    "ipv4": 200,
+    "ipv6": 200
+  },
+  "pages_visited": [
+    {
+      "url": "http://localhost:4321",
+      "status": 200,
+      "title": "omp metrics \u00b7 uso de tokens do oh-my-pi",
+      "height": 3170
+    }
+  ],
+  "webgl_canvas": true,
+  "webgl_animated": true,
+  "canvas_2d_count": 0,
+  "animated_canvas_contexts": [
+    "webgl2"
+  ],
+  "chart_svg_count": 6,
+  "bar_like_elements": 8,
+  "css_3d_elements": 0,
+  "running_animations": 3,
+  "widest_period_control": "click:Tudo",
+  "json_api_calls": [
+    {
+      "url": "http://localhost:4322/api/filters?",
+      "status": 200,
+      "bytes": 1026
+    },
+    {
+      "url": "http://localhost:4322/api/dashboard?tz=0",
+      "status": 200,
+      "bytes": 29412
+    }
+  ],
+  "failed_requests": [],
+  "console_errors": [],
+  "page_errors": [],
+  "truth_scalars": {
+    "messages": {
+      "in_api": true,
+      "on_page": true
+    },
+    "sessions": {
+      "in_api": true,
+      "on_page": true
+    },
+    "tool_calls": {
+      "in_api": true,
+      "on_page": true
+    },
+    "total_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "input_tokens": {
+      "in_api": true,
+      "on_page": false
+    },
+    "output_tokens": {
+      "in_api": true,
+      "on_page": false
+    },
+    "cache_read_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "cost_total": {
+      "in_api": true,
+      "on_page": true
+    },
+    "errors": {
+      "in_api": true,
+      "on_page": true
+    }
+  },
+  "truth_scalars_in_api": 9,
+  "truth_scalars_on_page": 7,
+  "per_model_token_totals_in_api": 8,
+  "per_model_token_totals_expected": 8,
+  "page_text_chars": 7629,
+  "start_log_tail": "Rust)\n    Finished `release` profile [optimized] target(s) in 0.02s\n==> Preparando frontend (Astro)\n\n> omp-metrics-web@0.1.0 build\n> astro build\n\n10:26:02 [types] Generated 18ms\n10:26:02 [build] output: \"static\"\n10:26:02 [build] mode: \"static\"\n10:26:02 [build] directory: /home/kaio/work/omp-metrics/web/dist/\n10:26:02 [build] Collecting build info...\n10:26:02 [build] \u2713 Completed in 37ms.\n10:26:02 [build] Building static entrypoints...\n10:26:02 [vite] \u2713 built in 58ms\n10:26:02 [WARN] [vite] [plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n10:26:02 [vite] \u2713 built in 195ms\n10:26:02 [build] Rearranging server assets...\n\n generating static routes \n10:26:02   \u251c\u2500 /index.html (+5ms) \n10:26:02 \u2713 Completed in 18ms.\n\n10:26:02 [build] \u2713 Completed in 290ms.\n10:26:02 [build] 1 page(s) built in 328ms\n10:26:02 [build] Complete!\n==> Aguardando servi\u00e7os\nAPI em http://127.0.0.1:4322 (banco: /home/kaio/work/omp-metrics/data/stats.db)\n\n> omp-metrics-web@0.1.0 preview\n> astro preview --port 4321 --host\n\n astro  v7.4.13 ready in 11 ms\n\u2503 Local    http://localhost:4321/\n\u2503 Network  http://172.27.0.2:4321/\n\n  Site pronto: http://localhost:4321   (API: http://localhost:4322)\n  Ctrl+C para encerrar.\n\n"
+}

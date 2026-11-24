@@ -1,0 +1,14 @@
+{
+  "slug": "terra-solo-r1",
+  "model": "9router/cx/gpt-6.1-terra",
+  "thinking": "high",
+  "max_minutes": 60,
+  "started": 1795529380.4558861,
+  "omp_bin": "/home/kaio/omp-bench/build/oh-my-pi/packages/coding-agent/dist/omp",
+  "models_patch": true,
+  "extra_args": "--tools eval,read,bash,edit,write,grep,glob,todo,wait,ast_edit,lsp,web_search",
+  "exit_code": 0,
+  "finished": 1795529797.267116,
+  "wall_seconds": 417,
+  "timed_out": false
+}

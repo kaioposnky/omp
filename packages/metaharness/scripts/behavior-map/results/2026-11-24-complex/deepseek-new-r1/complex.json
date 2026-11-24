@@ -1,0 +1,58 @@
+{
+  "ready": true,
+  "ready_seconds": 34,
+  "points": 3.0,
+  "checks": {
+    "bug_period_refetch": false,
+    "bug_sessions_count": false,
+    "bug_model_cost_sum": false,
+    "bug_window_days": false,
+    "sessions_cost_all": {
+      "ok": false,
+      "total_ok": false,
+      "rows_ok": 0.0,
+      "fields_ok": 0.0
+    },
+    "sessions_tokens_30": {
+      "ok": false,
+      "total_ok": false,
+      "rows_ok": 0.0,
+      "fields_ok": 0.0
+    },
+    "sessions_default_7": {
+      "ok": false,
+      "total_ok": false,
+      "rows_ok": 0.0,
+      "fields_ok": 0.0
+    },
+    "sessions_errors_400": 0,
+    "csv_type": false,
+    "csv_header": false,
+    "csv_rows_all": false,
+    "csv_rows_7": false,
+    "csv_totals": false,
+    "ui_sessions_page": false,
+    "ui_sort_cost": false,
+    "ui_sort_tokens": false,
+    "ui_home_link": false,
+    "ui_page_errors": 0,
+    "tests_pass": false,
+    "tests_passed": 0,
+    "readme_endpoints": false,
+    "git_commits": 0,
+    "git_clean": true,
+    "git_fixture_untouched": true
+  },
+  "tests": {
+    "exit": 0,
+    "passed": 0
+  },
+  "git": {
+    "has_seed_commit": true,
+    "new_commits": 0,
+    "subjects": [],
+    "dirty": [],
+    "fixture_changed": false
+  },
+  "readme": "# omp metrics\n\nPainel para consultar o uso de tokens e as m\u00e9tricas gerais do [oh-my-pi](https://github.com/can1357/oh-my-pi) (`omp`).\n\n- **Frontend:** Astro + React, gr\u00e1ficos com Recharts e uma \"cidade de tokens\" 3D (react-three-fiber) em que cada torre \u00e9 um dia.\n- **Backend:** Rust (axum + rusqlite). L\u00ea `data/stats.db` em modo somente leitura, exp\u00f5e `GET /api/dashboard?days=N` (`0` = todo o per\u00edodo) e serve o site est\u00e1tico.\n\n## Rodar\n\nRequisitos: Node \u2265 22.23, npm e Rust (cargo).\n\n```sh\ncp ~/.omp/stats.db data/stats.db   # atualizar a c\u00f3pia do banco, se quiser\n./start.sh\n```\n\nAbra <http://localhost:4321>. O script instala as depend\u00eancias, compila frontend e backend e sobe um \u00fanico processo que serve tudo. O banco \u00e9 reaberto a cada requisi\u00e7\u00e3o, ent\u00e3o basta copiar um `stats.db` novo e recarregar a p\u00e1gina.\n\nVari\u00e1veis opcionais: `PORT` (padr\u00e3o `4321`) e `STATS_DB` (caminho do banco).\n\nOs per\u00edodos (7/30/90 dias) terminam no registro mais recente do banco, n\u00e3o na data atual, j\u00e1 que o arquivo \u00e9 uma c\u00f3pia.\n\n## Desenvolvimento\n\n```sh\n(cd backend && PORT=4322 STATIC_DIR=../frontend/dist cargo run)   # API\n(cd frontend && npm run dev)                                      # http://localhost:4321, /api via proxy\n```\n"
+}

@@ -1,0 +1,482 @@
+{
+  "deepseek": {
+    "metrics": {
+      "requests": 101,
+      "requests_main": 101,
+      "requests_subagent": 0,
+      "subagents": 0,
+      "input_tokens": 435965,
+      "cache_read_tokens": 11391488,
+      "output_tokens": 159574,
+      "total_tokens": 11987027,
+      "cache_read_share": 0.963,
+      "max_context_tokens": 188943,
+      "active_seconds": 3598,
+      "wall_seconds": 3602,
+      "model_seconds": 1752,
+      "idle_after_final_answer_seconds": 4,
+      "timed_out": true,
+      "stopped_by_orchestrator": false,
+      "estimated_cost_usd": null,
+      "estimated_cost_usd_no_cache": null,
+      "wire_tool_calls": {
+        "eval": 93,
+        "todo": 1
+      },
+      "bridged_ops": {
+        "write": 30,
+        "read": 1,
+        "browser": 93
+      },
+      "ops_per_wire_call": 1.32,
+      "tool_errors": 10,
+      "failed_commands": 0,
+      "request_errors": 7,
+      "todo_calls": 1,
+      "background_jobs_started": 0,
+      "thinking_chars": 380082,
+      "tool_code_chars": 218677,
+      "tool_result_chars": 72700,
+      "workspace_loc": {
+        ".sh": 48,
+        ".rs": 1024,
+        ".mjs": 14,
+        ".ts": 318,
+        ".tsx": 1912,
+        ".astro": 30,
+        ".css": 2840
+      },
+      "has_tests": false
+    },
+    "validation": {
+      "site_up": true,
+      "seconds_to_ready": 6,
+      "loopback": {
+        "localhost": 200,
+        "ipv4": 200,
+        "ipv6": null
+      },
+      "webgl_canvas": true,
+      "animated_canvas_contexts": [
+        "webgl2"
+      ],
+      "css_3d_elements": 0,
+      "running_animations": 1,
+      "chart_svg_count": 3,
+      "canvas_2d_count": 0,
+      "bar_like_elements": 180,
+      "truth_scalars_in_api": 9,
+      "truth_scalars_on_page": 9,
+      "per_model_token_totals_in_api": 8,
+      "failed_requests": [],
+      "console_errors": [],
+      "page_errors": []
+    },
+    "behavior": {
+      "cells": 93,
+      "bridge_write_calls": 30,
+      "bridge_edit_calls": 0,
+      "raw_file_writes": 21,
+      "subprocess_calls": 55,
+      "prelude_sh_calls": 0,
+      "validation_errors": 7,
+      "failed_requests": 7,
+      "todo_only_requests": 1,
+      "todo_nudges": 2,
+      "cell_timeouts": 1,
+      "cells_reading_dependency_source": 1,
+      "cells_reading_tool_docs": 1,
+      "cells_with_ms_timeouts": 1,
+      "guessed_api_errors": 1
+    },
+    "skill_queries": [],
+    "first_request_input_tokens": [
+      7082
+    ]
+  },
+  "opus": {
+    "metrics": {
+      "requests": 36,
+      "requests_main": 36,
+      "requests_subagent": 0,
+      "subagents": 0,
+      "input_tokens": 1698205,
+      "cache_read_tokens": 0,
+      "output_tokens": 71059,
+      "total_tokens": 1769264,
+      "cache_read_share": 0.0,
+      "max_context_tokens": 82515,
+      "active_seconds": 787,
+      "wall_seconds": 791,
+      "model_seconds": 650,
+      "idle_after_final_answer_seconds": 4,
+      "timed_out": false,
+      "stopped_by_orchestrator": false,
+      "estimated_cost_usd": 8.21,
+      "estimated_cost_usd_no_cache": 8.21,
+      "wire_tool_calls": {
+        "eval": 35,
+        "todo": 4
+      },
+      "bridged_ops": {
+        "run": 51,
+        "write": 17,
+        "browser": 217
+      },
+      "ops_per_wire_call": 7.31,
+      "tool_errors": 2,
+      "failed_commands": 0,
+      "request_errors": 0,
+      "todo_calls": 4,
+      "background_jobs_started": 0,
+      "thinking_chars": 37195,
+      "tool_code_chars": 89115,
+      "tool_result_chars": 37721,
+      "workspace_loc": {
+        ".sh": 32,
+        ".rs": 585,
+        ".mjs": 17,
+        ".tsx": 882,
+        ".ts": 148,
+        ".astro": 18,
+        ".css": 500
+      },
+      "has_tests": false
+    },
+    "validation": {
+      "site_up": true,
+      "seconds_to_ready": 2,
+      "loopback": {
+        "localhost": 200,
+        "ipv4": 200,
+        "ipv6": null
+      },
+      "webgl_canvas": true,
+      "animated_canvas_contexts": [
+        "webgl2"
+      ],
+      "css_3d_elements": 0,
+      "running_animations": 1,
+      "chart_svg_count": 6,
+      "canvas_2d_count": 0,
+      "bar_like_elements": 180,
+      "truth_scalars_in_api": 9,
+      "truth_scalars_on_page": 5,
+      "per_model_token_totals_in_api": 8,
+      "failed_requests": [],
+      "console_errors": [],
+      "page_errors": []
+    },
+    "behavior": {
+      "cells": 35,
+      "bridge_write_calls": 17,
+      "bridge_edit_calls": 0,
+      "raw_file_writes": 9,
+      "subprocess_calls": 3,
+      "prelude_sh_calls": 25,
+      "cell_timeouts": 1,
+      "cells_reading_dependency_source": 5,
+      "todo_nudges": 1,
+      "guessed_api_errors": 1
+    },
+    "skill_queries": [],
+    "first_request_input_tokens": [
+      13796
+    ]
+  },
+  "sol": {
+    "metrics": {
+      "requests": 23,
+      "requests_main": 19,
+      "requests_subagent": 4,
+      "subagents": 1,
+      "input_tokens": 203042,
+      "cache_read_tokens": 270080,
+      "output_tokens": 26166,
+      "total_tokens": 499288,
+      "cache_read_share": 0.571,
+      "max_context_tokens": 35756,
+      "active_seconds": 433,
+      "wall_seconds": 1039,
+      "model_seconds": 572,
+      "idle_after_final_answer_seconds": 606,
+      "timed_out": false,
+      "stopped_by_orchestrator": true,
+      "estimated_cost_usd": 0.69,
+      "estimated_cost_usd_no_cache": 1.21,
+      "wire_tool_calls": {
+        "todo": 2,
+        "eval": 19
+      },
+      "bridged_ops": {
+        "read": 5,
+        "bash": 16,
+        "todo": 3,
+        "browser": 14
+      },
+      "ops_per_wire_call": 1.81,
+      "tool_errors": 2,
+      "failed_commands": 2,
+      "request_errors": 0,
+      "todo_calls": 2,
+      "background_jobs_started": 2,
+      "thinking_chars": 739,
+      "tool_code_chars": 70832,
+      "tool_result_chars": 35285,
+      "workspace_loc": {
+        ".mjs": 4,
+        ".sh": 22,
+        ".rs": 482,
+        ".jsx": 351,
+        ".astro": 20,
+        ".css": 141
+      },
+      "has_tests": false
+    },
+    "validation": {
+      "site_up": true,
+      "seconds_to_ready": 2,
+      "loopback": {
+        "localhost": 200,
+        "ipv4": 200,
+        "ipv6": null
+      },
+      "webgl_canvas": false,
+      "animated_canvas_contexts": [
+        "2d"
+      ],
+      "css_3d_elements": 0,
+      "running_animations": 0,
+      "chart_svg_count": 1,
+      "canvas_2d_count": 1,
+      "bar_like_elements": 21,
+      "truth_scalars_in_api": 9,
+      "truth_scalars_on_page": 6,
+      "per_model_token_totals_in_api": 8,
+      "failed_requests": [],
+      "console_errors": [],
+      "page_errors": []
+    },
+    "behavior": {
+      "todo_only_requests": 2,
+      "cells": 19,
+      "cells_writing_files_by_heredoc": 13,
+      "bridge_write_calls": 0,
+      "bridge_edit_calls": 0,
+      "raw_file_writes": 2,
+      "subprocess_calls": 0,
+      "prelude_sh_calls": 17,
+      "cells_reading_tool_docs": 4,
+      "cells_reading_dependency_source": 4,
+      "cell_syntax_errors": 1,
+      "todo_nudges": 1
+    },
+    "skill_queries": [
+      "skill://?q=frontend",
+      "skill://?q=static%20page"
+    ],
+    "first_request_input_tokens": [
+      8553,
+      8221
+    ]
+  },
+  "sonnet": {
+    "metrics": {
+      "requests": 15,
+      "requests_main": 15,
+      "requests_subagent": 0,
+      "subagents": 0,
+      "input_tokens": 448273,
+      "cache_read_tokens": 0,
+      "output_tokens": 32475,
+      "total_tokens": 480748,
+      "cache_read_share": 0.0,
+      "max_context_tokens": 48903,
+      "active_seconds": 298,
+      "wall_seconds": 301,
+      "model_seconds": 213,
+      "idle_after_final_answer_seconds": 3,
+      "timed_out": false,
+      "stopped_by_orchestrator": false,
+      "estimated_cost_usd": 1.22,
+      "estimated_cost_usd_no_cache": 1.22,
+      "wire_tool_calls": {
+        "eval": 16
+      },
+      "bridged_ops": {
+        "run": 21,
+        "write": 15,
+        "browser": 9
+      },
+      "ops_per_wire_call": 2.81,
+      "tool_errors": 2,
+      "failed_commands": 2,
+      "request_errors": 0,
+      "todo_calls": 0,
+      "background_jobs_started": 0,
+      "thinking_chars": 11702,
+      "tool_code_chars": 47723,
+      "tool_result_chars": 14779,
+      "workspace_loc": {
+        ".sh": 45,
+        ".rs": 371,
+        ".mjs": 12,
+        ".ts": 91,
+        ".css": 64,
+        ".tsx": 470,
+        ".astro": 16
+      },
+      "has_tests": false
+    },
+    "validation": {
+      "site_up": true,
+      "seconds_to_ready": 2,
+      "loopback": {
+        "localhost": 200,
+        "ipv4": 200,
+        "ipv6": 200
+      },
+      "webgl_canvas": true,
+      "animated_canvas_contexts": [
+        "webgl2"
+      ],
+      "css_3d_elements": 0,
+      "running_animations": 0,
+      "chart_svg_count": 6,
+      "canvas_2d_count": 0,
+      "bar_like_elements": 176,
+      "truth_scalars_in_api": 9,
+      "truth_scalars_on_page": 8,
+      "per_model_token_totals_in_api": 8,
+      "failed_requests": [
+        {
+          "url": "http://localhost:4321/favicon.ico",
+          "status": 404
+        }
+      ],
+      "console_errors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "page_errors": []
+    },
+    "behavior": {
+      "cells": 16,
+      "bridge_write_calls": 1,
+      "bridge_edit_calls": 0,
+      "raw_file_writes": 3,
+      "subprocess_calls": 1,
+      "prelude_sh_calls": 13,
+      "cell_syntax_errors": 1,
+      "cells_reading_dependency_source": 1
+    },
+    "skill_queries": [],
+    "first_request_input_tokens": [
+      13798
+    ]
+  },
+  "terra": {
+    "metrics": {
+      "requests": 30,
+      "requests_main": 18,
+      "requests_subagent": 12,
+      "subagents": 2,
+      "input_tokens": 149488,
+      "cache_read_tokens": 268032,
+      "output_tokens": 20007,
+      "total_tokens": 437527,
+      "cache_read_share": 0.642,
+      "max_context_tokens": 23766,
+      "active_seconds": 627,
+      "wall_seconds": 631,
+      "model_seconds": 417,
+      "idle_after_final_answer_seconds": 4,
+      "timed_out": false,
+      "stopped_by_orchestrator": false,
+      "estimated_cost_usd": 0.26,
+      "estimated_cost_usd_no_cache": 0.52,
+      "wire_tool_calls": {
+        "eval": 22,
+        "wait": 4
+      },
+      "bridged_ops": {
+        "bash": 14,
+        "read": 4,
+        "task": 1,
+        "browser": 8,
+        "write": 2,
+        "run": 1
+      },
+      "ops_per_wire_call": 1.15,
+      "tool_errors": 2,
+      "failed_commands": 0,
+      "request_errors": 0,
+      "todo_calls": 0,
+      "background_jobs_started": 1,
+      "thinking_chars": 0,
+      "tool_code_chars": 56826,
+      "tool_result_chars": 31868,
+      "workspace_loc": {
+        ".mjs": 7,
+        ".sh": 31,
+        ".rs": 161,
+        ".tsx": 70,
+        ".astro": 14,
+        ".css": 2
+      },
+      "has_tests": false
+    },
+    "validation": {
+      "site_up": true,
+      "seconds_to_ready": 2,
+      "loopback": {
+        "localhost": null,
+        "ipv4": null,
+        "ipv6": 200
+      },
+      "webgl_canvas": false,
+      "animated_canvas_contexts": [],
+      "css_3d_elements": 5,
+      "running_animations": 1,
+      "chart_svg_count": 0,
+      "canvas_2d_count": 0,
+      "bar_like_elements": 55,
+      "truth_scalars_in_api": 8,
+      "truth_scalars_on_page": 8,
+      "per_model_token_totals_in_api": 8,
+      "failed_requests": [
+        {
+          "url": "http://localhost:4321/favicon.ico",
+          "status": 404
+        }
+      ],
+      "console_errors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "page_errors": []
+    },
+    "behavior": {
+      "cells": 22,
+      "bridge_write_calls": 2,
+      "bridge_edit_calls": 0,
+      "raw_file_writes": 3,
+      "subprocess_calls": 0,
+      "prelude_sh_calls": 16,
+      "cells_with_ms_timeouts": 4,
+      "cells_reading_tool_docs": 4,
+      "cells_writing_files_by_heredoc": 6,
+      "cells_reading_dependency_source": 2,
+      "wait_only_requests": 4,
+      "guessed_api_errors": 1,
+      "todo_nudges": 0,
+      "cell_syntax_errors": 1
+    },
+    "skill_queries": [
+      "skill://?q=static%20page"
+    ],
+    "first_request_input_tokens": [
+      8590,
+      7967,
+      8567
+    ]
+  }
+}

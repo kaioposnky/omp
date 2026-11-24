@@ -1,0 +1,13 @@
+{
+  "slug": "opus-base-r2",
+  "model": "9router/cc/claude-opus-5-5",
+  "thinking": "high",
+  "max_minutes": 60,
+  "started": 1795522605.4677117,
+  "omp_bin": "/home/kaio/omp-bench/build-base/oh-my-pi/packages/coding-agent/dist/omp",
+  "models_patch": true,
+  "exit_code": 0,
+  "finished": 1795523438.2682283,
+  "wall_seconds": 833,
+  "timed_out": false
+}

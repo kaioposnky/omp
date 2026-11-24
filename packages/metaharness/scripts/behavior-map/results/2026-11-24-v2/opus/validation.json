@@ -1,0 +1,89 @@
+{
+  "start_sh_present": true,
+  "site_up": true,
+  "seconds_to_ready": 2,
+  "root_status": 200,
+  "loopback": {
+    "localhost": 200,
+    "ipv4": 200,
+    "ipv6": null
+  },
+  "pages_visited": [
+    {
+      "url": "http://localhost:4321",
+      "status": 200,
+      "title": "omp metrics",
+      "height": 3013
+    }
+  ],
+  "webgl_canvas": true,
+  "webgl_animated": true,
+  "canvas_2d_count": 0,
+  "animated_canvas_contexts": [
+    "webgl2"
+  ],
+  "chart_svg_count": 6,
+  "bar_like_elements": 168,
+  "css_3d_elements": 0,
+  "running_animations": 0,
+  "widest_period_control": "click:Tudo",
+  "json_api_calls": [
+    {
+      "url": "http://localhost:4321/api/dashboard?days=30",
+      "status": 200,
+      "bytes": 14190
+    },
+    {
+      "url": "http://localhost:4321/api/dashboard?days=0",
+      "status": 200,
+      "bytes": 24057
+    }
+  ],
+  "failed_requests": [],
+  "console_errors": [],
+  "page_errors": [],
+  "truth_scalars": {
+    "messages": {
+      "in_api": true,
+      "on_page": true
+    },
+    "sessions": {
+      "in_api": true,
+      "on_page": true
+    },
+    "tool_calls": {
+      "in_api": true,
+      "on_page": true
+    },
+    "total_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "input_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "output_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "cache_read_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "cost_total": {
+      "in_api": true,
+      "on_page": true
+    },
+    "errors": {
+      "in_api": true,
+      "on_page": true
+    }
+  },
+  "truth_scalars_in_api": 9,
+  "truth_scalars_on_page": 9,
+  "per_model_token_totals_in_api": 8,
+  "per_model_token_totals_expected": 8,
+  "page_text_chars": 4744,
+  "start_log_tail": "==> Frontend (Astro + React)\n\u25b6 Astro collects anonymous usage data.\n  This information helps us improve Astro.\n  Run \"astro telemetry disable\" to opt-out.\n  https://astro.build/telemetry\n\n10:35:56 [vite] Re-optimizing dependencies because vite config has changed\n10:35:56 [types] Generated 75ms\n10:35:56 [build] output: \"static\"\n10:35:56 [build] mode: \"static\"\n10:35:56 [build] directory: /home/kaio/work/omp-metrics/frontend/dist/\n10:35:56 [build] Collecting build info...\n10:35:56 [build] \u2713 Completed in 96ms.\n10:35:56 [build] Building static entrypoints...\n10:35:56 [vite] \u2713 built in 51ms\n10:35:57 [WARN] [vite] [plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n10:35:57 [vite] \u2713 built in 327ms\n10:35:57 [build] Rearranging server assets...\n\n generating static routes \n10:35:57   \u251c\u2500 /404.html (+4ms) \n10:35:57   \u251c\u2500 /index.html (+2ms) \n10:35:57 \u2713 Completed in 19ms.\n\n10:35:57 [build] \u2713 Completed in 416ms.\n10:35:57 [build] 2 page(s) built in 513ms\n10:35:57 [build] Complete!\n==> Backend (Rust)\n==> Servindo em http://localhost:4321 (Ctrl+C para parar)\nomp-metrics listening on http://localhost:4321\n"
+}

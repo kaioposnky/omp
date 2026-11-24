@@ -1,0 +1,89 @@
+{
+  "start_sh_present": true,
+  "site_up": true,
+  "seconds_to_ready": 4,
+  "root_status": 200,
+  "loopback": {
+    "localhost": 200,
+    "ipv4": 200,
+    "ipv6": null
+  },
+  "pages_visited": [
+    {
+      "url": "http://localhost:4321",
+      "status": 200,
+      "title": "Vis\u00e3o geral \u00b7 omp m\u00e9tricas",
+      "height": 1488
+    }
+  ],
+  "webgl_canvas": false,
+  "webgl_animated": false,
+  "canvas_2d_count": 1,
+  "animated_canvas_contexts": [
+    "2d"
+  ],
+  "chart_svg_count": 1,
+  "bar_like_elements": 5,
+  "css_3d_elements": 0,
+  "running_animations": 0,
+  "widest_period_control": "select:Todo o per\u00edodo",
+  "json_api_calls": [
+    {
+      "url": "http://localhost:4321/api/stats?days=30",
+      "status": 200,
+      "bytes": 5882
+    },
+    {
+      "url": "http://localhost:4321/api/stats?days=all",
+      "status": 200,
+      "bytes": 14774
+    }
+  ],
+  "failed_requests": [],
+  "console_errors": [],
+  "page_errors": [],
+  "truth_scalars": {
+    "messages": {
+      "in_api": true,
+      "on_page": true
+    },
+    "sessions": {
+      "in_api": true,
+      "on_page": true
+    },
+    "tool_calls": {
+      "in_api": false,
+      "on_page": false
+    },
+    "total_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "input_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "output_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "cache_read_tokens": {
+      "in_api": true,
+      "on_page": true
+    },
+    "cost_total": {
+      "in_api": true,
+      "on_page": true
+    },
+    "errors": {
+      "in_api": false,
+      "on_page": false
+    }
+  },
+  "truth_scalars_in_api": 7,
+  "truth_scalars_on_page": 7,
+  "per_model_token_totals_in_api": 8,
+  "per_model_token_totals_expected": 8,
+  "page_text_chars": 3344,
+  "start_log_tail": "\nadded 284 packages in 2s\nnpm notice\nnpm notice New minor version of npm available! 11.17.0 -> 11.21.3\nnpm notice Changelog: https://github.com/npm/cli/releases/tag/v11.21.3\nnpm notice To update run: npm install -g npm@11.21.3\nnpm notice\n\n> build\n> astro build\n\n\u25b6 Astro collects anonymous usage data.\n  This information helps us improve Astro.\n  Run \"astro telemetry disable\" to opt-out.\n  https://astro.build/telemetry\n\n10:24:15 [types] Generated 155ms\n10:24:15 [build] output: \"static\"\n10:24:15 [build] mode: \"static\"\n10:24:15 [build] directory: /home/kaio/work/omp-metrics/frontend/dist/\n10:24:15 [build] Collecting build info...\n10:24:15 [build] \u2713 Completed in 174ms.\n10:24:15 [build] Building static entrypoints...\n10:24:15 [vite] \u2713 built in 93ms\n10:24:15 [vite] \u2713 built in 180ms\n10:24:15 [build] Rearranging server assets...\n\n generating static routes \n10:24:15   \u251c\u2500 /index.html (+91ms) \n10:24:15 \u2713 Completed in 105ms.\n\n10:24:15 [build] \u2713 Completed in 397ms.\n10:24:15 [build] 1 page(s) built in 573ms\n10:24:15 [build] Complete!\n   Compiling omp-metrics v0.1.0 (/home/kaio/work/omp-metrics/backend)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.77s\n     Running `backend/target/debug/omp-metrics`\nomp metrics: http://localhost:4321\n"
+}

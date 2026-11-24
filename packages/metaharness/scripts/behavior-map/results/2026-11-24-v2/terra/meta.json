@@ -1,0 +1,13 @@
+{
+  "slug": "terra",
+  "model": "9router/cx/gpt-6.1-terra",
+  "thinking": "high",
+  "max_minutes": 60,
+  "started": 1795515374.4621286,
+  "omp_bin": "/home/kaio/omp-bench/build/oh-my-pi/packages/coding-agent/dist/omp",
+  "models_patch": true,
+  "exit_code": 0,
+  "finished": 1795515574.9907002,
+  "wall_seconds": 201,
+  "timed_out": false
+}

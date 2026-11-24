@@ -1,0 +1,84 @@
+{
+  "seed": 20261123,
+  "messages": 7792,
+  "sessions": 502,
+  "tool_calls": 9411,
+  "user_messages": 832,
+  "total_tokens": 481637673,
+  "input_tokens": 56656132,
+  "output_tokens": 3389290,
+  "cache_read_tokens": 396784290,
+  "cache_write_tokens": 24807961,
+  "cost_total": 347.1867,
+  "errors": 316,
+  "by_model": {
+    "claude-haiku-5-5": {
+      "messages": 727,
+      "total_tokens": 44322967,
+      "cost": 15.5379
+    },
+    "claude-opus-5-5": {
+      "messages": 1045,
+      "total_tokens": 58320806,
+      "cost": 105.7858
+    },
+    "claude-sonnet-5-5": {
+      "messages": 2049,
+      "total_tokens": 144107336,
+      "cost": 148.6796
+    },
+    "deepseek-v4.1-flash": {
+      "messages": 835,
+      "total_tokens": 44391736,
+      "cost": 3.2568
+    },
+    "gemini-3.1-pro": {
+      "messages": 227,
+      "total_tokens": 10373933,
+      "cost": 5.8859
+    },
+    "gpt-6-luna": {
+      "messages": 657,
+      "total_tokens": 40937434,
+      "cost": 2.6905
+    },
+    "gpt-6.1-terra": {
+      "messages": 1121,
+      "total_tokens": 86329830,
+      "cost": 27.0216
+    },
+    "gpt-6.2-sol": {
+      "messages": 1131,
+      "total_tokens": 52853631,
+      "cost": 38.3286
+    }
+  },
+  "by_tool": {
+    "bash": 1481,
+    "edit": 1122,
+    "eval": 2859,
+    "glob": 286,
+    "grep": 733,
+    "lsp": 37,
+    "read": 2096,
+    "task": 150,
+    "todo": 371,
+    "web_search": 99,
+    "write": 177
+  },
+  "by_folder": {
+    "/home/dev/dotfiles": 3548333,
+    "/home/dev/projects/billing-api": 80630028,
+    "/home/dev/projects/cli-tools": 52494862,
+    "/home/dev/projects/data-pipeline": 44821979,
+    "/home/dev/projects/design-system": 56840552,
+    "/home/dev/projects/docs-site": 21853876,
+    "/home/dev/projects/game-jam": 4033770,
+    "/home/dev/projects/infra": 34504950,
+    "/home/dev/projects/ml-notebooks": 6745027,
+    "/home/dev/projects/mobile-app": 52176116,
+    "/home/dev/projects/storefront": 111182695,
+    "/home/dev/sandbox/experiments": 12805485
+  },
+  "days_with_data": 82
+}
