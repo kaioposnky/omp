@@ -4,6 +4,9 @@
 
 ### Added
 
+- `eval` calls may omit `language`: the cell runs in the previous cell's language instead of failing validation
+- `models.yml` accepts `compat.streamFirstEventTimeoutMs` to shorten the wait for a stalled provider's first stream event
+- Code Mode guidance tells models to write files with `write`/`tool.edit` instead of shell heredocs, and to stop or report a server they started for verification; the skill-search example is now a placeholder; `eval` and `bash` state their timeout default and unit
 - Extensions can take over a built-in provider through `registerProvider`: `stream` replaces its request adapter, `generateImage` its image generation, and `webSearch` its grounded search request, and `discoverModels` its model discovery request. `rules` sets KDL rule directives (such as `prompt-perturbation`) for its models.
 - Code Mode is on by default (`codeMode.default: true`): the model sees `eval` plus control tools and reaches every other tool from a cell; `--no-code-mode`, `/code-mode off` or `codeMode.default: false` restore direct tools. Measured 30–70% fewer tokens across Anthropic, OpenAI and open-weights models with identical hidden-test correctness
 - Code Mode eval prompt adapts to the model family: OpenAI and other non-Anthropic models get a few-cells workflow (one discovery cell, one edit+verify cell, no standalone `todo` turns); Anthropic and OpenAI models get a scope rule (targeted edits, no unrequested behavior changes)

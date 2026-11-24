@@ -98,7 +98,8 @@ function joinWithOr(items: readonly string[]): string {
 }
 
 function describeLanguageField(langs: readonly EvalLanguageToken[]): string {
-	return langs.map(lang => EVAL_LANGUAGE_RUNTIME[lang]).join("; ");
+	const runtimes = langs.map(lang => EVAL_LANGUAGE_RUNTIME[lang]).join("; ");
+	return `${runtimes}; omitted: the previous cell's language. No "bash": shell runs through sh(…) inside a cell`;
 }
 
 /** One-line discovery summary listing the runtimes available this session. */
@@ -132,7 +133,7 @@ function evalTimeoutSchema(maxTimeout?: number) {
 			? ` Configured tools.maxTimeout: ${maxTimeout}s (effective ceiling ${clampTimeout("eval", max, maxTimeout)}s).`
 			: "";
 	return type("number").describe(
-		`Cell deadline in seconds; nonzero values clamp to ${min}–${max}; 0 disables it.${configured}`,
+		`Cell deadline in seconds, default ${clampTimeout("eval", undefined, maxTimeout)}; nonzero values clamp to ${min}–${max}; 0 disables it.${configured}`,
 	);
 }
 
@@ -144,7 +145,7 @@ function evalTimeoutSchema(maxTimeout?: number) {
  * copy per session so disabled backends are never advertised to the model.
  */
 export const evalSchema = type({
-	language: type("'py' | 'js'").describe(describeLanguageField(EVAL_LANGUAGE_ORDER)),
+	"language?": type("'py' | 'js'").describe(describeLanguageField(EVAL_LANGUAGE_ORDER)),
 	...evalCellCommonFields,
 });
 export type EvalToolParams = typeof evalSchema.infer;
@@ -159,7 +160,7 @@ export type EvalCellInput = EvalToolParams;
  */
 function buildEvalSchema(langs: readonly EvalLanguageToken[], maxTimeout?: number): typeof evalSchema {
 	const schema = type({
-		language: type.enumerated(...langs).describe(describeLanguageField(langs)),
+		"language?": type.enumerated(...langs).describe(describeLanguageField(langs)),
 		...evalCellCommonFields,
 		"timeout?": evalTimeoutSchema(maxTimeout),
 	});
@@ -398,7 +399,9 @@ export class EvalTool implements AgentTool<typeof evalSchema> {
 	];
 	get examples(): readonly ToolExample<typeof evalSchema.infer>[] {
 		const langs = new Set(this.#enabledLanguages());
-		return EvalTool.#examples.filter(ex => "call" in ex && langs.has(ex.call.language));
+		return EvalTool.#examples.filter(
+			ex => "call" in ex && ex.call.language !== undefined && langs.has(ex.call.language),
+		);
 	}
 	get parameters(): typeof evalSchema {
 		const langs = this.#enabledLanguages();
@@ -449,6 +452,8 @@ export class EvalTool implements AgentTool<typeof evalSchema> {
 	#paramsKey?: string;
 	#cachedParams?: typeof evalSchema;
 	readonly #shadowCells = new Map<string, EvalShadowCellSession>();
+	/** Language of the last cell; a call that omits `language` runs in it. */
+	#lastLanguage: EvalLanguageToken | undefined;
 	readonly #environmentModes: Partial<Record<EvalLanguage, "managed" | "project">> = {};
 
 	/**
@@ -498,7 +503,10 @@ export class EvalTool implements AgentTool<typeof evalSchema> {
 		if (validated instanceof type.errors) {
 			throw new ToolError(`Validation failed for tool "eval": ${validated.summary}`);
 		}
-		params = validated;
+		const language = validated.language ?? this.#lastLanguage ?? this.#enabledLanguages()[0];
+		if (!language) throw new ToolError("No eval runtime is available in this session");
+		this.#lastLanguage = language;
+		params = { ...validated, language };
 
 		const shadowCell = this.#shadowCells.get(_toolCallId);
 		this.#shadowCells.delete(_toolCallId);
@@ -510,10 +518,10 @@ export class EvalTool implements AgentTool<typeof evalSchema> {
 			throw new ToolError("Eval tool requires a session when not using proxy executor");
 		}
 		const session = this.session;
-		noteEvalPreludesNamed(params.code, params.language, session);
+		noteEvalPreludesNamed(params.code, language, session);
 		const excludeWebP = webpExclusionForModel(session.getActiveModel?.());
 
-		const cellLanguage: EvalLanguage = params.language === "py" ? "python" : params.language;
+		const cellLanguage: EvalLanguage = language === "py" ? "python" : language;
 		// Bound backend discovery by the eval cell's own timeout and abort signal:
 		// the cell IdleTimeout is armed only later in #runCells, so a hung runtime
 		// probe would otherwise wedge the whole turn (issue #9466).
@@ -532,7 +540,7 @@ export class EvalTool implements AgentTool<typeof evalSchema> {
 		}
 		const resolved = await resolveBackend(session, cellLanguage, { signal, timeoutMs: cellTimeoutMs });
 		resolved.notice = [timeoutNotice, resolved.notice].filter(Boolean).join(" ") || undefined;
-		const source = await prepareEvalSource(params, session, signal);
+		const source = await prepareEvalSource({ ...params, language }, session, signal);
 		if (shadowCell && (source.filename || source.packages?.length || source.environment)) {
 			await shadowCell.discard("file-backed or environment-changing eval requires authoritative execution");
 		}

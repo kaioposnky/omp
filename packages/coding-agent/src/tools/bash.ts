@@ -455,7 +455,7 @@ async function saveBashOriginalArtifact(session: ToolSession, originalText: stri
 	}
 }
 
-const BASH_TIMEOUT_DESCRIPTION = `timeout in seconds; 0 disables the command deadline; nonzero values are clamped to ${TOOL_TIMEOUTS.bash.min}-${TOOL_TIMEOUTS.bash.max}`;
+const BASH_TIMEOUT_DESCRIPTION = `timeout in seconds, not ms; 0 disables the command deadline; nonzero values are clamped to ${TOOL_TIMEOUTS.bash.min}-${TOOL_TIMEOUTS.bash.max}`;
 
 // Blank stays valid: some tool-call layers spell an unset field as "".
 const SERVICE_NAME = type(/^(?:\s*|[A-Za-z0-9][A-Za-z0-9._-]{0,47})$/).describe(

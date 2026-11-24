@@ -25,7 +25,7 @@ print(value, ...)  log(message)  phase(title)  env(key?, value?)
 read(path, offset?, limit?)  write(path, content)  output(*ids, format?, query?, offset?, limit?); JS: await read(…)  await write(…)  await output(…)
 wait(handles, timeout?=None, raise_errors?=True); JS: await wait(…) — agent/completion barrier, ordered results; raise_errors=False retains failures
 await tool.<name>(args) — session tool; `args` is its parameter object
-sh(command, cwd?, timeout?); JS: await sh(…) or await sh`cmd ${arg}` — embedded bash engine, runs to completion (never backgrounded)
+sh(command, cwd?, timeout?); JS: await sh(…) or await sh`cmd ${arg}` — embedded bash engine, runs to completion (never backgrounded); `timeout` in seconds
   returns stdout+stderr; non-zero exit raises ShellError (.exit_code/.exitCode, .output)
   JS interpolations are shell-quoted; starts in the session cwd unless cwd is given
 ```
@@ -38,7 +38,7 @@ print(value, ...)  log(message)  phase(title)  env(key?, value?)
 read(path, offset?, limit?)  write(path, content)  output(*ids, format?, query?, offset?, limit?)
 wait(handles, timeout?=None, raise_errors?=True) — agent/completion barrier, ordered results; `raise_errors=False` retains failures.
 await tool.<name>(args) — session tool; `args` is its parameter object
-sh(command, cwd?, timeout?) — embedded bash engine, runs to completion (never backgrounded)
+sh(command, cwd?, timeout?) — embedded bash engine, runs to completion (never backgrounded); `timeout` in seconds
   returns stdout+stderr; non-zero exit raises ShellError (`.exit_code`, `.output`); starts in the session cwd unless `cwd` is given
 ```
 {{/if}}
@@ -49,7 +49,7 @@ print(value, ...)  log(message)  phase(title)  env(key?, value?)
 await read(path, offset?, limit?)  await write(path, content)  await output(...ids, { format?, query?, offset?, limit? })
 await wait(handles, { timeout?, raiseErrors? }) — agent/completion barrier, ordered results; `raiseErrors: false` retains failures.
 await tool.<name>(args) — session tool; `args` is its parameter object
-await sh(command, { cwd?, timeout? })  await sh`cmd ${arg}` — embedded bash engine, runs to completion (never backgrounded)
+await sh(command, { cwd?, timeout? })  await sh`cmd ${arg}` — embedded bash engine, runs to completion (never backgrounded); `timeout` in seconds
   resolves to stdout+stderr; non-zero exit throws ShellError (`.exitCode`, `.output`)
   interpolations are shell-quoted; starts in the session cwd unless `cwd` is given
 ```
@@ -69,9 +69,10 @@ Never tell the user to call a tool you can reach through the bridge, and never r
 {{#if cellWorkflow}}
 <cell-workflow>
 Work in as few `eval` cells as possible; each extra cell resends the whole conversation.
-1. Discover in ONE cell: a single `tool.bash` that lists the files, prints every relevant source and test file with headers, and runs the tests (`… | tail -30`).
+1. Discover in ONE cell: list the files, print every relevant source and test file with headers, and run the tests (`… | tail -30`). New project: inspect the inputs and the toolchain instead.
 2. Edit and verify in ONE cell: do every write/replacement for the task, then in the same cell run the tests, quick edge-case probes, and a grep for leftovers. Make edits throw when the anchor text is missing instead of re-reading to confirm.
 3. Answer as soon as verification passes. No extra re-reads.
+File bodies go through `write`/`tool.edit`, NEVER a shell heredoc or `cat >`: quoting nested inside a cell breaks.
 Never send `todo` as its own turn: update it inside the working cell with `await tool.todo({...})`, or skip it on small tasks.
 </cell-workflow>
 {{/if}}

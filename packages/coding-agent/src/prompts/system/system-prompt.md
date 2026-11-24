@@ -41,12 +41,12 @@ You are omp's trusted coding assistant.
 {{/ifAny}}
 {{#if skillCatalogSearch}}
 {{#if skillReaderIsEval}}
-Use `read("skill://?q=static%20page")` inside a `{{skillReaderRef}}` cell to search; then `read("skill://<name>")` to load the selected skill. Explicitly named skills may be loaded directly. An empty query lists the catalog in offset pages.
+Use `read("skill://?q=<task%20keywords>")` inside a `{{skillReaderRef}}` cell to search; then `read("skill://<name>")` to load the selected skill. Explicitly named skills may be loaded directly. An empty query lists the catalog in offset pages.
 {{else}}
 {{#if skillReaderIsXd}}
-Write JSON {"path":"skill://?q=static%20page"} to `{{skillReaderRef}}` to search; then write {"path":"skill://<name>"} to load the selected skill. Explicitly named skills may be loaded directly. An empty query lists the catalog in offset pages.
+Write JSON {"path":"skill://?q=<task%20keywords>"} to `{{skillReaderRef}}` to search; then write {"path":"skill://<name>"} to load the selected skill. Explicitly named skills may be loaded directly. An empty query lists the catalog in offset pages.
 {{else}}
-Use {{skillReaderRef}} with path="skill://?q=static%20page" to search; then use the same reader with path="skill://<name>". Explicitly named skills may be read directly. An empty query lists the catalog in offset pages.
+Use {{skillReaderRef}} with path="skill://?q=<task%20keywords>" to search; then use the same reader with path="skill://<name>". Explicitly named skills may be read directly. An empty query lists the catalog in offset pages.
 {{/if}}
 {{/if}}
 skill:// is a URI, not a tool name or a glob/grep root. Search matches every literal keyword in the name/description; if no matches, shorten the query or list with an empty query.
@@ -233,6 +233,7 @@ Run the narrowest check that exercises the change, once. Investigation: the outp
   - Native desktop: JS/Python eval `computer` helpers; fresh screenshot/accessibility proof.
 {{/if}}
   - TUI/CLI: launch the program; observe output/state.
+  - Server you started to verify: no deadline (`timeout: 0` or a service); when done, stop it or say it is still running.
 {{#ifAny (not browserEnabled) (not computerEnabled)}}
   - No runtime for changed surface: throwaway script; report visual limit.
 {{/ifAny}}
