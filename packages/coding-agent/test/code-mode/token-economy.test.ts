@@ -230,14 +230,26 @@ describe("Code Mode token economy (§12)", () => {
 			expect(normalText.length).toBeGreaterThan(10_000);
 			expect(normalText).not.toContain("[raw output:");
 			expect(codeText.length).toBeLessThan(normalText.length);
-			const url = codeText.match(/\[raw output: (local:\/\/\d+\.log)\]/)?.[1];
-			expect(url).toBeDefined();
-			// The footer must name a link the cell can follow, with the elided middle intact.
+			const footer = codeText.match(/\[Lines (\d+)-(\d+) elided: read\("([^"]+)"\)\]\n\[raw output: (local:\/\/\d+\.log)\]/);
+			expect(footer).not.toBeNull();
+			const [, first, last, selector, url] = footer!;
+			// The named range is exactly the lines the cap hid: the line before it and the line after it are shown.
+			expect(codeText).toContain(`line-${Number(first) - 2} `);
+			expect(codeText).not.toContain(`line-${Number(first) - 1} `);
+			expect(codeText).toContain(`line-${Number(last)} `);
+			expect(selector).toBe(`${url}:${first}-${last}`);
+			// Following the footer returns those lines and nothing the cell already showed.
 			const readBack = await run(
+				code.session,
+				`const t = await read(${JSON.stringify(selector)}); const l = t.split("\\n"); console.log(l.length, l[0].split(" ")[0], l.at(-1).split(" ")[0]);`,
+			);
+			expect(readBack).toContain(`${Number(last) - Number(first) + 1} line-${Number(first) - 1} line-${Number(last) - 1}`);
+			// The whole spill stays readable with the middle intact.
+			const whole = await run(
 				code.session,
 				`const t = await read(${JSON.stringify(url)}); console.log(t.includes("line-200 "), t.includes("line-399 "));`,
 			);
-			expect(readBack).toContain("true true");
+			expect(whole).toContain("true true");
 		} finally {
 			await normal.session.dispose();
 			await code.session.dispose();

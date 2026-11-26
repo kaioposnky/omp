@@ -187,6 +187,8 @@ describe("python prelude", () => {
 			[
 				`open(${JSON.stringify(out)}, "w", newline="").write(read("local://7.log"))`,
 				`print(repr(read("local://7.log", offset=3, limit=2)))`,
+				// The selector the cut-output footer names reads the same lines.
+				`print(repr(read("local://7.log:3-4")))`,
 			].join("\n"),
 			{ PI_EVAL_LOCAL_ROOTS: JSON.stringify({ local: tmp.join("local") }) },
 			async () => ({ text: "from the read tool" }),
@@ -194,7 +196,7 @@ describe("python prelude", () => {
 
 		expect(stderr).toBe("");
 		expect(await Bun.file(out).text()).toBe(largeArtifact);
-		expect(stdout).toBe("'row 0\\nrow 1\\n'\n");
+		expect(stdout).toBe("'row 0\\nrow 1\\n'\n'row 0\\nrow 1\\n'\n");
 		expect(requests).toEqual([]);
 	});
 

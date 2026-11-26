@@ -47,6 +47,11 @@ const strictUtf8Decoder = new TextDecoder("utf-8", { fatal: true });
 export function createHelpers(ctx: HelperContext): HelperBundle {
 	return {
 		read: async (rawPath, options = {}) => {
+			const ranged = splitLineSelector(rawPath);
+			if (ranged) {
+				rawPath = ranged.path;
+				options = { offset: ranged.offset, limit: ranged.limit, ...options };
+			}
 			const resolved = await resolveRegularFile(ctx, rawPath);
 			if (!resolved) return undefined;
 			const { filePath, file, size } = resolved;
@@ -112,6 +117,24 @@ function getMergedEnv(ctx: HelperContext): Record<string, string> {
 }
 
 const INTERNAL_URL_RE = /^([a-z][a-z0-9+.-]*):\/\/(.*)$/i;
+
+/** `:N-M`, `:N-` or `:N` (optionally after `:raw`) at the end of an internal URL. */
+const LINE_SELECTOR_RE = /^([a-z][a-z0-9+.-]*:\/\/.*?)(?::raw)?:(\d+)(?:-(\d*))?$/i;
+
+/**
+ * Split the read tool's line selector off an internal URL served from disk (`local://3.log:120-140`),
+ * as 1-indexed offset/limit. Plain paths are left alone: `a:1` can be a real file name.
+ */
+function splitLineSelector(rawPath: string): { path: string; offset: number; limit?: number } | undefined {
+	const match = LINE_SELECTOR_RE.exec(rawPath);
+	if (!match) return undefined;
+	const offset = Number(match[2]);
+	if (offset < 1) return undefined;
+	if (match[3] === undefined) return { path: match[1], offset, limit: 1 };
+	if (match[3] === "") return { path: match[1], offset };
+	const last = Number(match[3]);
+	return last < offset ? undefined : { path: match[1], offset, limit: last - offset + 1 };
+}
 
 function resolvePath(ctx: HelperContext, value: string): string {
 	if (path.isAbsolute(value)) return path.normalize(value);

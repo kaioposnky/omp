@@ -88,14 +88,42 @@ export function resolveEvalArtifactAllocator(
 	};
 }
 
-/** Append the `[raw output: local://N.log]` recovery link the Code Mode cap promises. */
+/** `formatMiddleElisionMarker` line, e.g. `[…292ln elided…]`. */
+const ELISION_MARKER_RE = /^\[…\d+ln elided…\]$/;
+
+/** Lines `OutputSink.dump(notice)` prepends as `[notice]\n`. */
+function noticeLineCount(notice: string | undefined): number {
+	return notice ? notice.split("\n").length : 0;
+}
+
+/**
+ * Append the `[raw output: local://N.log]` recovery link the Code Mode cap promises. When the cap cut
+ * the middle, a line above it names the elided lines and the read() call that returns exactly them:
+ * without it models guess a narrower re-read and re-fetch lines they already saw. The link line itself
+ * keeps its fixed shape (`stripRawOutputArtifactNotice` parses it).
+ */
 export function appendEvalArtifactFooter(
 	output: string,
-	summary: Pick<OutputSummary, "truncated" | "artifactId">,
+	summary: Pick<OutputSummary, "truncated" | "artifactId" | "elidedLines" | "artifactElidedBytes">,
 	codeMode: boolean,
+	/** Lines `dump(notice)` put before the output; the artifact does not hold them. */
+	noticeLines = 0,
 ): string {
 	if (!codeMode || !summary.truncated || summary.artifactId === undefined) return output;
-	const footer = `[raw output: ${spillUrl(summary.artifactId)}]`;
+	const url = spillUrl(summary.artifactId);
+	const link = `[raw output: ${url}]`;
+	let footer = link;
+	const elided = summary.elidedLines ?? 0;
+	// A capped artifact is itself a head/tail sample, so its line numbers no longer match the output.
+	if (elided > 1 && summary.artifactElidedBytes === undefined) {
+		// The sink's middle marker sits right after the kept head: the lines above it are artifact lines 1..N.
+		const markerAt = output.split("\n").findIndex(line => ELISION_MARKER_RE.test(line)) - noticeLines;
+		if (markerAt > 0) {
+			const first = markerAt + 1;
+			const last = markerAt + elided;
+			footer = `[Lines ${first}-${last} elided: read("${url}:${first}-${last}")]\n${link}`;
+		}
+	}
 	return output.length > 0 ? `${output}\n${footer}` : footer;
 }
 
@@ -671,7 +699,7 @@ export async function executeWithKernelBase<
 				exitCode: undefined,
 				cancelled: true,
 				truncated: dumped.truncated,
-				output: appendEvalArtifactFooter(dumped.output, dumped, budget.codeMode),
+				output: appendEvalArtifactFooter(dumped.output, dumped, budget.codeMode, noticeLineCount(annotation)),
 				artifactId: dumped.artifactId ?? undefined,
 				artifactElidedBytes: dumped.artifactElidedBytes,
 				artifactError: dumped.artifactError,
@@ -685,12 +713,13 @@ export async function executeWithKernelBase<
 		}
 
 		if (result.stdinRequested) {
-			const dumped = await sink.dump("Kernel requested stdin; interactive input is not supported.");
+			const stdinNotice = "Kernel requested stdin; interactive input is not supported.";
+			const dumped = await sink.dump(stdinNotice);
 			return {
 				exitCode: 1,
 				cancelled: false,
 				truncated: dumped.truncated,
-				output: appendEvalArtifactFooter(dumped.output, dumped, budget.codeMode),
+				output: appendEvalArtifactFooter(dumped.output, dumped, budget.codeMode, noticeLineCount(stdinNotice)),
 				artifactId: dumped.artifactId ?? undefined,
 				artifactElidedBytes: dumped.artifactElidedBytes,
 				artifactError: dumped.artifactError,
@@ -727,14 +756,13 @@ export async function executeWithKernelBase<
 		) {
 			const timedOut =
 				abortShield.timedOut || isTimedOutCancellation(err, cancelledErrorClass, abortShield.signal, deadlineMs);
-			const dumped = await sink.dump(
-				timedOut ? formatTimeoutAnnotation(executionTimeoutMs ?? options?.idleTimeoutMs) : undefined,
-			);
+			const timeoutNotice = timedOut ? formatTimeoutAnnotation(executionTimeoutMs ?? options?.idleTimeoutMs) : undefined;
+			const dumped = await sink.dump(timeoutNotice);
 			return {
 				exitCode: undefined,
 				cancelled: true,
 				truncated: dumped.truncated,
-				output: appendEvalArtifactFooter(dumped.output, dumped, budget.codeMode),
+				output: appendEvalArtifactFooter(dumped.output, dumped, budget.codeMode, noticeLineCount(timeoutNotice)),
 				artifactId: dumped.artifactId ?? undefined,
 				artifactElidedBytes: dumped.artifactElidedBytes,
 				artifactError: dumped.artifactError,

@@ -19,9 +19,11 @@
 
 - Code Mode sends a smaller fixed prompt: the eval description no longer repeats the session tool names that `<bridge-tools>` already lists, and the system prompt links `xd://read/urls` instead of inlining the proc, ssh and issue URL grammar
 - The Code Mode cell workflow asks for discovery as one `tool.bash` that prints the relevant files, and no longer tells the model to print only line ranges, which spread reads over extra requests
+- A Code Mode `eval` result whose middle was cut names the hidden lines and the exact `read("local://N.log:A-B")` call that returns them; models re-read the source in guessed ranges instead, refetching lines already shown (DeepSeek: about 11 re-reads a run, 39% of the lines already seen)
 
 ### Fixed
 
+- `read("local://N.log:A-B")` in an `eval` cell returns those lines, as the read tool does; it failed with a missing-file error because the selector was taken as part of the file name
 - A provider stream that drops after text was shown, while a tool call was streaming, now continues the turn when that call provably never ran, instead of ending the session
 - `wait` on subagents alone no longer returns after 5 s with a still-running snapshot: subagents run for minutes, and the early return cost a request per wait
 - Code Mode no longer sends the Linux X11 window-focus note when no user browser (relay or CDP) is reachable

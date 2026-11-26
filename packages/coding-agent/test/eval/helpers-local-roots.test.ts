@@ -68,6 +68,22 @@ describe("eval js helpers internal-url resolution", () => {
 		expect(await helpers.read("local://12.log", { offset: 2, limit: 1 })).toBe("second");
 	});
 
+	// The cut-output footer and the system prompt advertise `local://N.log:N-M`; read() must honor it.
+	it("reads the line range a local:// selector names, as the read tool does", async () => {
+		using tmp = TempDir.createSync("@eval-helpers-selector-");
+		const root = path.join(tmp.path(), "local");
+		await Bun.write(path.join(root, "7.log"), "one\ntwo\nthree\nfour\n");
+		await Bun.write(path.join(tmp.path(), "a:2"), "plain file");
+		const helpers = createHelpers(makeCtx(tmp.path(), { local: root }));
+
+		expect(await helpers.read("local://7.log:2-3")).toBe("two\nthree");
+		expect(await helpers.read("local://7.log:raw:3-3")).toBe("three");
+		expect(await helpers.read("local://7.log:2")).toBe("two");
+		expect(await helpers.read("local://7.log:3-")).toBe("three\nfour\n");
+		// A plain path keeps its colon: only internal URLs carry a selector.
+		expect(await helpers.read("a:2")).toBe("plain file");
+	});
+
 	it("serves a session's spills from the local:// root its artifacts dir implies", async () => {
 		using tmp = TempDir.createSync("@eval-helpers-session-spills-");
 		await Bun.write(path.join(tmp.path(), "local", "12.log"), "spill text");

@@ -104,8 +104,32 @@ if "__omp_prelude_loaded__" not in globals():
             raise ValueError(f"{scheme}:// path escapes its root: {path}")
         return Path(resolved)
 
+    _OMP_LINE_SELECTOR_RE = re.compile(r"^([a-z][a-z0-9+.-]*://.*?)(?::raw)?:(\d+)(?:-(\d*))?$", re.IGNORECASE)
+
+    def _split_line_selector(path: str | Path) -> tuple[str, int, int | None] | None:
+        """Split the read tool's `:N-M` selector off an internal URL served from disk (`local://3.log:120-140`)."""
+        if not isinstance(path, str) or _should_delegate_read(path):
+            return None
+        match = _OMP_LINE_SELECTOR_RE.match(path)
+        if match is None:
+            return None
+        first = int(match.group(2))
+        if first < 1:
+            return None
+        if match.group(3) is None:
+            return match.group(1), first, 1
+        if match.group(3) == "":
+            return match.group(1), first, None
+        last = int(match.group(3))
+        return None if last < first else (match.group(1), first, last - first + 1)
+
     def read(path: str | Path, offset: int = 1, limit: int | None = None) -> str:
         """Read file or read-tool URI contents. offset/limit are 1-indexed lines."""
+        ranged = _split_line_selector(path)
+        if ranged is not None and offset <= 1 and limit is None:
+            path, offset, limit = ranged
+        elif ranged is not None:
+            path = ranged[0]
         if _should_delegate_read(path):
             return _read_through_tool(path, offset, limit)
         else:
