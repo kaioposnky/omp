@@ -1,0 +1,5697 @@
+{
+ "runs": {
+  "deepseek-base-r1": {
+   "model": "deepseek",
+   "arm": "base",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 76,
+   "total_tokens": 3626980,
+   "input_tokens": 102589,
+   "cache_read_tokens": 3477760,
+   "output_tokens": 46631,
+   "active_seconds": 2015,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 2,
+   "ms_timeouts": 2,
+   "cell_timeouts": 0,
+   "todo_only": 1,
+   "failed_requests": 1,
+   "write_calls": 3,
+   "edit_calls": 11,
+   "skill_static_page": 0,
+   "tool_errors": 5
+  },
+  "deepseek-base-r2": {
+   "model": "deepseek",
+   "arm": "base",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 84,
+   "total_tokens": 4445085,
+   "input_tokens": 40101,
+   "cache_read_tokens": 4351872,
+   "output_tokens": 53112,
+   "active_seconds": 3155,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 2,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 8,
+   "edit_calls": 7,
+   "skill_static_page": 0,
+   "tool_errors": 7
+  },
+  "deepseek-base-r3": {
+   "model": "deepseek",
+   "arm": "base",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 6,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 86,
+   "total_tokens": 4664752,
+   "input_tokens": 41757,
+   "cache_read_tokens": 4569344,
+   "output_tokens": 53651,
+   "active_seconds": 881,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 1,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 13,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "deepseek-base-r4": {
+   "model": "deepseek",
+   "arm": "base",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 6,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 77,
+   "total_tokens": 3622031,
+   "input_tokens": 29249,
+   "cache_read_tokens": 3540480,
+   "output_tokens": 52302,
+   "active_seconds": 843,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 2,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 2,
+   "write_calls": 1,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 11
+  },
+  "deepseek-base-r5": {
+   "model": "deepseek",
+   "arm": "base",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 6,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 63,
+   "total_tokens": 3300335,
+   "input_tokens": 28956,
+   "cache_read_tokens": 3210496,
+   "output_tokens": 60883,
+   "active_seconds": 768,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 2,
+   "failed_requests": 0,
+   "write_calls": 3,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "deepseek-new-r1": {
+   "model": "deepseek",
+   "arm": "new",
+   "rep": "r1",
+   "points": 3.0,
+   "checks": {
+    "bug_period_refetch": false,
+    "bug_sessions_count": false,
+    "bug_model_cost_sum": false,
+    "bug_window_days": false,
+    "sessions_cost_all": {
+     "ok": false,
+     "total_ok": false,
+     "rows_ok": 0.0,
+     "fields_ok": 0.0
+    },
+    "sessions_tokens_30": {
+     "ok": false,
+     "total_ok": false,
+     "rows_ok": 0.0,
+     "fields_ok": 0.0
+    },
+    "sessions_default_7": {
+     "ok": false,
+     "total_ok": false,
+     "rows_ok": 0.0,
+     "fields_ok": 0.0
+    },
+    "sessions_errors_400": 0,
+    "csv_type": false,
+    "csv_header": false,
+    "csv_rows_all": false,
+    "csv_rows_7": false,
+    "csv_totals": false,
+    "ui_sessions_page": false,
+    "ui_sort_cost": false,
+    "ui_sort_tokens": false,
+    "ui_home_link": false,
+    "ui_page_errors": 0,
+    "tests_pass": false,
+    "tests_passed": 0,
+    "readme_endpoints": false,
+    "git_commits": 0,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 39,
+   "total_tokens": 823015,
+   "input_tokens": 27910,
+   "cache_read_tokens": 777216,
+   "output_tokens": 17889,
+   "active_seconds": 793,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "deepseek-new-r2": {
+   "model": "deepseek",
+   "arm": "new",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 6,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 67,
+   "total_tokens": 2874472,
+   "input_tokens": 31832,
+   "cache_read_tokens": 2798336,
+   "output_tokens": 44304,
+   "active_seconds": 2779,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 3,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 7
+  },
+  "deepseek-v3-r1": {
+   "model": "deepseek",
+   "arm": "v3",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 66,
+   "total_tokens": 2993363,
+   "input_tokens": 92972,
+   "cache_read_tokens": 2858752,
+   "output_tokens": 41639,
+   "active_seconds": 880,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 2,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 9
+  },
+  "deepseek-v3-r2": {
+   "model": "deepseek",
+   "arm": "v3",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 80,
+   "total_tokens": 4130616,
+   "input_tokens": 40094,
+   "cache_read_tokens": 4038528,
+   "output_tokens": 51994,
+   "active_seconds": 882,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 12,
+   "edit_calls": 5,
+   "skill_static_page": 0,
+   "tool_errors": 7
+  },
+  "deepseek-v3-r3": {
+   "model": "deepseek",
+   "arm": "v3",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 64,
+   "total_tokens": 2611806,
+   "input_tokens": 31331,
+   "cache_read_tokens": 2540800,
+   "output_tokens": 39675,
+   "active_seconds": 807,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 13,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "deepseek-v3-r4": {
+   "model": "deepseek",
+   "arm": "v3",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 69,
+   "total_tokens": 3198514,
+   "input_tokens": 34964,
+   "cache_read_tokens": 3116288,
+   "output_tokens": 47262,
+   "active_seconds": 773,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 12,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 5
+  },
+  "deepseek-v3-r5": {
+   "model": "deepseek",
+   "arm": "v3",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 96,
+   "total_tokens": 4577671,
+   "input_tokens": 41852,
+   "cache_read_tokens": 4488192,
+   "output_tokens": 47627,
+   "active_seconds": 1093,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 8,
+   "edit_calls": 15,
+   "skill_static_page": 0,
+   "tool_errors": 8
+  },
+  "opus-base-r1": {
+   "model": "opus",
+   "arm": "base",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 6,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 32,
+   "total_tokens": 1541435,
+   "input_tokens": 1495814,
+   "cache_read_tokens": 0,
+   "output_tokens": 45621,
+   "active_seconds": 514,
+   "cost": 6.9,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "opus-base-r2": {
+   "model": "opus",
+   "arm": "base",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 43,
+   "total_tokens": 2154532,
+   "input_tokens": 2076457,
+   "cache_read_tokens": 0,
+   "output_tokens": 78075,
+   "active_seconds": 830,
+   "cost": 9.87,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 4,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 2
+  },
+  "opus-base-r3": {
+   "model": "opus",
+   "arm": "base",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 36,
+   "total_tokens": 1801186,
+   "input_tokens": 1741404,
+   "cache_read_tokens": 0,
+   "output_tokens": 59782,
+   "active_seconds": 648,
+   "cost": 8.16,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 3,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "opus-base-r4": {
+   "model": "opus",
+   "arm": "base",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 9,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 33,
+   "total_tokens": 1631811,
+   "input_tokens": 1561759,
+   "cache_read_tokens": 0,
+   "output_tokens": 70052,
+   "active_seconds": 728,
+   "cost": 7.65,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "opus-base-r5": {
+   "model": "opus",
+   "arm": "base",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 8,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 41,
+   "total_tokens": 2090229,
+   "input_tokens": 2031407,
+   "cache_read_tokens": 0,
+   "output_tokens": 58822,
+   "active_seconds": 667,
+   "cost": 9.3,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "opus-new-r1": {
+   "model": "opus",
+   "arm": "new",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 9,
+    "readme_endpoints": true,
+    "git_commits": 4,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 43,
+   "total_tokens": 2308007,
+   "input_tokens": 2234721,
+   "cache_read_tokens": 0,
+   "output_tokens": 73286,
+   "active_seconds": 805,
+   "cost": 10.4,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 1,
+   "failed_requests": 0,
+   "write_calls": 21,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "opus-new-r2": {
+   "model": "opus",
+   "arm": "new",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 43,
+   "total_tokens": 2099599,
+   "input_tokens": 2035601,
+   "cache_read_tokens": 0,
+   "output_tokens": 63998,
+   "active_seconds": 1004,
+   "cost": 9.42,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "opus-v3-r1": {
+   "model": "opus",
+   "arm": "v3",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 33,
+   "total_tokens": 1600635,
+   "input_tokens": 1553262,
+   "cache_read_tokens": 0,
+   "output_tokens": 47373,
+   "active_seconds": 567,
+   "cost": 7.16,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 1,
+   "failed_requests": 0,
+   "write_calls": 1,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "opus-v3-r2": {
+   "model": "opus",
+   "arm": "v3",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 38,
+   "total_tokens": 1861232,
+   "input_tokens": 1797576,
+   "cache_read_tokens": 0,
+   "output_tokens": 63656,
+   "active_seconds": 685,
+   "cost": 8.46,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 1,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "opus-v3-r3": {
+   "model": "opus",
+   "arm": "v3",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 42,
+   "total_tokens": 2199948,
+   "input_tokens": 2134886,
+   "cache_read_tokens": 0,
+   "output_tokens": 65062,
+   "active_seconds": 711,
+   "cost": 9.84,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "opus-v3-r4": {
+   "model": "opus",
+   "arm": "v3",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 8,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 40,
+   "total_tokens": 1895846,
+   "input_tokens": 1830008,
+   "cache_read_tokens": 0,
+   "output_tokens": 65838,
+   "active_seconds": 702,
+   "cost": 8.64,
+   "file_heredoc_cells": 1,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 3,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 1
+  },
+  "opus-v3-r5": {
+   "model": "opus",
+   "arm": "v3",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 34,
+   "total_tokens": 1495787,
+   "input_tokens": 1424820,
+   "cache_read_tokens": 0,
+   "output_tokens": 70967,
+   "active_seconds": 757,
+   "cost": 7.12,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "sol-base-r1": {
+   "model": "sol",
+   "arm": "base",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 43,
+   "total_tokens": 1161289,
+   "input_tokens": 326332,
+   "cache_read_tokens": 806912,
+   "output_tokens": 28045,
+   "active_seconds": 458,
+   "cost": 1.01,
+   "file_heredoc_cells": 1,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 3,
+   "edit_calls": 0,
+   "skill_static_page": 1,
+   "tool_errors": 8
+  },
+  "sol-base-r2": {
+   "model": "sol",
+   "arm": "base",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 62,
+   "total_tokens": 1555124,
+   "input_tokens": 542738,
+   "cache_read_tokens": 968704,
+   "output_tokens": 43682,
+   "active_seconds": 552,
+   "cost": 1.62,
+   "file_heredoc_cells": 2,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 5,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "sol-base-r3": {
+   "model": "sol",
+   "arm": "base",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 39,
+   "total_tokens": 942007,
+   "input_tokens": 277445,
+   "cache_read_tokens": 641280,
+   "output_tokens": 23282,
+   "active_seconds": 492,
+   "cost": 0.85,
+   "file_heredoc_cells": 1,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 6,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 6
+  },
+  "sol-base-r4": {
+   "model": "sol",
+   "arm": "base",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 45,
+   "total_tokens": 1218918,
+   "input_tokens": 317018,
+   "cache_read_tokens": 876032,
+   "output_tokens": 25868,
+   "active_seconds": 668,
+   "cost": 0.98,
+   "file_heredoc_cells": 3,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 6,
+   "failed_requests": 0,
+   "write_calls": 1,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 1
+  },
+  "sol-base-r5": {
+   "model": "sol",
+   "arm": "base",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 4,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 38,
+   "total_tokens": 927305,
+   "input_tokens": 329206,
+   "cache_read_tokens": 570112,
+   "output_tokens": 27987,
+   "active_seconds": 469,
+   "cost": 1.0,
+   "file_heredoc_cells": 4,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 4,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 2
+  },
+  "sol-new-r1": {
+   "model": "sol",
+   "arm": "new",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 44,
+   "total_tokens": 1207004,
+   "input_tokens": 338756,
+   "cache_read_tokens": 841728,
+   "output_tokens": 26520,
+   "active_seconds": 474,
+   "cost": 1.03,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 1,
+   "failed_requests": 0,
+   "write_calls": 13,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 9
+  },
+  "sol-new-r2": {
+   "model": "sol",
+   "arm": "new",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 6,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 36,
+   "total_tokens": 859396,
+   "input_tokens": 261429,
+   "cache_read_tokens": 576768,
+   "output_tokens": 21199,
+   "active_seconds": 391,
+   "cost": 0.79,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 15,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 6
+  },
+  "sol-v3-r1": {
+   "model": "sol",
+   "arm": "v3",
+   "rep": "r1",
+   "points": 95.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": false,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 66,
+   "total_tokens": 1629759,
+   "input_tokens": 523794,
+   "cache_read_tokens": 1058816,
+   "output_tokens": 47149,
+   "active_seconds": 565,
+   "cost": 1.62,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 21,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 5
+  },
+  "sol-v3-r2": {
+   "model": "sol",
+   "arm": "v3",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 8,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 65,
+   "total_tokens": 1532341,
+   "input_tokens": 477748,
+   "cache_read_tokens": 1011712,
+   "output_tokens": 42881,
+   "active_seconds": 515,
+   "cost": 1.49,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 36,
+   "edit_calls": 1,
+   "skill_static_page": 0,
+   "tool_errors": 11
+  },
+  "sol-v3-r3": {
+   "model": "sol",
+   "arm": "v3",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 38,
+   "total_tokens": 928530,
+   "input_tokens": 262810,
+   "cache_read_tokens": 642816,
+   "output_tokens": 22904,
+   "active_seconds": 565,
+   "cost": 0.82,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 1,
+   "failed_requests": 0,
+   "write_calls": 14,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 7
+  },
+  "sol-v3-r4": {
+   "model": "sol",
+   "arm": "v3",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 35,
+   "total_tokens": 819151,
+   "input_tokens": 243855,
+   "cache_read_tokens": 551424,
+   "output_tokens": 23872,
+   "active_seconds": 528,
+   "cost": 0.78,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 7,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "sol-v3-r5": {
+   "model": "sol",
+   "arm": "v3",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 68,
+   "total_tokens": 1642722,
+   "input_tokens": 440091,
+   "cache_read_tokens": 1166848,
+   "output_tokens": 35783,
+   "active_seconds": 485,
+   "cost": 1.35,
+   "file_heredoc_cells": 0,
+   "validation_errors": 1,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 1,
+   "failed_requests": 0,
+   "write_calls": 17,
+   "edit_calls": 5,
+   "skill_static_page": 0,
+   "tool_errors": 7
+  },
+  "sonnet-base-r1": {
+   "model": "sonnet",
+   "arm": "base",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 8,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 29,
+   "total_tokens": 1289195,
+   "input_tokens": 1254980,
+   "cache_read_tokens": 0,
+   "output_tokens": 34215,
+   "active_seconds": 333,
+   "cost": 2.85,
+   "file_heredoc_cells": 0,
+   "validation_errors": 1,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 5
+  },
+  "sonnet-base-r2": {
+   "model": "sonnet",
+   "arm": "base",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 10,
+    "readme_endpoints": true,
+    "git_commits": 4,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 25,
+   "total_tokens": 1054242,
+   "input_tokens": 1023069,
+   "cache_read_tokens": 0,
+   "output_tokens": 31173,
+   "active_seconds": 278,
+   "cost": 2.36,
+   "file_heredoc_cells": 0,
+   "validation_errors": 1,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 5
+  },
+  "sonnet-new-r1": {
+   "model": "sonnet",
+   "arm": "new",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 8,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 33,
+   "total_tokens": 1514860,
+   "input_tokens": 1466329,
+   "cache_read_tokens": 0,
+   "output_tokens": 48531,
+   "active_seconds": 419,
+   "cost": 3.42,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 5
+  },
+  "sonnet-new-r2": {
+   "model": "sonnet",
+   "arm": "new",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 22,
+   "total_tokens": 861586,
+   "input_tokens": 831478,
+   "cache_read_tokens": 0,
+   "output_tokens": 30108,
+   "active_seconds": 276,
+   "cost": 1.96,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 2
+  },
+  "sonnet-v3-r1": {
+   "model": "sonnet",
+   "arm": "v3",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 6,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 24,
+   "total_tokens": 960222,
+   "input_tokens": 923583,
+   "cache_read_tokens": 0,
+   "output_tokens": 36639,
+   "active_seconds": 340,
+   "cost": 2.21,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 1
+  },
+  "sonnet-v3-r2": {
+   "model": "sonnet",
+   "arm": "v3",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 29,
+   "total_tokens": 1150883,
+   "input_tokens": 1114988,
+   "cache_read_tokens": 0,
+   "output_tokens": 35895,
+   "active_seconds": 331,
+   "cost": 2.59,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 3,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "terra-base-r1": {
+   "model": "terra",
+   "arm": "base",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 2,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 69,
+   "total_tokens": 1272030,
+   "input_tokens": 290237,
+   "cache_read_tokens": 962432,
+   "output_tokens": 19361,
+   "active_seconds": 581,
+   "cost": 0.44,
+   "file_heredoc_cells": 2,
+   "validation_errors": 0,
+   "ms_timeouts": 13,
+   "cell_timeouts": 0,
+   "todo_only": 6,
+   "failed_requests": 0,
+   "write_calls": 12,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 2
+  },
+  "terra-base-r2": {
+   "model": "terra",
+   "arm": "base",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 3,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 60,
+   "total_tokens": 944537,
+   "input_tokens": 182732,
+   "cache_read_tokens": 745856,
+   "output_tokens": 15949,
+   "active_seconds": 550,
+   "cost": 0.3,
+   "file_heredoc_cells": 2,
+   "validation_errors": 0,
+   "ms_timeouts": 7,
+   "cell_timeouts": 0,
+   "todo_only": 4,
+   "failed_requests": 2,
+   "write_calls": 9,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "terra-base-r3": {
+   "model": "terra",
+   "arm": "base",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 2,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 47,
+   "total_tokens": 721555,
+   "input_tokens": 199271,
+   "cache_read_tokens": 506752,
+   "output_tokens": 15532,
+   "active_seconds": 499,
+   "cost": 0.3,
+   "file_heredoc_cells": 1,
+   "validation_errors": 0,
+   "ms_timeouts": 10,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 4,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 2
+  },
+  "terra-base-r4": {
+   "model": "terra",
+   "arm": "base",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 3,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 49,
+   "total_tokens": 800684,
+   "input_tokens": 226553,
+   "cache_read_tokens": 559360,
+   "output_tokens": 14771,
+   "active_seconds": 477,
+   "cost": 0.33,
+   "file_heredoc_cells": 3,
+   "validation_errors": 0,
+   "ms_timeouts": 11,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 3,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "terra-base-r5": {
+   "model": "terra",
+   "arm": "base",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 2,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 49,
+   "total_tokens": 790807,
+   "input_tokens": 207881,
+   "cache_read_tokens": 568832,
+   "output_tokens": 14094,
+   "active_seconds": 271,
+   "cost": 0.31,
+   "file_heredoc_cells": 4,
+   "validation_errors": 0,
+   "ms_timeouts": 12,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 7,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "terra-new-r1": {
+   "model": "terra",
+   "arm": "new",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 6,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 84,
+   "total_tokens": 1413353,
+   "input_tokens": 324717,
+   "cache_read_tokens": 1070848,
+   "output_tokens": 17788,
+   "active_seconds": 304,
+   "cost": 0.47,
+   "file_heredoc_cells": 0,
+   "validation_errors": 1,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 20,
+   "edit_calls": 6,
+   "skill_static_page": 0,
+   "tool_errors": 9
+  },
+  "terra-new-r2": {
+   "model": "terra",
+   "arm": "new",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 2,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 68,
+   "total_tokens": 1088865,
+   "input_tokens": 239768,
+   "cache_read_tokens": 832000,
+   "output_tokens": 17097,
+   "active_seconds": 272,
+   "cost": 0.37,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 2,
+   "write_calls": 20,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 3
+  },
+  "terra-v3-r1": {
+   "model": "terra",
+   "arm": "v3",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 3,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 57,
+   "total_tokens": 993718,
+   "input_tokens": 214382,
+   "cache_read_tokens": 765824,
+   "output_tokens": 13512,
+   "active_seconds": 228,
+   "cost": 0.32,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 15,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "terra-v3-r2": {
+   "model": "terra",
+   "arm": "v3",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 3,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 77,
+   "total_tokens": 1578150,
+   "input_tokens": 279875,
+   "cache_read_tokens": 1282176,
+   "output_tokens": 16099,
+   "active_seconds": 291,
+   "cost": 0.42,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 1,
+   "failed_requests": 0,
+   "write_calls": 24,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 6
+  },
+  "terra-v3-r3": {
+   "model": "terra",
+   "arm": "v3",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 2,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 57,
+   "total_tokens": 999911,
+   "input_tokens": 239870,
+   "cache_read_tokens": 748032,
+   "output_tokens": 12009,
+   "active_seconds": 237,
+   "cost": 0.34,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 4,
+   "failed_requests": 0,
+   "write_calls": 13,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 6
+  },
+  "terra-v3-r4": {
+   "model": "terra",
+   "arm": "v3",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 74,
+   "total_tokens": 1375656,
+   "input_tokens": 282197,
+   "cache_read_tokens": 1076992,
+   "output_tokens": 16467,
+   "active_seconds": 295,
+   "cost": 0.42,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 1,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 27,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "terra-v3-r5": {
+   "model": "terra",
+   "arm": "v3",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 3,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 65,
+   "total_tokens": 1441913,
+   "input_tokens": 267381,
+   "cache_read_tokens": 1160320,
+   "output_tokens": 14212,
+   "active_seconds": 290,
+   "cost": 0.4,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 5,
+   "failed_requests": 0,
+   "write_calls": 13,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  }
+ },
+ "summary": {
+  "deepseek": {
+   "base": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      98.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      76,
+      84,
+      86,
+      77,
+      63
+     ],
+     77.2
+    ],
+    "total_tokens": [
+     [
+      3626980,
+      4445085,
+      4664752,
+      3622031,
+      3300335
+     ],
+     3931836.6
+    ],
+    "output_tokens": [
+     [
+      46631,
+      53112,
+      53651,
+      52302,
+      60883
+     ],
+     53315.8
+    ],
+    "active_seconds": [
+     [
+      2015,
+      3155,
+      881,
+      843,
+      768
+     ],
+     1532.4
+    ],
+    "cost": [
+     [],
+     null
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      2,
+      2,
+      1,
+      2,
+      0
+     ],
+     1.4
+    ],
+    "ms_timeouts": [
+     [
+      2,
+      0,
+      0,
+      0,
+      0
+     ],
+     0.4
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      1,
+      0,
+      0,
+      0,
+      2
+     ],
+     0.6
+    ],
+    "failed_requests": [
+     [
+      1,
+      1,
+      0,
+      2,
+      0
+     ],
+     0.8
+    ],
+    "tool_errors": [
+     [
+      5,
+      7,
+      4,
+      11,
+      3
+     ],
+     6
+    ],
+    "edit_calls": [
+     [
+      11,
+      7,
+      0,
+      0,
+      0
+     ],
+     3.6
+    ]
+   },
+   "new": {
+    "n": 2,
+    "final_answers": 2,
+    "points": [
+     [
+      3.0,
+      98.0
+     ],
+     50.5
+    ],
+    "requests": [
+     [
+      39,
+      67
+     ],
+     53
+    ],
+    "total_tokens": [
+     [
+      823015,
+      2874472
+     ],
+     1848743.5
+    ],
+    "output_tokens": [
+     [
+      17889,
+      44304
+     ],
+     31096.5
+    ],
+    "active_seconds": [
+     [
+      793,
+      2779
+     ],
+     1786
+    ],
+    "cost": [
+     [],
+     null
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "failed_requests": [
+     [
+      1,
+      0
+     ],
+     0.5
+    ],
+    "tool_errors": [
+     [
+      3,
+      7
+     ],
+     5
+    ],
+    "edit_calls": [
+     [
+      0,
+      0
+     ],
+     0
+    ]
+   },
+   "v3": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      98.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      66,
+      80,
+      64,
+      69,
+      96
+     ],
+     75
+    ],
+    "total_tokens": [
+     [
+      2993363,
+      4130616,
+      2611806,
+      3198514,
+      4577671
+     ],
+     3502394
+    ],
+    "output_tokens": [
+     [
+      41639,
+      51994,
+      39675,
+      47262,
+      47627
+     ],
+     45639.4
+    ],
+    "active_seconds": [
+     [
+      880,
+      882,
+      807,
+      773,
+      1093
+     ],
+     887
+    ],
+    "cost": [
+     [],
+     null
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      1,
+      0,
+      0,
+      0
+     ],
+     0.2
+    ],
+    "todo_only": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "failed_requests": [
+     [
+      0,
+      0,
+      0,
+      1,
+      1
+     ],
+     0.4
+    ],
+    "tool_errors": [
+     [
+      9,
+      7,
+      4,
+      5,
+      8
+     ],
+     6.6
+    ],
+    "edit_calls": [
+     [
+      0,
+      5,
+      0,
+      0,
+      15
+     ],
+     4
+    ]
+   }
+  },
+  "opus": {
+   "base": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      98.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      32,
+      43,
+      36,
+      33,
+      41
+     ],
+     37
+    ],
+    "total_tokens": [
+     [
+      1541435,
+      2154532,
+      1801186,
+      1631811,
+      2090229
+     ],
+     1843838.6
+    ],
+    "output_tokens": [
+     [
+      45621,
+      78075,
+      59782,
+      70052,
+      58822
+     ],
+     62470.4
+    ],
+    "active_seconds": [
+     [
+      514,
+      830,
+      648,
+      728,
+      667
+     ],
+     677.4
+    ],
+    "cost": [
+     [
+      6.9,
+      9.87,
+      8.16,
+      7.65,
+      9.3
+     ],
+     8.38
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      1,
+      1,
+      1,
+      1,
+      0
+     ],
+     0.8
+    ],
+    "todo_only": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "failed_requests": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "tool_errors": [
+     [
+      4,
+      2,
+      3,
+      3,
+      4
+     ],
+     3.2
+    ],
+    "edit_calls": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ]
+   },
+   "new": {
+    "n": 2,
+    "final_answers": 2,
+    "points": [
+     [
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      43,
+      43
+     ],
+     43
+    ],
+    "total_tokens": [
+     [
+      2308007,
+      2099599
+     ],
+     2203803
+    ],
+    "output_tokens": [
+     [
+      73286,
+      63998
+     ],
+     68642
+    ],
+    "active_seconds": [
+     [
+      805,
+      1004
+     ],
+     904.5
+    ],
+    "cost": [
+     [
+      10.4,
+      9.42
+     ],
+     9.91
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      1,
+      0
+     ],
+     0.5
+    ],
+    "failed_requests": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "tool_errors": [
+     [
+      3,
+      3
+     ],
+     3
+    ],
+    "edit_calls": [
+     [
+      0,
+      0
+     ],
+     0
+    ]
+   },
+   "v3": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      98.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      33,
+      38,
+      42,
+      40,
+      34
+     ],
+     37.4
+    ],
+    "total_tokens": [
+     [
+      1600635,
+      1861232,
+      2199948,
+      1895846,
+      1495787
+     ],
+     1810689.6
+    ],
+    "output_tokens": [
+     [
+      47373,
+      63656,
+      65062,
+      65838,
+      70967
+     ],
+     62579.2
+    ],
+    "active_seconds": [
+     [
+      567,
+      685,
+      711,
+      702,
+      757
+     ],
+     684.4
+    ],
+    "cost": [
+     [
+      7.16,
+      8.46,
+      9.84,
+      8.64,
+      7.12
+     ],
+     8.24
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0,
+      0,
+      1,
+      0
+     ],
+     0.2
+    ],
+    "validation_errors": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      1,
+      1,
+      0,
+      0,
+      0
+     ],
+     0.4
+    ],
+    "failed_requests": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "tool_errors": [
+     [
+      3,
+      3,
+      3,
+      1,
+      3
+     ],
+     2.6
+    ],
+    "edit_calls": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ]
+   }
+  },
+  "sol": {
+   "base": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      98.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      43,
+      62,
+      39,
+      45,
+      38
+     ],
+     45.4
+    ],
+    "total_tokens": [
+     [
+      1161289,
+      1555124,
+      942007,
+      1218918,
+      927305
+     ],
+     1160928.6
+    ],
+    "output_tokens": [
+     [
+      28045,
+      43682,
+      23282,
+      25868,
+      27987
+     ],
+     29772.8
+    ],
+    "active_seconds": [
+     [
+      458,
+      552,
+      492,
+      668,
+      469
+     ],
+     527.8
+    ],
+    "cost": [
+     [
+      1.01,
+      1.62,
+      0.85,
+      0.98,
+      1.0
+     ],
+     1.09
+    ],
+    "file_heredoc_cells": [
+     [
+      1,
+      2,
+      1,
+      3,
+      4
+     ],
+     2.2
+    ],
+    "validation_errors": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      0,
+      0,
+      0,
+      6,
+      0
+     ],
+     1.2
+    ],
+    "failed_requests": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "tool_errors": [
+     [
+      8,
+      4,
+      6,
+      1,
+      2
+     ],
+     4.2
+    ],
+    "edit_calls": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ]
+   },
+   "new": {
+    "n": 2,
+    "final_answers": 2,
+    "points": [
+     [
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      44,
+      36
+     ],
+     40
+    ],
+    "total_tokens": [
+     [
+      1207004,
+      859396
+     ],
+     1033200
+    ],
+    "output_tokens": [
+     [
+      26520,
+      21199
+     ],
+     23859.5
+    ],
+    "active_seconds": [
+     [
+      474,
+      391
+     ],
+     432.5
+    ],
+    "cost": [
+     [
+      1.03,
+      0.79
+     ],
+     0.91
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      1,
+      0
+     ],
+     0.5
+    ],
+    "failed_requests": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "tool_errors": [
+     [
+      9,
+      6
+     ],
+     7.5
+    ],
+    "edit_calls": [
+     [
+      0,
+      0
+     ],
+     0
+    ]
+   },
+   "v3": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      95.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     97.4
+    ],
+    "requests": [
+     [
+      66,
+      65,
+      38,
+      35,
+      68
+     ],
+     54.4
+    ],
+    "total_tokens": [
+     [
+      1629759,
+      1532341,
+      928530,
+      819151,
+      1642722
+     ],
+     1310500.6
+    ],
+    "output_tokens": [
+     [
+      47149,
+      42881,
+      22904,
+      23872,
+      35783
+     ],
+     34517.8
+    ],
+    "active_seconds": [
+     [
+      565,
+      515,
+      565,
+      528,
+      485
+     ],
+     531.6
+    ],
+    "cost": [
+     [
+      1.62,
+      1.49,
+      0.82,
+      0.78,
+      1.35
+     ],
+     1.21
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0,
+      0,
+      0,
+      1
+     ],
+     0.2
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      0,
+      0,
+      1,
+      0,
+      1
+     ],
+     0.4
+    ],
+    "failed_requests": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "tool_errors": [
+     [
+      5,
+      11,
+      7,
+      4,
+      7
+     ],
+     6.8
+    ],
+    "edit_calls": [
+     [
+      0,
+      1,
+      0,
+      0,
+      5
+     ],
+     1.2
+    ]
+   }
+  },
+  "sonnet": {
+   "base": {
+    "n": 2,
+    "final_answers": 2,
+    "points": [
+     [
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      29,
+      25
+     ],
+     27
+    ],
+    "total_tokens": [
+     [
+      1289195,
+      1054242
+     ],
+     1171718.5
+    ],
+    "output_tokens": [
+     [
+      34215,
+      31173
+     ],
+     32694
+    ],
+    "active_seconds": [
+     [
+      333,
+      278
+     ],
+     305.5
+    ],
+    "cost": [
+     [
+      2.85,
+      2.36
+     ],
+     2.6
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      1,
+      1
+     ],
+     1
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      1,
+      1
+     ],
+     1
+    ],
+    "todo_only": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "failed_requests": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "tool_errors": [
+     [
+      5,
+      5
+     ],
+     5
+    ],
+    "edit_calls": [
+     [
+      0,
+      0
+     ],
+     0
+    ]
+   },
+   "new": {
+    "n": 2,
+    "final_answers": 2,
+    "points": [
+     [
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      33,
+      22
+     ],
+     27.5
+    ],
+    "total_tokens": [
+     [
+      1514860,
+      861586
+     ],
+     1188223
+    ],
+    "output_tokens": [
+     [
+      48531,
+      30108
+     ],
+     39319.5
+    ],
+    "active_seconds": [
+     [
+      419,
+      276
+     ],
+     347.5
+    ],
+    "cost": [
+     [
+      3.42,
+      1.96
+     ],
+     2.69
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      1
+     ],
+     0.5
+    ],
+    "todo_only": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "failed_requests": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "tool_errors": [
+     [
+      5,
+      2
+     ],
+     3.5
+    ],
+    "edit_calls": [
+     [
+      0,
+      0
+     ],
+     0
+    ]
+   },
+   "v3": {
+    "n": 2,
+    "final_answers": 2,
+    "points": [
+     [
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      24,
+      29
+     ],
+     26.5
+    ],
+    "total_tokens": [
+     [
+      960222,
+      1150883
+     ],
+     1055552.5
+    ],
+    "output_tokens": [
+     [
+      36639,
+      35895
+     ],
+     36267
+    ],
+    "active_seconds": [
+     [
+      340,
+      331
+     ],
+     335.5
+    ],
+    "cost": [
+     [
+      2.21,
+      2.59
+     ],
+     2.4
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "failed_requests": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "tool_errors": [
+     [
+      1,
+      3
+     ],
+     2
+    ],
+    "edit_calls": [
+     [
+      0,
+      0
+     ],
+     0
+    ]
+   }
+  },
+  "terra": {
+   "base": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      98.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      69,
+      60,
+      47,
+      49,
+      49
+     ],
+     54.8
+    ],
+    "total_tokens": [
+     [
+      1272030,
+      944537,
+      721555,
+      800684,
+      790807
+     ],
+     905922.6
+    ],
+    "output_tokens": [
+     [
+      19361,
+      15949,
+      15532,
+      14771,
+      14094
+     ],
+     15941.4
+    ],
+    "active_seconds": [
+     [
+      581,
+      550,
+      499,
+      477,
+      271
+     ],
+     475.6
+    ],
+    "cost": [
+     [
+      0.44,
+      0.3,
+      0.3,
+      0.33,
+      0.31
+     ],
+     0.34
+    ],
+    "file_heredoc_cells": [
+     [
+      2,
+      2,
+      1,
+      3,
+      4
+     ],
+     2.4
+    ],
+    "validation_errors": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      13,
+      7,
+      10,
+      11,
+      12
+     ],
+     10.6
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      6,
+      4,
+      0,
+      0,
+      0
+     ],
+     2
+    ],
+    "failed_requests": [
+     [
+      0,
+      2,
+      0,
+      0,
+      0
+     ],
+     0.4
+    ],
+    "tool_errors": [
+     [
+      2,
+      4,
+      2,
+      3,
+      4
+     ],
+     3
+    ],
+    "edit_calls": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ]
+   },
+   "new": {
+    "n": 2,
+    "final_answers": 2,
+    "points": [
+     [
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      84,
+      68
+     ],
+     76
+    ],
+    "total_tokens": [
+     [
+      1413353,
+      1088865
+     ],
+     1251109
+    ],
+    "output_tokens": [
+     [
+      17788,
+      17097
+     ],
+     17442.5
+    ],
+    "active_seconds": [
+     [
+      304,
+      272
+     ],
+     288
+    ],
+    "cost": [
+     [
+      0.47,
+      0.37
+     ],
+     0.42
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      1,
+      0
+     ],
+     0.5
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      0,
+      0
+     ],
+     0
+    ],
+    "failed_requests": [
+     [
+      1,
+      2
+     ],
+     1.5
+    ],
+    "tool_errors": [
+     [
+      9,
+      3
+     ],
+     6
+    ],
+    "edit_calls": [
+     [
+      6,
+      0
+     ],
+     3
+    ]
+   },
+   "v3": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      98.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      57,
+      77,
+      57,
+      74,
+      65
+     ],
+     66
+    ],
+    "total_tokens": [
+     [
+      993718,
+      1578150,
+      999911,
+      1375656,
+      1441913
+     ],
+     1277869.6
+    ],
+    "output_tokens": [
+     [
+      13512,
+      16099,
+      12009,
+      16467,
+      14212
+     ],
+     14459.8
+    ],
+    "active_seconds": [
+     [
+      228,
+      291,
+      237,
+      295,
+      290
+     ],
+     268.2
+    ],
+    "cost": [
+     [
+      0.32,
+      0.42,
+      0.34,
+      0.42,
+      0.4
+     ],
+     0.38
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0,
+      0,
+      1,
+      0
+     ],
+     0.2
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "todo_only": [
+     [
+      0,
+      1,
+      4,
+      0,
+      5
+     ],
+     2
+    ],
+    "failed_requests": [
+     [
+      0,
+      0,
+      0,
+      1,
+      0
+     ],
+     0.2
+    ],
+    "tool_errors": [
+     [
+      4,
+      6,
+      6,
+      4,
+      4
+     ],
+     4.8
+    ],
+    "edit_calls": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ]
+   }
+  }
+ }
+}

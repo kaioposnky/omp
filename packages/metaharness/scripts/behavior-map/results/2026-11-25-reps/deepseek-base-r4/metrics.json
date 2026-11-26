@@ -1,0 +1,73 @@
+{
+  "label": "deepseek-base-r4",
+  "wall_seconds": 845,
+  "exit_code": 0,
+  "timed_out": false,
+  "requests": 77,
+  "requests_main": 77,
+  "requests_subagent": 0,
+  "subagents": 1,
+  "input_tokens": 29249,
+  "output_tokens": 52302,
+  "cache_read_tokens": 3540480,
+  "total_tokens": 3622031,
+  "max_context_tokens": 81398,
+  "thinking_chars": 111809,
+  "text_chars": 2170,
+  "tool_code_chars": 81868,
+  "tool_result_chars": 102397,
+  "wire_tool_calls": {
+    "eval": 74
+  },
+  "parallel_call_requests": 0,
+  "cells": 72,
+  "eval_languages": {
+    "js": 56,
+    "const r = await sh(`cd /home/kaio/work/omp-metrics && sed -n '225,457p' backend/src/main.rs`);\nconsole.log(r);\n": 1,
+    "null": 1,
+    "py": 16
+  },
+  "bridged_ops": {
+    "run": 37,
+    "read": 4,
+    "browser": 13,
+    "commit": 18
+  },
+  "tool_errors": 11,
+  "validation_errors": 2,
+  "failed_commands": 0,
+  "request_errors": 2,
+  "stop_reasons": {
+    "toolUse": 74,
+    "error": 2,
+    "stop": 1
+  },
+  "todo_calls": 0,
+  "skill_reads": [],
+  "first_write_request": 34,
+  "model_seconds": 695,
+  "auxiliary_requests": {},
+  "estimated_cost_usd": null,
+  "estimated_cost_usd_no_cache": null,
+  "cache_read_share": 0.992,
+  "active_seconds": 843,
+  "background_jobs_started": 0,
+  "idle_after_final_answer_seconds": 2,
+  "stopped_by_orchestrator": false,
+  "bridged_op_total": 72,
+  "ops_per_wire_call": 0.97,
+  "tokens_per_request": 47039,
+  "workspace_files": 21,
+  "workspace_loc": {
+    ".sh": 28,
+    ".rs": 1120,
+    ".mjs": 16,
+    ".tsx": 734,
+    ".ts": 153,
+    ".astro": 48,
+    ".css": 437
+  },
+  "has_start_sh": true,
+  "has_readme": true,
+  "has_tests": false
+}

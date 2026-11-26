@@ -27,9 +27,13 @@ cp check.mjs contract.mjs ~/omp-bench/behavior-map/validator/   # after `bun add
 /usr/bin/python3 collect.py <run_dir> <slug> && /usr/bin/python3 validate.py <run_dir> <truth.json> 600
 
 # complex A/B: arms from schedule_complex.ARMS (base, new, solo, v3), N replicates
-/usr/bin/python3 schedule_complex.py <runs_root> 2 base,new [terra,sol,...]
+/usr/bin/python3 schedule_complex.py <runs_root> 2|3-5 base,new [terra,sol,...]   # BM_MAX_PARALLEL caps sandboxes
 /usr/bin/python3 validate_complex.py <run_dir> ~/omp-bench/complex/truth.json 900 [--rescore]
 /usr/bin/python3 compare_complex.py <runs_root> <out.json>
+# replicates 3-5, all arms of one model/replicate at a time; reruns a group that hit a provider usage limit
+systemd-inhibit --what=sleep:idle /usr/bin/python3 drive_reps.py <runs_root> terra,sol 3-5 2 [base,v3]
+# per-arm means, medians, bootstrap CI of arm/reference, exact Mann-Whitney p (runs_dir = symlinks to all runs)
+/usr/bin/python3 stats_arms.py <compare.json> <runs_dir> [reference arm]
 ```
 
 `run.py` environment: `BM_OMP_BIN` (binary under test), `BM_MODELS_PATCH=1` (DeepSeek stall deadlines),

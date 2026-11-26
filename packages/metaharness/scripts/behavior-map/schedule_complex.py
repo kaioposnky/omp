@@ -6,6 +6,7 @@ At most MAX_PARALLEL sandboxes run at once. A run that has given its final answe
 but stays alive (a background server under --wait-async) is stopped after GRACE_S.
 
 Usage: schedule_complex.py <out_root> <replicates> [arms] [models]
+replicates: N runs r1..rN, or a range FIRST-LAST (e.g. 3-5) to add replicates to earlier rounds.
 arms: comma list from ARMS (default base,new); models: comma list of slugs (default all).
 """
 import json
@@ -35,7 +36,7 @@ MODELS = [  # slug, model, thinking
     ("opus", "9router/cc/claude-opus-5-5", "high"),
     ("sonnet", "9router/cc/claude-sonnet-5-5", "high"),
 ]
-MAX_PARALLEL = 6
+MAX_PARALLEL = int(os.environ.get("BM_MAX_PARALLEL", "6"))  # lower it when a provider quota is tight
 MAX_MINUTES = 60
 GRACE_S = 120
 SEED = f"{HOME}/omp-bench/complex/seed"
@@ -54,12 +55,14 @@ def finished_answer(run_dir):
 
 
 def main():
-    root, reps = sys.argv[1], int(sys.argv[2])
+    root = sys.argv[1]
+    first, _, last = sys.argv[2].rpartition("-")
+    first, last = int(first or 1), int(last)
     arms = sys.argv[3].split(",") if len(sys.argv) > 3 else ["base", "new"]
     wanted = set(sys.argv[4].split(",")) if len(sys.argv) > 4 else None
     os.makedirs(root, exist_ok=True)
     queue = [[(f"{slug}-{arm}-r{rep}", model, thinking, arm) for arm in arms]
-             for rep in range(1, reps + 1) for slug, model, thinking in MODELS if wanted is None or slug in wanted]
+             for rep in range(first, last + 1) for slug, model, thinking in MODELS if wanted is None or slug in wanted]
     running = {}  # name -> (Popen, run_dir, answered_at)
     log = open(os.path.join(root, "schedule.log"), "a")
     def note(msg):

@@ -1,0 +1,82 @@
+{
+  "label": "terra-v3-r5",
+  "wall_seconds": 293,
+  "exit_code": 0,
+  "timed_out": false,
+  "requests": 65,
+  "requests_main": 44,
+  "requests_subagent": 21,
+  "subagents": 3,
+  "input_tokens": 267381,
+  "output_tokens": 14212,
+  "cache_read_tokens": 1160320,
+  "total_tokens": 1441913,
+  "max_context_tokens": 41577,
+  "thinking_chars": 0,
+  "text_chars": 2110,
+  "tool_code_chars": 34479,
+  "tool_result_chars": 129826,
+  "wire_tool_calls": {
+    "eval": 54,
+    "todo": 5,
+    "wait": 3
+  },
+  "parallel_call_requests": 0,
+  "cells": 54,
+  "eval_languages": {
+    "js": 54
+  },
+  "bridged_ops": {
+    "read": 24,
+    "run": 38,
+    "task": 2,
+    "write": 13,
+    "bash": 3,
+    "browser": 15,
+    "commit": 9
+  },
+  "tool_errors": 4,
+  "validation_errors": 0,
+  "failed_commands": 6,
+  "request_errors": 0,
+  "stop_reasons": {
+    "toolUse": 62,
+    "stop": 3
+  },
+  "todo_calls": 5,
+  "skill_reads": [
+    "skill://?q=frontend:raw",
+    "skill://?q=rust:raw",
+    "skill://?q=rust:raw"
+  ],
+  "first_write_request": 8,
+  "model_seconds": 370,
+  "auxiliary_requests": {
+    "task-label": 2,
+    "title": 2,
+    "job-widget": 1
+  },
+  "estimated_cost_usd": 0.4,
+  "estimated_cost_usd_no_cache": 1.5,
+  "cache_read_share": 0.813,
+  "active_seconds": 290,
+  "background_jobs_started": 1,
+  "idle_after_final_answer_seconds": 3,
+  "stopped_by_orchestrator": false,
+  "bridged_op_total": 104,
+  "ops_per_wire_call": 1.68,
+  "tokens_per_request": 22183,
+  "workspace_files": 21,
+  "workspace_loc": {
+    ".sh": 28,
+    ".rs": 720,
+    ".mjs": 16,
+    ".tsx": 714,
+    ".ts": 121,
+    ".astro": 47,
+    ".css": 413
+  },
+  "has_start_sh": true,
+  "has_readme": true,
+  "has_tests": false
+}
