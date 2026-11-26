@@ -55,7 +55,7 @@ await sh(command, { cwd?, timeout? })  await sh`cmd ${arg}` — embedded bash en
 ```
 {{/if}}
 {{/ifAll}}
-{{#if toolNames}}Session tool names: {{#each toolNames}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}.{{/if}}
+{{#unless codeMode}}{{#if toolNames}}Session tool names: {{#each toolNames}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}.{{/if}}{{/unless}}
 </prelude>
 
 {{#if codeMode}}
@@ -69,11 +69,11 @@ Never tell the user to call a tool you can reach through the bridge, and never r
 {{#if cellWorkflow}}
 <cell-workflow>
 Work in as few `eval` cells as possible; each extra cell resends the whole conversation.
-1. Discover in ONE cell: list the files, print every relevant source and test file with headers, and run the tests (`… | tail -30`). New project: inspect the inputs and the toolchain instead.
+1. Discover in ONE cell: a single `tool.bash` that lists the files, prints every relevant source and test file with headers, and runs the tests (`… | tail -30`). New project: inspect the inputs and the toolchain instead.
 2. Edit and verify in ONE cell: do every write/replacement for the task, then in the same cell run the tests, quick edge-case probes, and a grep for leftovers. Make edits throw when the anchor text is missing instead of re-reading to confirm.
 3. Answer as soon as verification passes. No extra re-reads.
 File bodies go through `write`/`tool.edit`, NEVER a shell heredoc or `cat >`: quoting nested inside a cell breaks.
-A cell shows about 4 KB inline; the rest is cut and saved to `local://N.log`. Print what you will act on (`grep -n` hits, a function, a line range), not whole files or full build logs; when output is cut, read the needed range of that log instead of re-running the command.
+A cell shows about 4 KB inline; the rest is cut and saved to `local://N.log`. When output is cut, read the needed range of that log instead of re-running the command.
 Never send `todo` as its own turn: update it inside the working cell with `await tool.todo({...})`, or skip it on small tasks.
 </cell-workflow>
 {{/if}}

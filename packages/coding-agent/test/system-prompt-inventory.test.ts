@@ -1032,4 +1032,24 @@ describe("system prompt tool inventory", () => {
 		expect(withoutRead).not.toContain("xd://read/urls");
 		expect(withoutRead).toContain("named service");
 	});
+
+	// Code Mode reaches xd://read/urls with read() inside eval even when the read tool is not on the wire.
+	it("links the internal URL reference instead of inlining it under Code Mode", async () => {
+		const prompt = (
+			await buildSystemPrompt({
+				cwd: tempDir,
+				contextFiles: [],
+				skills: [],
+				rules: [],
+				workspaceTree: { ...EMPTY_TREE, rootPath: tempDir },
+				tools: TOOLS,
+				nativeTools: true,
+				inlineToolDescriptors: false,
+				toolNames: ["eval", "bash"],
+				codeMode: true,
+			})
+		).systemPrompt.join("\n\n");
+		expect(prompt).toContain('read("xd://read/urls")');
+		expect(prompt).not.toContain("named service");
+	});
 });

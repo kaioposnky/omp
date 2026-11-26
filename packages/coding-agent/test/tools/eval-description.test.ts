@@ -108,6 +108,16 @@ describe("eval tool description", () => {
 		expect(disabled.agents).not.toContain("tools?=None");
 	});
 
+	// Code Mode lists every bridge-reachable tool in <bridge-tools>; the flat name list would only repeat it.
+	it("names session tools outside Code Mode and leaves them to the bridge catalog inside it", () => {
+		const toolNames = ["eval", "wait", "read", "mcp__wiki__search"];
+		const bridgeCatalog = "read: Read files\nmcp__wiki__search: Search the wiki";
+		expect(getEvalToolDescription({ toolNames })).toContain("Session tool names: eval, wait, read, mcp__wiki__search.");
+		const codeMode = getEvalToolDescription({ toolNames, codeMode: true, bridgeCatalog });
+		expect(codeMode).not.toContain("Session tool names");
+		expect(codeMode).toContain("mcp__wiki__search: Search the wiki");
+	});
+
 	// Advertisement content is covered through the task tool (task-schema.test.ts); this pins the eval gate.
 	it("advertises approved agent()/workpool() selectors only while task.perCallModel is not off", () => {
 		for (const mode of ["off", "on", "eval"] as const) {
