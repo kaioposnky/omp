@@ -20,6 +20,8 @@ HOME = os.path.expanduser("~")
 BASE_BIN = f"{HOME}/omp-bench/build-base/oh-my-pi/packages/coding-agent/dist/omp"
 NEW_BIN = f"{HOME}/omp-bench/build/oh-my-pi/packages/coding-agent/dist/omp"
 V3_BIN = f"{HOME}/omp-bench/build3/oh-my-pi/packages/coding-agent/dist/omp"
+V4A_BIN = f"{HOME}/omp-bench/build4a/oh-my-pi/packages/coding-agent/dist/omp"
+V4B_BIN = f"{HOME}/omp-bench/build4b/oh-my-pi/packages/coding-agent/dist/omp"
 # arm -> (binary, extra omp flags)
 ARMS = {
     "base": (BASE_BIN, ""),
@@ -28,6 +30,9 @@ ARMS = {
     "solo": (NEW_BIN, "--tools eval,read,bash,edit,write,grep,glob,todo,wait,ast_edit,lsp,web_search"),
     # Round 3: retry fix, subagent wait floor, model rules, eval output hint, X11 note gating.
     "v3": (V3_BIN, ""),
+    # V4 ablation on v3: (a) eval.md without "Print what you will act on ..."; (b) a + round-1 discovery step.
+    "v4a": (V4A_BIN, ""),
+    "v4b": (V4B_BIN, ""),
 }
 MODELS = [  # slug, model, thinking
     ("terra", "9router/cx/gpt-6.1-terra", "high"),

@@ -80,6 +80,26 @@ cutting requests cuts tokens. Main-agent breakdown:
   Verdict: subagents were not spam. For terra they trade ~4% more tokens for ~10% less wall time; for sol
   they lowered both. Disabling them would not cut cost. The waste was the polling around them, now fixed.
 
+## Round 4: V4 ablation of the eval cell-workflow text (not shipped)
+
+Arms built from the v3 tree with only `prompts/tools/eval.md` changed; prompt text confirmed in the 9router request log.
+- `v4a`: drops "Print what you will act on (`grep -n` hits, a function, a line range), not whole files or full build logs"; keeps "read the needed range of that log".
+- `v4b`: v4a plus the round-1 discovery step ("a single `tool.bash` that lists the files, prints every relevant source …").
+
+All arms of one replicate ran together. Means; ratio to v3 with bootstrap 95% CI.
+
+| Model | n per arm | Tokens v3 / v4a / v4b | v4a/v3 | v4b/v3 | Points below 98 |
+|---|---|---|---|---|---|
+| terra | 5 | 1.20M / 1.15M / 1.04M | 0.96 [0.73, 1.25] | 0.86 [0.66, 1.12] | v4a-r4 93.4, v4b-r4 92.8 |
+| sol | 3 (v3, v4a) | 1.22M / 1.10M / - | 0.90 [0.68, 1.20] | - | none |
+| deepseek | 5 | 4.17M / 4.35M / 3.79M | 1.04 [0.91, 1.20] | 0.91 [0.72, 1.13] | none |
+
+- Pooled within-model permutation test: v4a tokens 0.97x (p = 0.67), v4b tokens 0.88x over terra and DeepSeek (p = 0.22). Neither beats v3.
+- The two sub-98 runs both missed the session timestamp contract: v4a took `first_ts`/`last_ts` from user messages too, v4b named the fields `start`/`end`. These are the only session-field misses in 92 scored runs besides one crashed run, so they are a weak warning, not proof.
+- Removing the line does not restore terra's base token level (0.91M). terra's extra spend stays in the main agent while subagents run.
+- Decision: keep v3's eval.md. A further token cut needs a mechanism, not prompt wording.
+- Pitfalls hit: Codex usage limit (30 min reset) killed a whole replicate; a lid-close suspend froze DeepSeek r3 for 7.7 h. `systemd-inhibit --what=sleep` does not stop lid suspend; add `handle-lid-switch`.
+
 ## Round 3 (v3 build): retry fix, subagent wait floor, model rules, eval output hint
 
 Same complex task, 2 runs per model; means. All 10 runs gave a final answer; 9 scored 98, sol-v3-r1 95

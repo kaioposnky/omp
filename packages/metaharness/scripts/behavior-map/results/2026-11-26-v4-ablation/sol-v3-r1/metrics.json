@@ -1,0 +1,81 @@
+{
+  "label": "sol-v3-r1",
+  "wall_seconds": 860,
+  "exit_code": 0,
+  "timed_out": false,
+  "requests": 40,
+  "requests_main": 29,
+  "requests_subagent": 11,
+  "subagents": 2,
+  "input_tokens": 325513,
+  "output_tokens": 28265,
+  "cache_read_tokens": 611072,
+  "total_tokens": 964850,
+  "max_context_tokens": 43948,
+  "thinking_chars": 1386,
+  "text_chars": 2145,
+  "tool_code_chars": 67434,
+  "tool_result_chars": 97707,
+  "wire_tool_calls": {
+    "todo": 5,
+    "eval": 36
+  },
+  "parallel_call_requests": 3,
+  "cells": 35,
+  "eval_languages": {
+    "js": 36
+  },
+  "bridged_ops": {
+    "run": 32,
+    "read": 56,
+    "write": 31,
+    "bash": 1,
+    "commit": 18,
+    "browser": 33
+  },
+  "tool_errors": 7,
+  "validation_errors": 0,
+  "failed_commands": 4,
+  "request_errors": 0,
+  "stop_reasons": {
+    "toolUse": 38,
+    "stop": 2
+  },
+  "todo_calls": 5,
+  "skill_reads": [
+    "skill://?q=astro:raw",
+    "skill://?q=frontend:raw",
+    "skill://?q=frontend:raw",
+    "skill://?q=astro:raw",
+    "skill://?q=Astro:raw"
+  ],
+  "first_write_request": 2,
+  "model_seconds": 988,
+  "auxiliary_requests": {
+    "title": 2,
+    "job-widget": 1
+  },
+  "estimated_cost_usd": 0.99,
+  "estimated_cost_usd_no_cache": 2.16,
+  "cache_read_share": 0.652,
+  "active_seconds": 827,
+  "background_jobs_started": 1,
+  "idle_after_final_answer_seconds": 33,
+  "stopped_by_orchestrator": false,
+  "bridged_op_total": 171,
+  "ops_per_wire_call": 4.17,
+  "tokens_per_request": 24121,
+  "workspace_files": 23,
+  "workspace_loc": {
+    ".sh": 28,
+    ".rs": 904,
+    ".mjs": 16,
+    ".tsx": 740,
+    ".ts": 139,
+    ".astro": 48,
+    ".css": 405
+  },
+  "has_start_sh": true,
+  "has_readme": true,
+  "has_tests": false
+}

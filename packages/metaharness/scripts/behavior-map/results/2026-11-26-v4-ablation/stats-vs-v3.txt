@@ -1,0 +1,34 @@
+## terra: v3 n=5 base n=5  points v3=[98.0, 98.0, 98.0, 98.0, 98.0] base=[98.0, 98.0, 98.0, 98.0, 98.0]
+  total_tokens    v3 mean  1204755.2 med  1155797.0 | base mean   905922.6 med   800684.0 | base/v3 0.75 CI95 [0.58, 0.99] p=0.095
+  requests        v3 mean       63.0 med       64.0 | base mean       54.8 med       49.0 | base/v3 0.87 CI95 [0.74, 1.03] p=0.198
+  tool_calls      v3 mean       58.4 med       58.0 | base mean       49.4 med       46.0 | base/v3 0.85 CI95 [0.74, 0.97] p=0.095
+  active_seconds  v3 mean      307.4 med      267.0 | base mean      475.6 med      499.0 | base/v3 1.55 CI95 [1.08, 2.12] p=0.056
+  cost            v3 mean        0.4 med        0.4 | base mean        0.3 med        0.3 | base/v3 0.94 CI95 [0.79, 1.14] p=0.587
+## terra: v3 n=5 v4a n=5  points v3=[98.0, 98.0, 98.0, 98.0, 98.0] v4a=[98.0, 98.0, 98.0, 93.4, 98.0]
+  total_tokens    v3 mean  1204755.2 med  1155797.0 | v4a mean  1153860.0 med  1093992.0 | v4a/v3 0.96 CI95 [0.73, 1.25] p=0.841
+  requests        v3 mean       63.0 med       64.0 | v4a mean       60.4 med       58.0 | v4a/v3 0.96 CI95 [0.80, 1.14] p=0.683
+  tool_calls      v3 mean       58.4 med       58.0 | v4a mean       56.6 med       55.0 | v4a/v3 0.97 CI95 [0.82, 1.13] p=0.730
+  active_seconds  v3 mean      307.4 med      267.0 | v4a mean      271.2 med      245.0 | v4a/v3 0.88 CI95 [0.63, 1.21] p=0.548
+  cost            v3 mean        0.4 med        0.4 | v4a mean        0.3 med        0.3 | v4a/v3 0.97 CI95 [0.79, 1.18] p=0.881
+## terra: v3 n=5 v4b n=5  points v3=[98.0, 98.0, 98.0, 98.0, 98.0] v4b=[98.0, 98.0, 98.0, 92.8, 98.0]
+  total_tokens    v3 mean  1204755.2 med  1155797.0 | v4b mean  1038272.0 med  1025383.0 | v4b/v3 0.86 CI95 [0.66, 1.12] p=0.421
+  requests        v3 mean       63.0 med       64.0 | v4b mean       53.2 med       53.0 | v4b/v3 0.84 CI95 [0.68, 1.04] p=0.167
+  tool_calls      v3 mean       58.4 med       58.0 | v4b mean       49.8 med       51.0 | v4b/v3 0.85 CI95 [0.69, 1.02] p=0.206
+  active_seconds  v3 mean      307.4 med      267.0 | v4b mean      275.2 med      277.0 | v4b/v3 0.90 CI95 [0.67, 1.17] p=1.000
+  cost            v3 mean        0.4 med        0.4 | v4b mean        0.3 med        0.3 | v4b/v3 0.85 CI95 [0.67, 1.06] p=0.310
+## sol: v3 n=3 v4a n=3  points v3=[98.0, 98.0, 98.0] v4a=[98.0, 98.0, 98.0]
+  total_tokens    v3 mean  1223794.0 med  1166900.0 | v4a mean  1102354.3 med   974047.0 | v4a/v3 0.90 CI95 [0.68, 1.20] p=0.700
+  requests        v3 mean       48.3 med       44.0 | v4a mean       42.3 med       41.0 | v4a/v3 0.88 CI95 [0.68, 1.14] p=0.700
+  tool_calls      v3 mean       48.3 med       46.0 | v4a mean       43.3 med       39.0 | v4a/v3 0.90 CI95 [0.72, 1.12] p=0.300
+  active_seconds  v3 mean      709.3 med      652.0 | v4a mean      576.3 med      585.0 | v4a/v3 0.81 CI95 [0.63, 1.01] p=0.400
+  cost            v3 mean        1.1 med        1.0 | v4a mean        1.0 med        0.9 | v4a/v3 0.84 CI95 [0.68, 1.02] p=0.400
+## deepseek: v3 n=5 v4a n=5  points v3=[98.0, 98.0, 98.0, 98.0, 98.0] v4a=[98.0, 98.0, 98.0, 98.0, 98.0]
+  total_tokens    v3 mean  4169877.6 med  4082188.0 | v4a mean  4347781.2 med  4426263.0 | v4a/v3 1.04 CI95 [0.91, 1.20] p=0.690
+  requests        v3 mean       81.2 med       75.0 | v4a mean       84.2 med       81.0 | v4a/v3 1.04 CI95 [0.92, 1.17] p=0.389
+  tool_calls      v3 mean       79.6 med       74.0 | v4a mean       82.6 med       79.0 | v4a/v3 1.04 CI95 [0.92, 1.17] p=0.476
+  active_seconds  v3 mean     1511.0 med     1615.0 | v4a mean     1551.0 med     1566.0 | v4a/v3 1.03 CI95 [0.83, 1.32] p=1.000
+## deepseek: v3 n=5 v4b n=5  points v3=[98.0, 98.0, 98.0, 98.0, 98.0] v4b=[98.0, 98.0, 98.0, 98.0, 98.0]
+  total_tokens    v3 mean  4169877.6 med  4082188.0 | v4b mean  3788474.6 med  3447271.0 | v4b/v3 0.91 CI95 [0.72, 1.13] p=0.421
+  requests        v3 mean       81.2 med       75.0 | v4b mean       78.8 med       74.0 | v4b/v3 0.97 CI95 [0.80, 1.17] p=0.476
+  tool_calls      v3 mean       79.6 med       74.0 | v4b mean       77.4 med       73.0 | v4b/v3 0.97 CI95 [0.80, 1.18] p=0.595
+  active_seconds  v3 mean     1511.0 med     1615.0 | v4b mean     1380.6 med     1549.0 | v4b/v3 0.91 CI95 [0.70, 1.19] p=0.310

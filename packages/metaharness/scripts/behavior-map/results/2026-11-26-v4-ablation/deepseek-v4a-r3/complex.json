@@ -1,0 +1,66 @@
+{
+  "ready": true,
+  "ready_seconds": 2,
+  "points": 98.0,
+  "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+      "ok": true,
+      "total_ok": true,
+      "length_ok": true,
+      "rows_ok": 1.0,
+      "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+      "ok": true,
+      "total_ok": true,
+      "length_ok": true,
+      "rows_ok": 1.0,
+      "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+      "ok": true,
+      "total_ok": true,
+      "length_ok": true,
+      "rows_ok": 1.0,
+      "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+  },
+  "tests": {
+    "exit": 0,
+    "passed": 4
+  },
+  "git": {
+    "has_seed_commit": true,
+    "new_commits": 3,
+    "subjects": [
+      "backend: corrige janela de N dias, sess\u00f5es e custo por modelo",
+      "frontend: recarrega o painel por per\u00edodo e adiciona p\u00e1gina de sess\u00f5es",
+      "docs: documenta /api/sessions, /api/export.csv e a p\u00e1gina de sess\u00f5es"
+    ],
+    "dirty": [],
+    "fixture_changed": false
+  },
+  "readme": "# omp metrics\n\nPainel para consultar o uso de tokens e as m\u00e9tricas gerais do [oh-my-pi](https://github.com/can1357/oh-my-pi) (`omp`).\n\n- **Frontend:** Astro + React, gr\u00e1ficos com Recharts e uma \"cidade de tokens\" 3D (react-three-fiber) em que cada torre \u00e9 um dia. Al\u00e9m do painel (`/`), a p\u00e1gina `/sessions` lista as sess\u00f5es com seletor de per\u00edodo e de ordena\u00e7\u00e3o.\n- **Backend:** Rust (axum + rusqlite). L\u00ea `data/stats.db` em modo somente leitura, exp\u00f5e a API abaixo e serve o site est\u00e1tico.\n\n## Rodar\n\nRequisitos: Node \u2265 22.23, npm e Rust (cargo).\n\n```sh\ncp ~/.omp/stats.db data/stats.db   # atualizar a c\u00f3pia do banco, se quiser\n./start.sh\n```\n\nAbra <http://localhost:4321>. O script instala as depend\u00eancias, compila frontend e backend e sobe um \u00fanico processo que serve tudo. O banco \u00e9 reaberto a cada requisi\u00e7\u00e3o, ent\u00e3o basta copiar um `stats.db` novo e recarregar a p\u00e1gina.\n\nVari\u00e1veis opcionais: `PORT` (padr\u00e3o `4321`) e `STATS_DB` (caminho do banco).\n\nOs per\u00edodos (7/30/90 dias) cobrem exatamente N dias corridos terminando no dia do registro mais recente do banco, n\u00e3o na data atual, j\u00e1 que o arquivo \u00e9 uma c\u00f3pia.\n\n## API\n\n### `GET /api/dashboard?days=N`\n\nM\u00e9tricas agregadas do painel: totais, s\u00e9rie di\u00e1ria (um item por dia do per\u00edodo, inclusive dias sem atividade), modelos, projetos, ferramentas, agentes, motivos de parada, erros e atividade por hora.\n\n- `days`: n\u00famero de dias corridos terminando no registro mais recente. Ausente ou `0` = todo o per\u00edodo.\n\n### `GET /api/sessions?days=N&sort=S&limit=K`\n\nSess\u00f5es com mensagens no per\u00edodo:\n\n```json\n{\n  \"total\": 51,\n  \"sessions\": [\n    {\n      \"session_file\": \"/home/dev/.omp/agent/sessions/.../s00488.jsonl\",\n      \"folder\": \"/home/dev/sandbox/experiments\",\n      \"model\": \"claude-sonnet-5-5\",\n      \"messages\": 48,\n      \"total_tokens\": 4652980,\n      \"cost\": 4.329675,\n      \"first_ts\": 1795366552869,\n      \"last_ts\": 1795367271800,\n      \"tool_calls\": 61,\n      \"tool_errors\": 5\n    }\n  ]\n}\n```\n\n- `days`: como no dashboard; ausente ou `0` = todo o per\u00edodo.\n- `sort`: `cost` (maior custo), `tokens` (mais tokens) ou `recent` (`last_ts` mais recente). Padr\u00e3o: `recent`.\n- `limit`: de 1 a 200. Padr\u00e3o: 20.\n- Os agregados de cada sess\u00e3o consideram apenas mensagens e tool calls dentro do per\u00edodo; `model` \u00e9 o modelo com mais mensagens na sess\u00e3o; `first_ts`/`last_ts` s\u00e3o timestamps em milissegundos.\n- `total` conta todas as sess\u00f5es com mensagens no per\u00edodo, independentemente de `limit`.\n\n### `GET /api/export.csv?days=N`\n\nCSV (`text/csv`) com o cabe\u00e7alho exato:\n\n```\ndate,messages,input_tokens,output_tokens,cache_read_tokens,cache_write_tokens,total_tokens,cost\n```\n\nUma linha por dia do per\u00edodo (inclusive dias sem atividade), em ordem crescente de data (`AAAA-MM-DD`). `days` funciona como nos demais endpoints.\n\n### Erros\n\nPar\u00e2metros inv\u00e1lidos (`days` negativo, `sort` desconhecido, `limit` fora de 1\u2013200) respondem `400` com `{\"error\": \"<mensagem>\"}`.\n\n## Desenvolvimento\n\n```sh\n(cd backend && PORT=4322 STATIC_DIR=../frontend/dist cargo run)   # API\n(cd frontend && npm run dev)                                      # http://localhost:4321, /api via proxy\n```\n\nTestes do backend:\n\n```sh\n(cd backend && cargo test)\n```\n"
+}

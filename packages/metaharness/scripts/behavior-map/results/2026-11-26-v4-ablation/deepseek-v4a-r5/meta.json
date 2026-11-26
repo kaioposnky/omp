@@ -1,0 +1,14 @@
+{
+  "slug": "deepseek-v4a-r5",
+  "model": "kgdev/cmd/deepseek/deepseek-v4.1-flash-fast",
+  "thinking": "high",
+  "max_minutes": 60,
+  "started": 1795687898.8565037,
+  "omp_bin": "/home/kaio/omp-bench/build4a/oh-my-pi/packages/coding-agent/dist/omp",
+  "models_patch": true,
+  "extra_args": "",
+  "exit_code": 0,
+  "finished": 1795689470.7301054,
+  "wall_seconds": 1572,
+  "timed_out": false
+}
