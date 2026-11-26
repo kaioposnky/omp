@@ -1,0 +1,66 @@
+{
+  "ready": true,
+  "ready_seconds": 2,
+  "points": 98.0,
+  "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+      "ok": true,
+      "total_ok": true,
+      "length_ok": true,
+      "rows_ok": 1.0,
+      "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+      "ok": true,
+      "total_ok": true,
+      "length_ok": true,
+      "rows_ok": 1.0,
+      "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+      "ok": true,
+      "total_ok": true,
+      "length_ok": true,
+      "rows_ok": 1.0,
+      "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+  },
+  "tests": {
+    "exit": 0,
+    "passed": 5
+  },
+  "git": {
+    "has_seed_commit": true,
+    "new_commits": 3,
+    "subjects": [
+      "backend: fix window, session count and model cost; add sessions and CSV APIs",
+      "frontend: add sessions page and shared range picker",
+      "docs: document sessions, CSV endpoints and tests"
+    ],
+    "dirty": [],
+    "fixture_changed": false
+  },
+  "readme": "# omp metrics\n\nPainel para consultar o uso de tokens e as m\u00e9tricas gerais do [oh-my-pi](https://github.com/can1357/oh-my-pi) (`omp`).\n\n- **Frontend:** Astro + React, gr\u00e1ficos com Recharts e uma \"cidade de tokens\" 3D (react-three-fiber) em que cada torre \u00e9 um dia. O painel principal fica em `/` e a lista de sess\u00f5es em `/sessions`.\n- **Backend:** Rust (axum + rusqlite). L\u00ea `data/stats.db` em modo somente leitura, exp\u00f5e a API em `/api` e serve o site est\u00e1tico.\n\n## Rodar\n\nRequisitos: Node \u2265 22.23, npm e Rust (cargo).\n\n```sh\ncp ~/.omp/stats.db data/stats.db   # atualizar a c\u00f3pia do banco, se quiser\n./start.sh\n```\n\nAbra <http://localhost:4321>. O script instala as depend\u00eancias, compila frontend e backend e sobe um \u00fanico processo que serve tudo. O banco \u00e9 reaberto a cada requisi\u00e7\u00e3o, ent\u00e3o basta copiar um `stats.db` novo e recarregar a p\u00e1gina.\n\nVari\u00e1veis opcionais: `PORT` (padr\u00e3o `4321`) e `STATS_DB` (caminho do banco).\n\nOs per\u00edodos (7/30/90 dias) terminam no registro mais recente do banco, n\u00e3o na data atual, j\u00e1 que o arquivo \u00e9 uma c\u00f3pia.\n\n## API\n\nEm todas as rotas, `days` usa a mesma janela do painel: `N` dias corridos terminando no dia do registro mais recente. Ausente ou `0` significa todo o per\u00edodo.\n\n- `GET /api/dashboard?days=N` \u2014 agregados do painel (totais, s\u00e9rie di\u00e1ria, modelos, projetos, ferramentas, agentes e hor\u00e1rios).\n- `GET /api/sessions?days=N&sort=S&limit=K` \u2014 sess\u00f5es com mensagens no per\u00edodo. `sort` aceita `recent` (padr\u00e3o), `cost` ou `tokens`; `limit` vai de 1 a 200 (padr\u00e3o 20). Cada sess\u00e3o agrega apenas as mensagens e tool calls do per\u00edodo, e `model` \u00e9 o modelo com mais mensagens na sess\u00e3o.\n- `GET /api/export.csv?days=N` \u2014 CSV com uma linha por dia do per\u00edodo (dias sem atividade inclu\u00eddos), em ordem crescente.\n\nPar\u00e2metros inv\u00e1lidos (`sort` desconhecido, `limit` fora da faixa, `days` negativo) respondem `400` com `{\"error\": \"...\"}`.\n\n## Testes\n\n```sh\n(cd backend && cargo test)\n```\n\n## Desenvolvimento\n\n```sh\n(cd backend && PORT=4322 STATIC_DIR=../frontend/dist cargo run)   # API\n(cd frontend && npm run dev)                                      # http://localhost:4321, /api via proxy\n```\n"
+}

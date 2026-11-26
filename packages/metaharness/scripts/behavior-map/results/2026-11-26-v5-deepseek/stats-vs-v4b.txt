@@ -1,0 +1,10 @@
+## deepseek: v4b n=5 v5 n=5  points v4b=[98.0, 98.0, 98.0, 98.0, 98.0] v5=[98.0, 98.0, 98.0, 98.0, 98.0]
+  total_tokens    v4b mean  3650579.4 med  3854616.0 | v5 mean  3700849.6 med  3861011.0 | v5/v4b 1.01 CI95 [0.78, 1.36] p=0.841
+  requests        v4b mean       75.8 med       82.0 | v5 mean       80.2 med       82.0 | v5/v4b 1.06 CI95 [0.91, 1.25] p=0.579
+  tool_calls      v4b mean       74.4 med       80.0 | v5 mean       78.6 med       81.0 | v5/v4b 1.06 CI95 [0.91, 1.25] p=0.595
+  active_seconds  v4b mean     1354.0 med     1345.0 | v5 mean     1433.0 med     1411.0 | v5/v4b 1.06 CI95 [0.90, 1.26] p=0.841
+## deepseek: v4b n=5 v5s n=5  points v4b=[98.0, 98.0, 98.0, 98.0, 98.0] v5s=[98.0, 98.0, 98.0, 98.0, 98.0]
+  total_tokens    v4b mean  3650579.4 med  3854616.0 | v5s mean  4157595.8 med  4246854.0 | v5s/v4b 1.14 CI95 [0.83, 1.58] p=0.548
+  requests        v4b mean       75.8 med       82.0 | v5s mean       86.0 med       92.0 | v5s/v4b 1.13 CI95 [0.96, 1.35] p=0.190
+  tool_calls      v4b mean       74.4 med       80.0 | v5s mean       84.2 med       90.0 | v5s/v4b 1.13 CI95 [0.95, 1.35] p=0.222
+  active_seconds  v4b mean     1354.0 med     1345.0 | v5s mean     1445.8 med     1327.0 | v5s/v4b 1.07 CI95 [0.87, 1.31] p=1.000

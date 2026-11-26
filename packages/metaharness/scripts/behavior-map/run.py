@@ -34,6 +34,7 @@ IMAGE = "ubuntu:24.04"
 OMP_BIN = os.environ.get("BM_OMP_BIN", f"{HOME}/.local/bin/omp")
 MODELS_PATCH = os.environ.get("BM_MODELS_PATCH") == "1"
 EXTRA_ARGS = os.environ.get("BM_EXTRA_ARGS", "")
+AGENTS_MD = os.environ.get("BM_AGENTS_MD")  # replaces ~/.omp/agent/AGENTS.md in the run home
 STALL_DEADLINE_MS = 120_000
 ROUTER_PORT = 20128
 WORKDIR = "work/omp-metrics"
@@ -63,6 +64,8 @@ def build_home(run_dir, model, thinking):
     os.makedirs(agent)
     for name in ["AGENTS.md", "mcp.json", "keybindings.yml", "models.db"]:
         shutil.copy2(os.path.join(agent_src, name), os.path.join(agent, name))
+    if AGENTS_MD:
+        shutil.copy2(AGENTS_MD, os.path.join(agent, "AGENTS.md"))
     for name in ["agents", "skills", "managed-skills", "tools"]:
         shutil.copytree(os.path.join(agent_src, name), os.path.join(agent, name), symlinks=False)
     os.makedirs(os.path.join(agent, "extensions/pi-jev"))

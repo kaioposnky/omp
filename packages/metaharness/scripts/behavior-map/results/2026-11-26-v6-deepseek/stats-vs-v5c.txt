@@ -1,0 +1,5 @@
+## deepseek: v5c n=5 v6 n=5  points v5c=[98.0, 98.0, 98.0, 98.0, 98.0] v6=[98.0, 98.0, 98.0, 98.0, 98.0]
+  total_tokens    v5c mean  4094753.2 med  3947264.0 | v6 mean  3391388.0 med  3489819.0 | v6/v5c 0.83 CI95 [0.62, 1.07] p=0.310
+  requests        v5c mean       84.8 med       83.0 | v6 mean       75.0 med       78.0 | v6/v5c 0.88 CI95 [0.73, 1.04] p=0.563
+  tool_calls      v5c mean       83.4 med       80.0 | v6 mean       73.8 med       77.0 | v6/v5c 0.88 CI95 [0.73, 1.04] p=0.595
+  active_seconds  v5c mean     1006.6 med     1003.0 | v6 mean      761.8 med      717.0 | v6/v5c 0.76 CI95 [0.65, 0.89] p=0.095

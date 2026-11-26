@@ -80,6 +80,33 @@ cutting requests cuts tokens. Main-agent breakdown:
   Verdict: subagents were not spam. For terra they trade ~4% more tokens for ~10% less wall time; for sol
   they lowered both. Disabling them would not cut cost. The waste was the polling around them, now fixed.
 
+## Round 6: cut-output footer names the hidden lines (DeepSeek only)
+
+`v5c` = committed round 5 (smaller Code Mode prefix + v4b cell workflow). `v6` = v5c + a cut eval result names its hidden lines and the `read("local://N.log:A-B")` call, and `read()` in eval honors that selector (it failed with a missing-file error before). DeepSeek, 5 replicates, both arms of a replicate together. All 10 runs scored 98.
+
+| Arm | Tokens | Tool calls | Requests | Active s | Requests before first edit | Line-range re-read requests |
+|---|---|---|---|---|---|---|
+| v5c | 4.09M | 83.4 | 84.8 | 1007 | 33.0 | 10.0 |
+| v6 | 3.39M (0.83 [0.62, 1.07]) | 73.8 (0.88 [0.73, 1.04]) | 75.0 | 762 (0.76 [0.65, 0.89]) | 31.2 | 6.6 |
+
+- The footer appeared on ~13 results a run, but DeepSeek followed the named call only 0.2 times a run; after a cut it still re-read the source in ranges (6.0 vs 6.4). The token and request drops are not significant and cannot be credited to the footer.
+- Active time fell in 4 of 5 pairs (CI excludes 1). Shipped: the selector fix is a real bug, and the footer cost nothing measurable.
+
+## Round 5: smaller Code Mode prefix, 8 KB cap for open-weights, lean AGENTS.md (DeepSeek only)
+
+Arms, all on the v4b cell-workflow text: `v4b`; `v5` = v4b + Code Mode prefix dedup (no "Session tool names" list, `xd://read/urls` linked instead of inlined) + 8 KB inline cap for non-Anthropic/OpenAI families; `v5s` = v5 with `AGENTS-lean.md` (696 B) in place of the user's 3,248 B AGENTS.md. DeepSeek, 5 replicates, all arms of a replicate together. All 15 runs scored 98.
+
+| Arm | Tokens | Tool calls | Requests | Active s | First-request ctx | Cut outputs | Read-only req |
+|---|---|---|---|---|---|---|---|
+| v4b | 3.65M | 74.4 | 75.8 | 1354 | 7563 | 18.4 | 23.8 |
+| v5 | 3.70M (1.01 [0.78, 1.36]) | 78.6 | 80.2 | 1433 | 7170 | 6.0 | 29.8 |
+| v5s | 4.16M (1.14 [0.83, 1.58]) | 84.2 | 86.0 | 1446 | 6600 | 6.6 | 31.2 |
+
+- The 8 KB cap did what it was meant to (cut outputs 18.4 -> 6.0, re-read right after a cut 10.6 -> 3.2) but saved nothing: DeepSeek kept reading files in ranges anyway, and the larger results it now kept inline (eval result text before the first edit 85 -> 111 kB a run) are resent on every later request. Reverted.
+- The prefix dedup removes ~390 tokens from every request (first-request ctx 7563 -> 7170); at ~80 requests that is ~0.03M a run, under the noise here. Kept: it is pure duplication.
+- The lean AGENTS.md shortened the prefix another ~570 tokens but ran 13% more tool calls (CI crosses 1); not adopted.
+- DeepSeek's exploration (about 35 requests before its first edit) is the real cost; prompt size and inline cap do not move it.
+
 ## Round 4: V4 ablation of the eval cell-workflow text (not shipped)
 
 Arms built from the v3 tree with only `prompts/tools/eval.md` changed; prompt text confirmed in the 9router request log.

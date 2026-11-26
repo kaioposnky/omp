@@ -22,7 +22,10 @@ NEW_BIN = f"{HOME}/omp-bench/build/oh-my-pi/packages/coding-agent/dist/omp"
 V3_BIN = f"{HOME}/omp-bench/build3/oh-my-pi/packages/coding-agent/dist/omp"
 V4A_BIN = f"{HOME}/omp-bench/build4a/oh-my-pi/packages/coding-agent/dist/omp"
 V4B_BIN = f"{HOME}/omp-bench/build4b/oh-my-pi/packages/coding-agent/dist/omp"
-# arm -> (binary, extra omp flags)
+V5_BIN = f"{HOME}/omp-bench/build5/oh-my-pi/packages/coding-agent/dist/omp"
+V5C_BIN = f"{HOME}/omp-bench/build5c/oh-my-pi/packages/coding-agent/dist/omp"
+V6_BIN = f"{HOME}/omp-bench/build6/oh-my-pi/packages/coding-agent/dist/omp"
+# arm -> (binary, extra omp flags[, extra run.py environment])
 ARMS = {
     "base": (BASE_BIN, ""),
     "new": (NEW_BIN, ""),
@@ -33,6 +36,14 @@ ARMS = {
     # V4 ablation on v3: (a) eval.md without "Print what you will act on ..."; (b) a + round-1 discovery step.
     "v4a": (V4A_BIN, ""),
     "v4b": (V4B_BIN, ""),
+    # Round 5: v4b cell workflow + smaller Code Mode prefix + 8 KB inline cap for open-weights models.
+    "v5": (V5_BIN, ""),
+    # v5 with the lean user AGENTS.md candidate in place of ~/.omp/agent/AGENTS.md.
+    "v5s": (V5_BIN, "", {"BM_AGENTS_MD": os.path.join(HERE, "AGENTS-lean.md")}),
+    # Committed round 5 (smaller Code Mode prefix + v4b cell workflow, no 8 KB cap).
+    "v5c": (V5C_BIN, ""),
+    # Round 6: v5c + a cut eval result names its hidden lines and the read("local://N.log:A-B") call.
+    "v6": (V6_BIN, ""),
 }
 MODELS = [  # slug, model, thinking
     ("terra", "9router/cx/gpt-6.1-terra", "high"),
@@ -76,8 +87,9 @@ def main():
     while queue or running:
         while queue and len(running) + len(queue[0]) <= MAX_PARALLEL:
             for name, model, thinking, arm in queue.pop(0):
-                binary, extra = ARMS[arm]
-                env = dict(os.environ, BM_ROOT=root, BM_OMP_BIN=binary, BM_MODELS_PATCH="1", BM_EXTRA_ARGS=extra)
+                binary, extra, *arm_env = ARMS[arm]
+                env = dict(os.environ, BM_ROOT=root, BM_OMP_BIN=binary, BM_MODELS_PATCH="1", BM_EXTRA_ARGS=extra,
+                           **(arm_env[0] if arm_env else {}))
                 proc = subprocess.Popen(["/usr/bin/python3", os.path.join(HERE, "run.py"), name, model, thinking,
                                          os.path.join(HERE, "TASK-complex.md"), FIXTURE, str(MAX_MINUTES), SEED],
                                         env=env, stdout=subprocess.DEVNULL, stderr=open(os.path.join(root, f"{name}.runner.log"), "w"))

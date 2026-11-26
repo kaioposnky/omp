@@ -1,0 +1,1487 @@
+{
+ "runs": {
+  "deepseek-v4b-r1": {
+   "model": "deepseek",
+   "arm": "v4b",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 68,
+   "total_tokens": 2655680,
+   "input_tokens": 30038,
+   "cache_read_tokens": 2592384,
+   "output_tokens": 33258,
+   "active_seconds": 1345,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 3,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 5,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 7
+  },
+  "deepseek-v4b-r2": {
+   "model": "deepseek",
+   "arm": "v4b",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 82,
+   "total_tokens": 3854616,
+   "input_tokens": 39111,
+   "cache_read_tokens": 3769216,
+   "output_tokens": 46289,
+   "active_seconds": 1419,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 3,
+   "edit_calls": 28,
+   "skill_static_page": 0,
+   "tool_errors": 9
+  },
+  "deepseek-v4b-r3": {
+   "model": "deepseek",
+   "arm": "v4b",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 58,
+   "total_tokens": 2407387,
+   "input_tokens": 26115,
+   "cache_read_tokens": 2332800,
+   "output_tokens": 48472,
+   "active_seconds": 1030,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 9,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 5
+  },
+  "deepseek-v4b-r4": {
+   "model": "deepseek",
+   "arm": "v4b",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 89,
+   "total_tokens": 5311117,
+   "input_tokens": 39490,
+   "cache_read_tokens": 5200128,
+   "output_tokens": 71499,
+   "active_seconds": 1335,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 1,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 6,
+   "edit_calls": 17,
+   "skill_static_page": 0,
+   "tool_errors": 4
+  },
+  "deepseek-v4b-r5": {
+   "model": "deepseek",
+   "arm": "v4b",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 6,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 82,
+   "total_tokens": 4024097,
+   "input_tokens": 34702,
+   "cache_read_tokens": 3934848,
+   "output_tokens": 54547,
+   "active_seconds": 1641,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 2,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 3,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 7
+  },
+  "deepseek-v5-r1": {
+   "model": "deepseek",
+   "arm": "v5",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 7,
+    "readme_endpoints": true,
+    "git_commits": 1,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 68,
+   "total_tokens": 2955307,
+   "input_tokens": 45342,
+   "cache_read_tokens": 2859648,
+   "output_tokens": 50317,
+   "active_seconds": 1257,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 1,
+   "ms_timeouts": 4,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 6,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 2
+  },
+  "deepseek-v5-r2": {
+   "model": "deepseek",
+   "arm": "v5",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 86,
+   "total_tokens": 3986441,
+   "input_tokens": 36178,
+   "cache_read_tokens": 3897463,
+   "output_tokens": 52800,
+   "active_seconds": 1585,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 4,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 2,
+   "write_calls": 15,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 7
+  },
+  "deepseek-v5-r3": {
+   "model": "deepseek",
+   "arm": "v5",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 92,
+   "total_tokens": 4301776,
+   "input_tokens": 32834,
+   "cache_read_tokens": 4214780,
+   "output_tokens": 54162,
+   "active_seconds": 1411,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 4,
+   "edit_calls": 22,
+   "skill_static_page": 0,
+   "tool_errors": 9
+  },
+  "deepseek-v5-r4": {
+   "model": "deepseek",
+   "arm": "v5",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 82,
+   "total_tokens": 3861011,
+   "input_tokens": 35253,
+   "cache_read_tokens": 3778556,
+   "output_tokens": 47202,
+   "active_seconds": 1238,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 5
+  },
+  "deepseek-v5-r5": {
+   "model": "deepseek",
+   "arm": "v5",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 73,
+   "total_tokens": 3399713,
+   "input_tokens": 36653,
+   "cache_read_tokens": 3314812,
+   "output_tokens": 48248,
+   "active_seconds": 1674,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 2,
+   "todo_only": 0,
+   "failed_requests": 0,
+   "write_calls": 5,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 6
+  },
+  "deepseek-v5s-r1": {
+   "model": "deepseek",
+   "arm": "v5s",
+   "rep": "r1",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 73,
+   "total_tokens": 2950962,
+   "input_tokens": 36434,
+   "cache_read_tokens": 2874496,
+   "output_tokens": 40032,
+   "active_seconds": 1253,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 5,
+   "edit_calls": 12,
+   "skill_static_page": 0,
+   "tool_errors": 6
+  },
+  "deepseek-v5s-r2": {
+   "model": "deepseek",
+   "arm": "v5s",
+   "rep": "r2",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 94,
+   "total_tokens": 4246854,
+   "input_tokens": 43088,
+   "cache_read_tokens": 4161920,
+   "output_tokens": 41846,
+   "active_seconds": 1609,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 5,
+   "edit_calls": 14,
+   "skill_static_page": 0,
+   "tool_errors": 6
+  },
+  "deepseek-v5s-r3": {
+   "model": "deepseek",
+   "arm": "v5s",
+   "rep": "r3",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 3,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 99,
+   "total_tokens": 5248594,
+   "input_tokens": 45050,
+   "cache_read_tokens": 5141632,
+   "output_tokens": 61912,
+   "active_seconds": 1327,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 1,
+   "todo_only": 0,
+   "failed_requests": 1,
+   "write_calls": 0,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 12
+  },
+  "deepseek-v5s-r4": {
+   "model": "deepseek",
+   "arm": "v5s",
+   "rep": "r4",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 5,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 72,
+   "total_tokens": 3190673,
+   "input_tokens": 35485,
+   "cache_read_tokens": 3104512,
+   "output_tokens": 50676,
+   "active_seconds": 1160,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 1,
+   "failed_requests": 1,
+   "write_calls": 6,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 2
+  },
+  "deepseek-v5s-r5": {
+   "model": "deepseek",
+   "arm": "v5s",
+   "rep": "r5",
+   "points": 98.0,
+   "checks": {
+    "bug_period_refetch": true,
+    "bug_sessions_count": true,
+    "bug_model_cost_sum": true,
+    "bug_window_days": true,
+    "sessions_cost_all": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_tokens_30": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_default_7": {
+     "ok": true,
+     "total_ok": true,
+     "length_ok": true,
+     "rows_ok": 1.0,
+     "fields_ok": 1.0
+    },
+    "sessions_errors_400": 4,
+    "csv_type": true,
+    "csv_header": true,
+    "csv_rows_all": true,
+    "csv_rows_7": true,
+    "csv_sorted": true,
+    "csv_totals": true,
+    "ui_sessions_page": true,
+    "ui_sort_cost": true,
+    "ui_sort_tokens": true,
+    "ui_home_link": true,
+    "ui_page_errors": 0,
+    "tests_pass": true,
+    "tests_passed": 4,
+    "readme_endpoints": true,
+    "git_commits": 2,
+    "git_clean": true,
+    "git_fixture_untouched": true
+   },
+   "final_answer": true,
+   "timed_out": false,
+   "stopped": false,
+   "requests": 92,
+   "total_tokens": 5150896,
+   "input_tokens": 42494,
+   "cache_read_tokens": 5051771,
+   "output_tokens": 56631,
+   "active_seconds": 1880,
+   "cost": null,
+   "file_heredoc_cells": 0,
+   "validation_errors": 0,
+   "ms_timeouts": 0,
+   "cell_timeouts": 0,
+   "todo_only": 1,
+   "failed_requests": 1,
+   "write_calls": 14,
+   "edit_calls": 0,
+   "skill_static_page": 0,
+   "tool_errors": 7
+  }
+ },
+ "summary": {
+  "deepseek": {
+   "v4b": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      98.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      68,
+      82,
+      58,
+      89,
+      82
+     ],
+     75.8
+    ],
+    "total_tokens": [
+     [
+      2655680,
+      3854616,
+      2407387,
+      5311117,
+      4024097
+     ],
+     3650579.4
+    ],
+    "output_tokens": [
+     [
+      33258,
+      46289,
+      48472,
+      71499,
+      54547
+     ],
+     50813
+    ],
+    "active_seconds": [
+     [
+      1345,
+      1419,
+      1030,
+      1335,
+      1641
+     ],
+     1354
+    ],
+    "cost": [
+     [],
+     null
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0,
+      0,
+      1,
+      0
+     ],
+     0.2
+    ],
+    "ms_timeouts": [
+     [
+      3,
+      0,
+      0,
+      0,
+      2
+     ],
+     1
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      1,
+      1,
+      0,
+      0
+     ],
+     0.4
+    ],
+    "todo_only": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "failed_requests": [
+     [
+      0,
+      1,
+      1,
+      1,
+      1
+     ],
+     0.8
+    ],
+    "tool_errors": [
+     [
+      7,
+      9,
+      5,
+      4,
+      7
+     ],
+     6.4
+    ],
+    "edit_calls": [
+     [
+      0,
+      28,
+      0,
+      17,
+      0
+     ],
+     9
+    ]
+   },
+   "v5": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      98.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      68,
+      86,
+      92,
+      82,
+      73
+     ],
+     80.2
+    ],
+    "total_tokens": [
+     [
+      2955307,
+      3986441,
+      4301776,
+      3861011,
+      3399713
+     ],
+     3700849.6
+    ],
+    "output_tokens": [
+     [
+      50317,
+      52800,
+      54162,
+      47202,
+      48248
+     ],
+     50545.8
+    ],
+    "active_seconds": [
+     [
+      1257,
+      1585,
+      1411,
+      1238,
+      1674
+     ],
+     1433
+    ],
+    "cost": [
+     [],
+     null
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     0.2
+    ],
+    "ms_timeouts": [
+     [
+      4,
+      4,
+      0,
+      0,
+      0
+     ],
+     1.6
+    ],
+    "cell_timeouts": [
+     [
+      1,
+      0,
+      0,
+      1,
+      2
+     ],
+     0.8
+    ],
+    "todo_only": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "failed_requests": [
+     [
+      1,
+      2,
+      1,
+      0,
+      0
+     ],
+     0.8
+    ],
+    "tool_errors": [
+     [
+      2,
+      7,
+      9,
+      5,
+      6
+     ],
+     5.8
+    ],
+    "edit_calls": [
+     [
+      0,
+      0,
+      22,
+      0,
+      0
+     ],
+     4.4
+    ]
+   },
+   "v5s": {
+    "n": 5,
+    "final_answers": 5,
+    "points": [
+     [
+      98.0,
+      98.0,
+      98.0,
+      98.0,
+      98.0
+     ],
+     98.0
+    ],
+    "requests": [
+     [
+      73,
+      94,
+      99,
+      72,
+      92
+     ],
+     86
+    ],
+    "total_tokens": [
+     [
+      2950962,
+      4246854,
+      5248594,
+      3190673,
+      5150896
+     ],
+     4157595.8
+    ],
+    "output_tokens": [
+     [
+      40032,
+      41846,
+      61912,
+      50676,
+      56631
+     ],
+     50219.4
+    ],
+    "active_seconds": [
+     [
+      1253,
+      1609,
+      1327,
+      1160,
+      1880
+     ],
+     1445.8
+    ],
+    "cost": [
+     [],
+     null
+    ],
+    "file_heredoc_cells": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "validation_errors": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "ms_timeouts": [
+     [
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     0
+    ],
+    "cell_timeouts": [
+     [
+      0,
+      0,
+      1,
+      0,
+      0
+     ],
+     0.2
+    ],
+    "todo_only": [
+     [
+      0,
+      0,
+      0,
+      1,
+      1
+     ],
+     0.4
+    ],
+    "failed_requests": [
+     [
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     1
+    ],
+    "tool_errors": [
+     [
+      6,
+      6,
+      12,
+      2,
+      7
+     ],
+     6.6
+    ],
+    "edit_calls": [
+     [
+      12,
+      14,
+      0,
+      0,
+      0
+     ],
+     5.2
+    ]
+   }
+  }
+ }
+}

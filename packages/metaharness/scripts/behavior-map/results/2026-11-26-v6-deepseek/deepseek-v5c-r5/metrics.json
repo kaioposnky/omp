@@ -1,0 +1,72 @@
+{
+  "label": "deepseek-v5c-r5",
+  "wall_seconds": 1076,
+  "exit_code": 0,
+  "timed_out": false,
+  "requests": 108,
+  "requests_main": 108,
+  "requests_subagent": 0,
+  "subagents": 1,
+  "input_tokens": 40815,
+  "output_tokens": 55594,
+  "cache_read_tokens": 5601276,
+  "total_tokens": 5697685,
+  "max_context_tokens": 91701,
+  "thinking_chars": 126664,
+  "text_chars": 1992,
+  "tool_code_chars": 63687,
+  "tool_result_chars": 136019,
+  "wire_tool_calls": {
+    "eval": 107
+  },
+  "parallel_call_requests": 0,
+  "cells": 106,
+  "eval_languages": {
+    "null": 107
+  },
+  "bridged_ops": {
+    "bash": 1,
+    "read": 55,
+    "run": 46,
+    "edit": 34,
+    "write": 3,
+    "browser": 19,
+    "commit": 12
+  },
+  "tool_errors": 8,
+  "validation_errors": 0,
+  "failed_commands": 0,
+  "request_errors": 0,
+  "stop_reasons": {
+    "toolUse": 107,
+    "stop": 1
+  },
+  "todo_calls": 0,
+  "skill_reads": [],
+  "first_write_request": 36,
+  "model_seconds": 722,
+  "auxiliary_requests": {},
+  "estimated_cost_usd": null,
+  "estimated_cost_usd_no_cache": null,
+  "cache_read_share": 0.993,
+  "active_seconds": 1073,
+  "background_jobs_started": 0,
+  "idle_after_final_answer_seconds": 3,
+  "stopped_by_orchestrator": false,
+  "bridged_op_total": 170,
+  "ops_per_wire_call": 1.59,
+  "tokens_per_request": 52756,
+  "workspace_files": 21,
+  "workspace_loc": {
+    ".sh": 28,
+    ".rs": 1022,
+    ".mjs": 16,
+    ".tsx": 748,
+    ".ts": 148,
+    ".astro": 48,
+    ".css": 432
+  },
+  "has_start_sh": true,
+  "has_readme": true,
+  "has_tests": false
+}
